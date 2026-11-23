@@ -201,6 +201,35 @@ class TestRunnerResources(unittest.TestCase):
             # The behaviour gate does not depend on release history; CI checks that in its own step.
             self.assertEqual(release_checks, [])
 
+    def test_a_fixture_commit_in_a_worker_starts_no_git_maintenance(self):
+        # Since git 2.47 a commit spawns detached auto-maintenance, which changes .git while a test
+        # compares snapshots; workers must not start it, even when the repository asks for it.
+        # A fresh interpreter without inherited git config imports the runner, so only the runner's own ENV can set it.
+        driver = ('import importlib.util, os, sys\n'
+                  'spec = importlib.util.spec_from_file_location("runner_under_test", sys.argv[1])\n'
+                  'runner = importlib.util.module_from_spec(spec); spec.loader.exec_module(runner)\n'
+                  'runner.ENV["PYTHONPATH"] = sys.argv[2] + os.pathsep + runner.ENV["PYTHONPATH"]\n'
+                  '_, code, completed, _, error = runner.run(["maintenance_case.Case.test_commit"])\n'
+                  'print(code, completed); sys.stderr.write(error)\n')
+        with tempfile.TemporaryDirectory() as temp:
+            Path(temp, 'maintenance_case.py').write_text(
+                'import json, os, subprocess, tempfile, unittest\n'
+                'class Case(unittest.TestCase):\n'
+                '    def test_commit(self):\n'
+                '        with tempfile.TemporaryDirectory() as repo, tempfile.TemporaryDirectory() as logs:\n'
+                '            trace = os.path.join(logs, "trace.json")\n'
+                '            git = lambda *a: subprocess.run(["git", "-C", repo, "-c", "user.name=t", "-c", "user.email=t@example.invalid", *a],\n'
+                '                                            check=True, capture_output=True, text=True, env=dict(os.environ, GIT_TRACE2_EVENT=trace))\n'
+                '            git("init", "-q"); git("config", "maintenance.auto", "true")\n'
+                '            self.assertEqual(git("config", "--bool", "--get", "maintenance.auto").stdout.strip(), "false")\n'
+                '            git("commit", "--allow-empty", "-qm", "fixture")\n'
+                '            children = [e.get("argv", []) for e in map(json.loads, open(trace)) if e.get("event") == "child_start"]\n'
+                '            self.assertFalse([argv for argv in children if "maintenance" in argv or "gc" in argv], children)\n')
+            clean = {key: value for key, value in os.environ.items() if not key.startswith('GIT_CONFIG_')}
+            done = subprocess.run([sys.executable, '-c', driver, str(ROOT / 'scripts/run_tests_parallel.py'), temp],
+                                  env=clean, capture_output=True, text=True, timeout=120)
+        self.assertEqual(done.stdout.split(), ['0', '1'], done.stderr)
+
     def test_every_test_skipped_does_not_claim_a_complete_gate(self):
         with tempfile.TemporaryDirectory() as temp:
             suite = unittest.TestSuite([self.__class__('test_high_limits_admission_but_runs_every_batch_once')])

@@ -435,6 +435,12 @@ class ProfileBoundary(unittest.TestCase):
         self.assertIn('(allow mach-register (global-name-regex #"^(com\\.google\\.Chrome|org\\.chromium\\.)"))', measurement)
         for service in ('com.apple.pasteboard.1', 'com.apple.tccd', 'com.apple.SecurityServer', 'com.apple.securityd', 'com.apple.coreservices.appleevents'):
             self.assertIn('(global-name "' + service + '")', measurement[measurement.index('(deny mach-lookup'):])
+        # Chrome may create only its default profile directories in the account home, never write inside them.
+        support = isolation.browser_profile_directories()[0].parent
+        home_rules = [line for line in measurement.splitlines() if str(support) in line]
+        self.assertEqual(home_rules, ['(allow file-write-create (require-all (vnode-type DIRECTORY) (require-any '
+                                      + ' '.join('(literal "' + str(path) + '")' for path in isolation.browser_profile_directories()) + ')))'])
+        for scope in ('project', 'database_server'): self.assertNotIn(str(support), texts[scope])
         # Żadnej reguły dla systemowego katalogu tymczasowego użytkownika: Chrome dostaje własny przez MAC_CHROMIUM_TMPDIR.
         self.assertNotIn('/var/folders', measurement); self.assertNotIn('regex #"^/', measurement)
         self.assertIn('(allow network* (local unix-socket (subpath "' + str(work) + '")))', measurement)
@@ -445,6 +451,25 @@ class ProfileBoundary(unittest.TestCase):
         self.assertLess(len(measurement.encode()), 16384)
         for scope in ('project', 'database_server'):
             self.assertNotIn('mach-', texts[scope]); self.assertNotIn('unix-socket', texts[scope]); self.assertNotIn('Chrome', texts[scope])
+
+    @unittest.skipUnless(sys.platform == 'darwin' and Path(isolation.SANDBOX_EXEC).exists(), 'wymaga macOS z sandbox-exec')
+    def test_real_sandbox_lets_the_browser_create_only_its_profile_directories(self):
+        with tempfile.TemporaryDirectory(dir='/private/tmp') as base:
+            root = Path(base).resolve(); work = root / 'work'; work.mkdir(); control = root / 'control'; control.mkdir(mode=0o700)
+            support = root / 'support'; support.mkdir()
+            profiles = [support / name for name in ('Google', 'Google/Chrome', 'Google/Chrome for Testing', 'Chromium')]
+            with patch.object(isolation, 'browser_profile_directories', return_value=profiles):
+                profile = root / 'measurement.sb'; profile.write_text(self.compiled('measurement', work, control))
+            # Each operation in its own sandboxed process: directories at the listed names succeed; a regular
+            # file, a link, an entry inside a profile directory and another name are refused.
+            operations = [(['/bin/mkdir', str(support / 'Google')], 0), (['/bin/mkdir', str(support / 'Google/Chrome')], 0),
+                          (['/usr/bin/touch', str(support / 'Chromium')], 1), (['/bin/ln', '-s', 'x', str(support / 'Google/Chrome for Testing')], 1),
+                          (['/usr/bin/touch', str(support / 'Google/Chrome/inside')], 1), (['/bin/mkdir', str(support / 'Other')], 1)]
+            codes = [(argv[-1], min(subprocess.run([isolation.SANDBOX_EXEC, '-f', str(profile), *argv], capture_output=True, timeout=30).returncode, 1))
+                     for argv, _ in operations]
+            created = sorted(str(path.relative_to(support)) for path in support.rglob('*'))
+        self.assertEqual(codes, [(argv[-1], expected) for argv, expected in operations])
+        self.assertEqual(created, ['Google', 'Google/Chrome'])
 
     @unittest.skipUnless(sys.platform == 'darwin' and Path('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome').exists()
                          and Path(isolation.SANDBOX_EXEC).exists(), 'wymaga macOS z Chrome i sandbox-exec')

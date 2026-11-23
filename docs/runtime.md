@@ -177,7 +177,12 @@ unprotected native fallback or project-configurable exception.
 The policy permits only Helix-owned loopback TCP ports and any explicitly required
 owned Unix socket. It does not expose host Docker, Podman or SSH-agent sockets.
 Writes are limited to the disposable project and its scratch space; protected control
-files remain outside writable roots. Children receive no inherited socket or directory
+files remain outside writable roots. One exception applies to the browser measurement
+scope only: processes there may create the browser's default profile directories in the
+account's `Library/Application Support` (`Google`, `Google/Chrome`,
+`Google/Chrome for Testing`, `Chromium`), directories only and nothing inside them.
+Chrome creates them on start even with `--user-data-dir` and aborts without them, so on
+an account that never ran the browser a measurement leaves these empty directories behind. Children receive no inherited socket or directory
 descriptors. Each grant is tied to its generated policy; changing a port or retrying
 requires admission for the current policy.
 

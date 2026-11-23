@@ -23,7 +23,12 @@ WORKER = ("import os, sys, unittest\n"
           "unittest.main(module=None, argv=['unittest', *sys.argv[1:]], testRunner=unittest.TextTestRunner(resultclass=Result))\n")
 # macOS hands out /var/... temp dirs whose canonical path is /private/var/...;
 # tests compare paths, so give every worker the canonical temp root.
-ENV = dict(os.environ, TMPDIR=os.path.realpath(__import__("tempfile").gettempdir()), PYTHONPATH=os.pathsep.join([os.path.join(ROOT, "tests"), ROOT, os.environ.get("PYTHONPATH", "")]))
+def without_git_maintenance(env):
+    """Fixture repositories commit inside tests; git then starts detached auto-maintenance, which changes
+    .git while a test compares before/after snapshots. Environment config outranks repository config."""
+    count = int(env.get("GIT_CONFIG_COUNT") or 0)
+    return dict(env, GIT_CONFIG_COUNT=str(count + 1), **{f"GIT_CONFIG_KEY_{count}": "maintenance.auto", f"GIT_CONFIG_VALUE_{count}": "false"})
+ENV = without_git_maintenance(dict(os.environ, TMPDIR=os.path.realpath(__import__("tempfile").gettempdir()), PYTHONPATH=os.pathsep.join([os.path.join(ROOT, "tests"), ROOT, os.environ.get("PYTHONPATH", "")])))
 
 def ids(suite):
     for t in suite:

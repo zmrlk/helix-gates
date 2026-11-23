@@ -3,6 +3,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import pwd
 import re
 import secrets
 import stat
@@ -67,6 +68,11 @@ def _quote(value):
 BROWSER_DENIED_SERVICES = ('com.apple.pasteboard.1', 'com.apple.tccd', 'com.apple.tccd.system', 'com.apple.SecurityServer',
                            'com.apple.securityd', 'com.apple.securityd.xpc', 'com.apple.coreservices.appleevents', 'com.apple.ocspd',
                            'com.apple.CoreServices.coreservicesd', 'com.apple.lsd.modifydb', 'com.apple.cfprefsd.daemon', 'com.apple.cfprefsd.agent')
+
+def browser_profile_directories():
+    """Default profile directories of Chrome, Chrome for Testing and Chromium in the account's home."""
+    support = Path(pwd.getpwuid(os.getuid()).pw_dir) / 'Library/Application Support'
+    return [support / name for name in ('Google', 'Google/Chrome', 'Google/Chrome for Testing', 'Chromium')]
 
 
 class SeatbeltBackend:
@@ -184,6 +190,11 @@ class SeatbeltBackend:
             for root in policy['writable_roots']:
                 lines.append('(allow network* (local unix-socket (subpath ' + _quote(root) + ')))')
                 lines.append('(allow network-outbound (remote unix-socket (subpath ' + _quote(root) + ')))')
+            # Even with --user-data-dir, Chrome creates its default profile directory on start, resolved from the
+            # account database rather than $HOME, and aborts when it cannot (an account that never ran the browser).
+            # Only these directory entries may be created; nothing inside them is writable.
+            lines.append('(allow file-write-create (require-all (vnode-type DIRECTORY) (require-any '
+                         + ' '.join('(literal ' + _quote(str(path)) + ')' for path in browser_profile_directories()) + ')))')
         for port in policy['connect_tcp']:
             lines.append(f'(allow network-outbound (remote tcp "localhost:{port}"))')
         for port in policy['listen_tcp']:
