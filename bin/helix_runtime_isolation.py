@@ -3,6 +3,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import pwd
 import re
 import secrets
 import stat
@@ -68,6 +69,11 @@ BROWSER_DENIED_SERVICES = ('com.apple.pasteboard.1', 'com.apple.tccd', 'com.appl
                            'com.apple.securityd', 'com.apple.securityd.xpc', 'com.apple.coreservices.appleevents', 'com.apple.ocspd',
                            'com.apple.CoreServices.coreservicesd', 'com.apple.lsd.modifydb', 'com.apple.cfprefsd.daemon', 'com.apple.cfprefsd.agent')
 
+def browser_profile_directories():
+    """Default profile directories of Chrome, Chrome for Testing and Chromium in the account's home."""
+    support = Path(pwd.getpwuid(os.getuid()).pw_dir) / 'Library/Application Support'
+    return [support / name for name in ('Google', 'Google/Chrome', 'Google/Chrome for Testing', 'Chromium')]
+
 
 class SeatbeltBackend:
     """Grants belong to this instance and are consumed once by wrap()."""
@@ -120,7 +126,7 @@ class SeatbeltBackend:
             if key == 'unix_sockets' and any(p.exists() and not stat.S_ISSOCK(p.stat().st_mode) for p in paths):
                 raise ValueError('invalid isolation policy')
             result[key] = sorted({str(p) for p in paths})
-        # Pojedyncze pliki tylko do odczytu (np. stan monitora zasobów); klucz opcjonalny, pusty nie zmienia skrótu polityki.
+        # Single read-only files (e.g. the resource monitor state); the key is optional and an empty one does not change the policy hash.
         files = policy.get('readonly_files', [])
         if not isinstance(files, list) or len(files) > 8:
             raise ValueError('invalid isolation policy')
@@ -146,11 +152,11 @@ class SeatbeltBackend:
         lines = ['(version 1)', '(deny default)', '(allow process-fork process-exec)',
                  '(allow sysctl-read)', '(allow signal (target self))',
                  '(allow process-info-pidinfo (target self))', '(allow file-read-metadata)',
-                 # macOS 27: dyld czyta sam katalog główny; bez tego każdy proces kończy się SIGABRT.
+                 # macOS 27: dyld reads the root directory itself; without this every process aborts (SIGABRT).
                  '(allow file-read* (literal "/"))']
         baseline = ['/usr/bin', '/bin', '/usr/lib', '/usr/share', '/System/Library',
                     '/System/Cryptexes', str(Path(sys.base_prefix).resolve()), str(Path(__file__).resolve().parent),
-                    # baza stref czasowych: /usr/share/zoneinfo jest dowiązaniem do tego katalogu (zoneinfo, pytz, tzdata)
+                    # time zone database: /usr/share/zoneinfo links to this directory (zoneinfo, pytz, tzdata)
                     '/private/var/db/timezone']
         for root in sorted(set(baseline + policy['readonly_roots'] + policy['writable_roots'])):
             lines.append('(allow file-read* file-map-executable (subpath ' + _quote(root) + '))')
@@ -164,26 +170,31 @@ class SeatbeltBackend:
         for file in policy['writable_files']:
             lines.append('(allow file-read* file-write* (literal ' + _quote(file) + '))')
         if policy['scope'] == 'database_server':
-            # PostgreSQL wymaga segmentu i semaforów SysV (shmat, semctl); POSIX IPC nie jest potrzebne przy
-            # dynamic_shared_memory_type=mmap i pozostaje zabronione. Seatbelt nie filtruje SysV po kluczu,
-            # więc serwer może sięgnąć do segmentów SysV tego samego użytkownika: jawne ograniczenie tej izolacji.
+            # PostgreSQL needs a SysV segment and semaphores (shmat, semctl); POSIX IPC is not needed with
+            # dynamic_shared_memory_type=mmap and stays denied. Seatbelt does not filter SysV by key, so the server
+            # can reach SysV segments of the same user: a known limit of this isolation.
             lines.append('(allow ipc-sysv-shm ipc-sysv-sem)')
-            # Procesy serwera sygnalizują się nawzajem (checkpoint, DROP DATABASE); tylko w obrębie tej samej izolacji.
+            # Server processes signal each other (checkpoint, DROP DATABASE); only within the same sandbox.
             lines.append('(allow signal (target same-sandbox))')
         if policy['scope'] == 'measurement':
-            # Przeglądarka pomiarowa (Chrome bez okna) nie startuje bez usług Mach i gniazd uniksowych we własnym katalogu.
-            # Dotyczy tylko fazy pomiarów; kod projektu w pozostałych fazach tego nie dostaje.
-            # Zestaw ustalony doświadczalnie na macOS 27: usługi tylko o nazwach Apple i własnych Chrome, rejestracja tylko
-            # własnych nazw, jawna odmowa usług wrażliwych, bez których Chrome nadal startuje.
+            # The measurement browser (headless Chrome) does not start without Mach services and Unix sockets in its own
+            # directory. This applies to the measurement phase only; project code in other phases gets none of it.
+            # On macOS 27 the tested policy allows lookups only for Apple and Chrome names, registration only of Chrome's
+            # own names, and explicitly denies sensitive services Chrome starts without.
             lines.append('(allow mach-lookup (global-name-regex #"^(com\\.apple\\.|com\\.google\\.Chrome|org\\.chromium\\.)"))')
             lines.append('(allow mach-register (global-name-regex #"^(com\\.google\\.Chrome|org\\.chromium\\.)"))')
             lines.append('(deny mach-lookup ' + ' '.join('(global-name ' + _quote(name) + ')' for name in BROWSER_DENIED_SERVICES) + ')')
-            # Chrome zakłada katalog i gniazdo pojedynczej instancji w katalogu z MAC_CHROMIUM_TMPDIR, który przebieg
-            # ustawia na własny katalog roboczy. Systemowy katalog tymczasowy użytkownika nie dostaje żadnych uprawnień,
-            # więc katalogi i gniazda innych instancji Chrome pozostają poza zasięgiem.
+            # Chrome creates its single-instance directory and socket in MAC_CHROMIUM_TMPDIR, which the run points at its
+            # own working directory. The user's system temporary directory gets no permission, so the directories and
+            # sockets of other Chrome instances stay out of reach.
             for root in policy['writable_roots']:
                 lines.append('(allow network* (local unix-socket (subpath ' + _quote(root) + ')))')
                 lines.append('(allow network-outbound (remote unix-socket (subpath ' + _quote(root) + ')))')
+            # Even with --user-data-dir, Chrome creates its default profile directory on start, resolved from the
+            # account database rather than $HOME, and aborts when it cannot (an account that never ran the browser).
+            # Only these directory entries may be created; nothing inside them is writable.
+            lines.append('(allow file-write-create (require-all (vnode-type DIRECTORY) (require-any '
+                         + ' '.join('(literal ' + _quote(str(path)) + ')' for path in browser_profile_directories()) + ')))')
         for port in policy['connect_tcp']:
             lines.append(f'(allow network-outbound (remote tcp "localhost:{port}"))')
         for port in policy['listen_tcp']:

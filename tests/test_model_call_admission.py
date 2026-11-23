@@ -2,9 +2,12 @@
 import contextlib
 import io
 import json
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
+import time
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
@@ -32,7 +35,7 @@ class ModelCallAdmission(unittest.TestCase):
                                    cfg=config(), explicit_cfg={}, offline=False)
 
     def test_every_real_source_caller_refuses_owner_restriction_before_process_or_export(self):
-        # Decyzja właściciela 15.11.2026: domyślnie wszyscy dostawcy; odmawia tylko jawne ograniczenie właściciela.
+        # All providers are allowed by default; only an explicit owner restriction refuses one.
         with patch.object(self.H, 'sh', side_effect=AssertionError('model process must not start')):
             for provider, caller in self.H.CALLERS.items():
                 other = 'gemini' if provider not in ('gemini',) else 'codex'
@@ -56,12 +59,47 @@ class ModelCallAdmission(unittest.TestCase):
                     with self.subTest(policy=bool(policy), provider=provider):
                         self.H.CALLERS[provider](self.ctx, 'synthetic-model', 'PRIVATE_SOURCE_CANARY', None, None, False, self.out, 1)
                 self.assertEqual(process.call_count, len(routing.JSON_PROVIDERS))
+    def test_every_model_cli_runs_with_the_browser_login_blocker(self):
+        # A CLI without a login (agy) opened a browser OAuth tab on every probe refresh.
+        blocker = str(Path(__file__).resolve().parents[1] / 'bin/no-browser')
+        envs = {}
+        def answer(argv, cwd, **kwargs):
+            envs[argv[0]] = kwargs.get('env') or {}
+            if argv[0] == 'codex': Path(argv[argv.index('-o') + 1]).write_text('{"ok": true}'); return 0, '', ''
+            if argv[0] == 'agy': return 0, json.dumps({'status': 'SUCCESS', 'structured_output': {'ok': True}}), ''
+            if argv[0] == 'grok': return 0, json.dumps({'structuredOutput': {'ok': True}}), ''
+            return 0, '{"ok": true}', ''
+        self.ctx.cfg.pop('data_egress', None)
+        with patch.object(self.H, 'sh', side_effect=answer):
+            for provider, caller in self.H.CALLERS.items():
+                if provider == 'grok': continue   # manual handoff file, no process
+                with self.subTest(provider=provider):
+                    caller(self.ctx, 'synthetic-model', 'prompt', None, None, False, self.out, 1)
+        self.assertEqual(set(envs), {'codex', 'agy', 'grok', 'claude'})
+        for program, env in envs.items():
+            self.assertEqual(env.get('PATH', '').split(os.pathsep)[0], blocker, program)
+
+    def test_browser_login_attempt_is_refused_without_signalling_any_process(self):
+        cli = self.root / 'fake-cli'
+        # The CLI decides what a refused browser means; the blocker only refuses and signals nobody,
+        # even when a CLI replaces itself with `exec open` and the caller becomes its parent.
+        cli.write_text('#!/bin/sh\nopen "https://login.example.invalid/oauth" || { echo "login unavailable" >&2; exit 3; }\n')
+        cli.chmod(0o755)
+        done = subprocess.run([str(cli)], capture_output=True, text=True, timeout=20, env=self.H.model_cli_env())
+        self.assertEqual(done.returncode, 3)
+        self.assertIn('open blocked', done.stderr)
+        replaced = self.root / 'exec-cli'
+        replaced.write_text('#!/bin/sh\nexec xdg-open "https://login.example.invalid/oauth"\n'); replaced.chmod(0o755)
+        done = subprocess.run([str(replaced)], capture_output=True, text=True, timeout=20, env=self.H.model_cli_env())
+        self.assertEqual(done.returncode, 1)
+        self.assertIn('xdg-open blocked', done.stderr)
+
     def test_read_only_grok_runs_outside_the_checked_project(self):
-        # Haki sesji (memsearch) piszą w katalogu roboczym: Grok w projekcie B zmienił źródła przeglądu.
+        # Session hooks (memsearch) write into the working directory, so a read-only review must not run inside the reviewed project.
         seen = []
         def answer(argv, cwd, **kwargs):
             seen.append((argv[argv.index('--cwd') + 1], Path(cwd)))
-            self.assertEqual(argv[argv.index('--max-turns') + 1], '8')   # 16.11: 4 tury kończyły się „max turns reached”
+            self.assertEqual(argv[argv.index('--max-turns') + 1], '8')   # four turns can run out before Grok answers ("max turns reached")
             return 0, json.dumps({'structuredOutput': {'ok': True}}), ''
         with patch.object(self.H, 'sh', side_effect=answer):
             self.H.call_grok_cli(self.ctx, 'grok-4.7', 'zadanie', None, None, False, self.out, 1)
@@ -137,11 +175,11 @@ class ModelCallAdmission(unittest.TestCase):
             with self.assertRaises(self.H.ProviderError) as caught:
                 self.H.ask(self.ctx, 'codex', 'PRIVATE_SOURCE_CANARY')
         self.assertEqual(caught.exception.admission_code, 'PROVIDER_NOT_ALLOWED')
-        # Odmowa zapada przed sondą i przed zapasowym dostawcą (gemini jest dopuszczony, ale nie wchodzi po cichu).
+        # The refusal comes before the probe and before any fallback provider (gemini is allowed but never steps in silently).
         self.assertEqual(probe.call_count, 0)
 
     def test_substitute_moves_to_next_available_provider_when_configured_one_is_limited(self):
-        # Właściciel: Gemini na limicie, a sędzia UX i eksplorator stały zamiast przejść na Codexa, Claude albo Groka.
+        # With substitution enabled, the UX judge and explorer continue with the next available provider after a usage limit.
         self.ctx.cfg['models'] = {'gemini-flash': ['flash-high', 'flash-low'], 'codex': ['astra'], 'grok-cli': [None]}
         self.ctx.explicit_cfg = {'providers': {'visual_judge': 'gemini-flash'}}
         probed = []
@@ -149,7 +187,7 @@ class ModelCallAdmission(unittest.TestCase):
             probed.append((provider, model)); return provider == 'codex', 'synthetic availability'
         with patch.object(self.H, 'probe', side_effect=probe), \
              patch.dict(self.H.CALLERS, {'codex': lambda *args: '{"ok": true}'}):
-            with self.assertRaises(self.H.ProviderError):   # bez zastępstwa jawny wybór zostaje i zadanie staje
+            with self.assertRaises(self.H.ProviderError):   # without a substitute the explicit choice stays and the task stops
                 self.H.ask(self.ctx, 'gemini-flash', 'synthetic', need_json=True)
             text, used = self.H.ask(self.ctx, 'gemini-flash', 'synthetic', need_json=True, substitute=True)
         self.assertEqual((used['provider'], used['model'], used['fallback_used']), ('codex', 'astra', True))

@@ -4,7 +4,7 @@ import json
 from datetime import date, datetime, timezone
 from pathlib import Path
 
-VERSION = '0.9.3-beta'
+VERSION = '0.9.4-beta'
 
 
 def artifact(root, value):
@@ -25,7 +25,7 @@ def check_pin(root):
     from helix_config import load
     data = load(root)
     if not data:
-        # Brak pliku to inna przyczyna niż zła wersja: bez tego rozróżnienia audyt cudzego repo pada bez wskazówki.
+        # A missing file is a different cause than a wrong version: without this distinction an audit of another repository fails without a hint.
         raise ValueError('version: brak helix.json w repo; podaj --config PLIK z {"helix_version": "' + VERSION
                          + '"} poza repo albo utwórz helix.json (helix.json must pin running Helix version ' + VERSION + ')')
     if not isinstance(data, dict) or data.get('helix_version') != VERSION:

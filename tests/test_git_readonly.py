@@ -84,6 +84,121 @@ class GitReadonlyTests(unittest.TestCase):
             result = self.provenance()
         self.assertEqual(result['target_ref']['dirty_reason'], 'git_filters_not_executed')
 
+    def test_global_driver_unused_by_project_paths_is_inert_until_an_attribute_names_it(self):
+        # CI runners configure git-lfs globally; git status runs a driver only for paths whose
+        # `filter` attribute names it, so an unused global driver must not hide the dirty state.
+        (self.repo / 'app.txt').write_text('changed')
+        global_config = self.base / 'global.gitconfig'
+        global_config.write_text('[filter "lfs"]\n    clean = ' + self.fake_command + '\n    process = ' + self.fake_command + '\n    required = true\n')
+        with patch.dict(os.environ, {'GIT_CONFIG_GLOBAL': str(global_config)}):
+            result = self.provenance()
+            self.assertTrue(result['target_dirty'])
+            self.assertEqual(result['target_ref']['dirty_reason'], 'git_status_without_filters')
+            # An attribute source outside .gitattributes counts like the file itself.
+            (self.repo / '.git/info').mkdir(exist_ok=True)
+            (self.repo / '.git/info/attributes').write_text('app.txt filter=lfs\n')
+            result = self.provenance()
+        self.assertIsNone(result['target_dirty'])
+        self.assertEqual(result['target_ref']['dirty_reason'], 'git_filters_not_executed')
+
+    def test_core_attributes_file_and_a_driver_named_like_a_placeholder(self):
+        (self.repo / 'app.txt').write_text('changed')
+        global_config = self.base / 'global.gitconfig'
+        attributes = self.base / 'global-attributes'
+        # The global file has the lowest precedence, so it names a path the project's .gitattributes leaves alone.
+        attributes.write_text('.gitattributes filter=lfs\n')
+        global_config.write_text('[filter "lfs"]\n    clean = ' + self.fake_command + '\n[core]\n    attributesFile = ' + str(attributes) + '\n')
+        with patch.dict(os.environ, {'GIT_CONFIG_GLOBAL': str(global_config)}):
+            result = self.provenance()
+        self.assertIsNone(result['target_dirty'])
+        self.assertEqual(result['target_ref']['dirty_reason'], 'git_filters_not_executed')
+        # check-attr prints `unspecified` for absent attributes; a driver of that name is still unused here.
+        global_config.write_text('[filter "unspecified"]\n    clean = ' + self.fake_command + '\n')
+        with patch.dict(os.environ, {'GIT_CONFIG_GLOBAL': str(global_config)}):
+            result = self.provenance()
+            self.assertTrue(result['target_dirty'])
+            (self.repo / '.git/info').mkdir(exist_ok=True)
+            (self.repo / '.git/info/attributes').write_text('app.txt filter=unspecified\n')
+            result = self.provenance()
+        self.assertIsNone(result['target_dirty'])
+        self.assertEqual(result['target_ref']['dirty_reason'], 'git_filters_not_executed')
+
+    def test_attribute_assigned_after_the_check_still_runs_no_driver(self):
+        # Same-length change: git must read the content, which is where a clean filter would run.
+        (self.repo / 'app.txt').write_text('changed')
+        global_config = self.base / 'global.gitconfig'
+        global_config.write_text('[filter "lfs"]\n    clean = ' + self.fake_command + '\n    process = ' + self.fake_command + '\n    required = true\n')
+        original = readonly.git
+        calls = []
+        def racing(repo, *args, **kwargs):
+            calls.append(args)
+            result = original(repo, *args, **kwargs)
+            if 'check-attr' in args and Path(repo) == self.repo:
+                (self.repo / '.git/info').mkdir(exist_ok=True)
+                (self.repo / '.git/info/attributes').write_text('app.txt filter=lfs\n')
+            return result
+        with patch.dict(os.environ, {'GIT_CONFIG_GLOBAL': str(global_config)}), patch.object(readonly, 'git', side_effect=racing):
+            result = self.provenance()
+        self.assertIn('filter.lfs.clean=', next(args for args in calls if 'status' in args))
+        # Raw bytes are not what the filter would compare, so the result stays unknown.
+        self.assertIsNone(result['target_dirty'])
+        self.assertEqual(result['target_ref']['dirty_reason'], 'git_filters_not_executed')
+        self.assertFalse(self.marker.exists())
+
+    def test_worktree_diffs_empty_known_drivers_even_after_a_late_attribute(self):
+        import helix_packs, helix_advisory
+        self.command('config', 'filter.synthetic.clean', self.fake_command)
+        # Advisory diff: the project's own attribute names the local driver; it must not run.
+        (self.repo / 'app.txt').write_text('changed')
+        self.assertEqual(helix_advisory.changed_files(self.repo, 'HEAD'), ['app.txt'])
+        self.assertFalse(self.marker.exists())
+        # Integrity diff: read_ref sees an unused global driver, the attribute appears just before the diff.
+        self.command('config', '--unset', 'filter.synthetic.clean')
+        global_config = self.base / 'global.gitconfig'
+        global_config.write_text('[filter "lfs"]\n    clean = ' + self.fake_command + '\n    required = true\n')
+        original = readonly.git
+        diffs = []
+        def late(repo, *args, **kwargs):
+            if 'diff' in args:
+                diffs.append(args)
+                (self.repo / '.git/info').mkdir(exist_ok=True)
+                (self.repo / '.git/info/attributes').write_text('app.txt filter=lfs\n')
+            return original(repo, *args, **kwargs)
+        with patch.dict(os.environ, {'GIT_CONFIG_GLOBAL': str(global_config)}), patch.object(readonly, 'git', side_effect=late):
+            changed = helix_packs.git(self.repo, 'diff', '--name-only', '-z', 'HEAD', '--', required=True)
+        self.assertIn('filter.lfs.clean=', diffs[0])
+        self.assertIn('app.txt', changed)
+        self.assertFalse(self.marker.exists())
+
+    def test_path_with_crlf_in_its_name_keeps_its_attribute(self):
+        # Text mode read CRLF in a name as LF, so check-attr matched another, shorter name.
+        odd = self.repo / 'odd\r\nname.txt'
+        odd.write_text('initial')
+        # A driver name no global config defines: committing the fixture must not run a real filter (git-lfs on CI).
+        (self.repo / '.gitattributes').write_text('app.txt filter=synthetic\nodd??name.txt filter=crlf-check\n')
+        self.command('add', '.'); self.command('commit', '-qm', 'odd name')
+        self.head = self.command('rev-parse', 'HEAD')
+        odd.write_text('changed')
+        global_config = self.base / 'global.gitconfig'
+        global_config.write_text('[filter "crlf-check"]\n    clean = ' + self.fake_command + '\n    required = true\n')
+        with patch.dict(os.environ, {'GIT_CONFIG_GLOBAL': str(global_config)}):
+            result = self.provenance()
+        self.assertIsNone(result['target_dirty'])
+        self.assertEqual(result['target_ref']['dirty_reason'], 'git_filters_not_executed')
+
+    def test_unreadable_attributes_never_fall_through_to_status(self):
+        global_config = self.base / 'global.gitconfig'
+        global_config.write_text('[filter "lfs"]\n    clean = ' + self.fake_command + '\n')
+        original = readonly.git
+        def failing(repo, *args, **kwargs):
+            self.assertNotIn('status', args)
+            if 'check-attr' in args: return subprocess.CompletedProcess(args, 128, '', 'fatal')
+            return original(repo, *args, **kwargs)
+        with patch.dict(os.environ, {'GIT_CONFIG_GLOBAL': str(global_config)}), patch.object(readonly, 'git', side_effect=failing):
+            result = self.provenance()
+        self.assertIsNone(result['target_dirty'])
+        self.assertEqual(result['target_ref']['dirty_reason'], 'git_filter_configuration_unknown')
+
     def test_fsmonitor_is_disabled_without_hiding_actual_dirty_state(self):
         self.command('config', 'core.fsmonitor', self.fake_command)
         (self.repo / 'app.txt').write_text('changed')

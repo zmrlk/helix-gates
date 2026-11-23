@@ -1,0 +1,7 @@
+#!/bin/sh
+# Helix runs model CLIs headless (bin/helix model_cli_env): a login that would open a browser
+# is refused instead of popping a window up on the owner's screen.
+# ponytail: refuse only, never signal a process (`exec open` would make the caller its parent);
+# a CLI waiting for the login code fails on its own timeout (agy: 60 s).
+echo "Helix: $(basename "$0") blocked; the model CLI wanted an interactive browser login. Log in to it in a terminal first." >&2
+exit 1

@@ -19,15 +19,17 @@ def write_json(path, value):
 
 
 def git(repo, *args, required=False):
-    from helix_git_readonly import git as read_git, read_ref
+    from helix_git_readonly import git as read_git, read_ref, filter_drivers, without_filters, REASONS
     if args and args[0] == 'diff':
         # A worktree diff can execute clean filters even with --name-only.
-        # Refuse unknown normalization and never invoke external diff/textconv.
+        # Refuse unknown normalization and never invoke external diff or textconv. Known drivers
+        # are emptied here too, so an attribute assigned after read_ref runs nothing.
         ref = read_ref(repo)
-        if ref['dirty'] is None:
-            if required: raise ValueError('Nie można bezpiecznie odczytać diff: ' + ref['reason'])
+        drivers = filter_drivers(repo) if ref['dirty'] is not None else None
+        if drivers is None:
+            if required: raise ValueError('Nie można bezpiecznie odczytać diff: ' + (ref['reason'] if ref['dirty'] is None else REASONS['git_filter_configuration_unknown']))
             return None
-        args = ('diff', '--no-ext-diff', '--no-textconv', *args[1:])
+        args = (*without_filters(drivers), 'diff', '--no-ext-diff', '--no-textconv', *args[1:])
     p = read_git(repo, *args)
     if required and p.returncode: raise ValueError('git: ' + p.stderr.strip())
     return p.stdout if not p.returncode else None
@@ -126,8 +128,8 @@ class Runner:
                 paths = data.get('paths')
                 if not isinstance(paths, dict) or not isinstance(paths.get('scanned'), list) or any(not isinstance(p, str) for p in paths['scanned']):
                     raise ValueError('Semgrep: brak poprawnej listy paths.scanned')
-                # Ostrzeżenie (np. częściowe parsowanie jednego pliku) nie unieważnia wyników z pozostałych plików;
-                # Projekt B: 2 ostrzeżenia na 2761 plików wyrzucały 150 wyników. Pokrycie zostaje oznaczone jako częściowe.
+                # A warning (e.g. one file parsed only partly) leaves the findings of the other files valid;
+                # coverage is marked partial.
                 if any(not (isinstance(e, dict) and e.get('level') == 'warn') for e in data['errors']):
                     raise ValueError('Semgrep zgłosił błędy skanowania')
                 if data['errors']:
@@ -170,7 +172,7 @@ def local_security(repo):
 
 
 def evidence_text(repo, root=None):
-    # Nie czytamy truth.json (twierdzenia) ani raportów skanerów jako dowodu odbioru.
+    # truth.json (claims) and scanner reports are not read as acceptance evidence.
     texts = []
     for p in Path(root or Path(repo) / 'helix-evidence').rglob('*'):
         if p.is_file() and not p.is_symlink() and p.name in ('operator.md', 'validation.md', 'database.md', 'deletion.md'):
@@ -678,12 +680,12 @@ def cmd_pack(ctx, args):
     if pack == 'security' and args.action == 'deep':
         import helix_security_deep as D
         if not getattr(args, 'plan_only', False) and not getattr(ctx, 'offline', False) and not getattr(args, 'resume', None):
-            # Polecenie CLI: przeterminowana albo brakująca sonda wybranych modeli odświeża się raz przed planem ról,
-            # zamiast kończyć przebieg LIMITED pół godziny po ostatniej sondzie.
+            # CLI command: an expired or missing probe of the chosen models is refreshed once before the role plan,
+            # so the half-hour probe expiry (helix_provider_plan.TTL_SECONDS) alone does not leave the run LIMITED.
             import helix_provider_plan as RP
             roles = {role: getattr(args, role, None) or (ctx.cfg.get('providers') or {}).get(role) for role in ('hunter', 'verifier')}
             models = ctx.cfg.get('models') or {}
-            # Liczy się model główny dostawcy (pierwszy w łańcuchu): plan nie podmienia jawnego wyboru na zapasowy.
+            # The provider's primary model (first in the chain) counts: the plan never swaps an explicit choice for a fallback.
             if any(p and not RP.model_available(getattr(ctx, 'availability', {}), p, (models.get(p) or [None])[0]) for p in roles.values()):
                 try: ctx.availability = RP.refresh(ctx, D.H.CALLERS, ctx.state_dir / 'provider-availability.json')
                 except (ValueError, OSError) as error: print('[helix] odświeżenie sond nieudane: ' + str(error)[:200])

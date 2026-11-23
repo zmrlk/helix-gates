@@ -23,7 +23,7 @@ def spec(identity='BLOCKED'):
 
 class ToolLedger(unittest.TestCase):
     def test_tool_first_seen_through_browser_metadata_can_later_be_run_directly(self):
-        # Przebieg 27 na projekcie A: po udanym e2e start Chrome dla PDF wywracał cały raport błędem 'calls'.
+        # Starting Chrome for the PDF after a successful e2e run must not crash the whole report with a 'calls' error.
         runner = runtime.Runner.__new__(runtime.Runner)
         runner.tools = {'playwright_chromium': '/synthetic/chrome'}; runner.browser_module_dir = '/synthetic/missing'
         runner.browser_metadata({'routes': [{'route': '/'}]})
@@ -44,12 +44,12 @@ class BareCallbackAnswers(unittest.TestCase):
                     errors=['stale'])
 
     def test_bare_callback_4xx_is_not_a_screen_defect_but_a_shared_screen_is_still_judged(self):
-        # Przebieg 28 na projekcie A: e2e i a11y kończyły FAIL przez 400 z /auth/callback wywołanego bez parametrów.
+        # A 400 from /auth/callback called without parameters must not fail e2e and a11y.
         out = runtime.bare_callback_answers(self.data(), self.PLANS, 'frontend')
         status = {row['route']: row['status'] for row in out['routes']}
         self.assertEqual(status, {'/auth/callback': 'NOT_APPLICABLE', '/': 'PASS', '/done': 'FAIL', '/missing': 'FAIL'})
         self.assertEqual(len(out['routes']), 4); self.assertEqual(out['bare_callbacks'], ['/auth/callback'])
-        self.assertEqual(len(out['requests']), 2)  # żądania zostają w dowodach, także 400 z adresu zwrotnego
+        self.assertEqual(len(out['requests']), 2)  # the requests stay in the evidence, including the 400 from the callback
         self.assertEqual(len(out['errors']), 2); self.assertTrue(any(e.startswith('/missing') for e in out['errors']))
 
     def test_callback_that_fails_for_another_reason_stays_a_failure(self):
@@ -289,7 +289,7 @@ class BrowserPort(unittest.TestCase):
             self.assertEqual(runner.active_sink['input']['browser_control_origins'], [])
             self.assertEqual((runner.network_listen_ports, runner.network_connect_ports, runner.env), ({5000}, {5000}, {'KEEP': '1'}))
             with self.assertRaises(runtime.Blocked): runner.project_command(['/synthetic/node', 'y.mjs'], phase='build')
-            # Każda droga startu procesu projektu przechodzi przez admit_process: polecenie, proces w tle i pomiar.
+            # Every way a project process starts goes through admit_process: command, background process and measurement.
             for phase in ('install', 'migration', 'build', 'application', 'measurement', 'database_server'):
                 with self.subTest(phase=phase), self.assertRaises(runtime.Blocked): runner.admit_process(phase, 10)
             with self.assertRaises(runtime.Blocked): runner.project_spawn(['/synthetic/node', 'server.js'], Path(directory), {}, Path(directory) / 'app.log', phase='application')
@@ -435,7 +435,13 @@ class ProfileBoundary(unittest.TestCase):
         self.assertIn('(allow mach-register (global-name-regex #"^(com\\.google\\.Chrome|org\\.chromium\\.)"))', measurement)
         for service in ('com.apple.pasteboard.1', 'com.apple.tccd', 'com.apple.SecurityServer', 'com.apple.securityd', 'com.apple.coreservices.appleevents'):
             self.assertIn('(global-name "' + service + '")', measurement[measurement.index('(deny mach-lookup'):])
-        # Żadnej reguły dla systemowego katalogu tymczasowego użytkownika: Chrome dostaje własny przez MAC_CHROMIUM_TMPDIR.
+        # Chrome may create only its default profile directories in the account home, never write inside them.
+        support = isolation.browser_profile_directories()[0].parent
+        home_rules = [line for line in measurement.splitlines() if str(support) in line]
+        self.assertEqual(home_rules, ['(allow file-write-create (require-all (vnode-type DIRECTORY) (require-any '
+                                      + ' '.join('(literal "' + str(path) + '")' for path in isolation.browser_profile_directories()) + ')))'])
+        for scope in ('project', 'database_server'): self.assertNotIn(str(support), texts[scope])
+        # No rule for the user's system temporary directory: Chrome gets its own through MAC_CHROMIUM_TMPDIR.
         self.assertNotIn('/var/folders', measurement); self.assertNotIn('regex #"^/', measurement)
         self.assertIn('(allow network* (local unix-socket (subpath "' + str(work) + '")))', measurement)
         self.assertNotIn('(allow network* (local unix-socket))', measurement)
@@ -446,6 +452,25 @@ class ProfileBoundary(unittest.TestCase):
         for scope in ('project', 'database_server'):
             self.assertNotIn('mach-', texts[scope]); self.assertNotIn('unix-socket', texts[scope]); self.assertNotIn('Chrome', texts[scope])
 
+    @unittest.skipUnless(sys.platform == 'darwin' and Path(isolation.SANDBOX_EXEC).exists(), 'wymaga macOS z sandbox-exec')
+    def test_real_sandbox_lets_the_browser_create_only_its_profile_directories(self):
+        with tempfile.TemporaryDirectory(dir='/private/tmp') as base:
+            root = Path(base).resolve(); work = root / 'work'; work.mkdir(); control = root / 'control'; control.mkdir(mode=0o700)
+            support = root / 'support'; support.mkdir()
+            profiles = [support / name for name in ('Google', 'Google/Chrome', 'Google/Chrome for Testing', 'Chromium')]
+            with patch.object(isolation, 'browser_profile_directories', return_value=profiles):
+                profile = root / 'measurement.sb'; profile.write_text(self.compiled('measurement', work, control))
+            # Each operation in its own sandboxed process: directories at the listed names succeed; a regular
+            # file, a link, an entry inside a profile directory and another name are refused.
+            operations = [(['/bin/mkdir', str(support / 'Google')], 0), (['/bin/mkdir', str(support / 'Google/Chrome')], 0),
+                          (['/usr/bin/touch', str(support / 'Chromium')], 1), (['/bin/ln', '-s', 'x', str(support / 'Google/Chrome for Testing')], 1),
+                          (['/usr/bin/touch', str(support / 'Google/Chrome/inside')], 1), (['/bin/mkdir', str(support / 'Other')], 1)]
+            codes = [(argv[-1], min(subprocess.run([isolation.SANDBOX_EXEC, '-f', str(profile), *argv], capture_output=True, timeout=30).returncode, 1))
+                     for argv, _ in operations]
+            created = sorted(str(path.relative_to(support)) for path in support.rglob('*'))
+        self.assertEqual(codes, [(argv[-1], expected) for argv, expected in operations])
+        self.assertEqual(created, ['Google', 'Google/Chrome'])
+
     @unittest.skipUnless(sys.platform == 'darwin' and Path('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome').exists()
                          and Path(isolation.SANDBOX_EXEC).exists(), 'wymaga macOS z Chrome i sandbox-exec')
     def test_real_chrome_starts_only_in_the_measurement_scope(self):
@@ -453,19 +478,23 @@ class ProfileBoundary(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir='/private/tmp') as base:
             root = Path(base).resolve(); work = root / 'work'; work.mkdir(); control = root / 'control'; control.mkdir(mode=0o700)
             readonly = [str(Path(p).resolve()) for p in ('/usr', '/bin', '/System', '/Library', '/private/etc', '/dev', '/Applications/Google Chrome.app')]
-            results = {}
-            for scope in ('project', 'measurement'):
+            # Only the scope where Chrome must start: launching it where it must fail crashed Chrome on every
+            # run and macOS showed a crash dialog to whoever ran the suite. The project scope lacking Chrome's
+            # rules is asserted on the compiled profile (test_measurement_scope_adds_only_the_browser_rules_and_other_scopes_get_none).
+            results = {}; errors = {}
+            for scope in ('measurement',):
                 policy = {key: [] for key in isolation.KEYS}; policy.update(scope=scope, writable_roots=[str(work)], readonly_roots=readonly)
                 backend = isolation.SeatbeltBackend(control); profile = root / (scope + '.sb'); profile.write_text(backend._compile(backend._normalize(policy)))
                 try:
                     done = subprocess.run([isolation.SANDBOX_EXEC, '-f', str(profile), chrome, '--headless=new', '--no-sandbox', '--disable-gpu', '--no-first-run',
                                            '--user-data-dir=' + str(work / ('profile-' + scope)), '--dump-dom', 'about:blank'],
                                           capture_output=True, text=True, timeout=60, cwd=str(work), env={'HOME': str(work), 'TMPDIR': str(work), 'MAC_CHROMIUM_TMPDIR': str(work), 'PATH': '/usr/bin:/bin'})
-                    results[scope] = (done.returncode, '<html' in done.stdout)
-                except subprocess.TimeoutExpired:
-                    results[scope] = ('timeout', False)
-            self.assertEqual(results['measurement'], (0, True))
-            self.assertNotEqual(results['project'][0], 0); self.assertFalse(results['project'][1])
+                    results[scope] = (done.returncode, '<html' in done.stdout); errors[scope] = done.stderr[-3000:]
+                except subprocess.TimeoutExpired as timeout:
+                    results[scope] = ('timeout', False); output = timeout.stderr or ''
+                    errors[scope] = (output.decode(errors='replace') if isinstance(output, bytes) else output)[-3000:]
+            # Chrome's own stderr names the denied service or path when the measurement scope is too narrow.
+            self.assertEqual(results['measurement'], (0, True), errors.get('measurement'))
 
     @unittest.skipUnless(sys.platform == 'darwin' and Path(isolation.SANDBOX_EXEC).exists(), 'wymaga macOS z sandbox-exec')
     def test_real_sandbox_denies_posix_ipc_outside_write_and_network_in_both_scopes(self):
@@ -511,17 +540,17 @@ class RedirectedRoutes(unittest.TestCase):
             Path(d,'audit.json').write_text(j.dumps(base))
             result=helix_visual.projection(d,known={'/old','/new'})
             self.assertEqual((result['status'],result['redirects_to']),('redirected','/new'))
-            # pomiar przerwany odesłaniem ma flagę stanów zamiast listy: nadal jest rozpoznany jako odesłanie
+            # a measurement cut short by a redirect carries a state flag instead of a list: it is still recognised as a redirect
             Path(d,'audit.json').write_text(j.dumps(dict(base,runs=[dict(run,states=True)])))
             self.assertEqual(helix_visual.projection(d,known={'/old','/new'})['status'],'redirected')
             Path(d,'audit.json').write_text(j.dumps(base))
-            # bez sesji ekranów, na nieznany ekran i na logowanie odesłanie zostaje pomiarem niepełnym
+            # a redirect leaves the measurement incomplete when the screen session is missing, the target is unknown, or it is the login
             self.assertEqual(helix_visual.projection(d)['status'],'incomplete')
             self.assertEqual(helix_visual.projection(d,known={'/old'})['status'],'incomplete')
             for target in ('/login','/403','/404','/access-denied','/errors/500','/brak-dostepu'):
                 Path(d,'audit.json').write_text(j.dumps(dict(base,runs=[dict(run,finalURL='https://localhost:1'+target)])))
                 self.assertEqual(helix_visual.projection(d,known={'/old',target})['status'],'incomplete',target)
-            # inny origin (np. dostawca tożsamości) i błąd HTTP zostają pomiarem niepełnym
+            # another origin (e.g. the identity provider) and an HTTP error stay incomplete measurements
             for change in (dict(finalURL='https://idp.example.invalid/new'),dict(httpStatus=404)):
                 Path(d,'audit.json').write_text(j.dumps(dict(base,runs=[dict(run,**change)])))
                 self.assertEqual(helix_visual.projection(d,known={'/old','/new'})['status'],'incomplete')
@@ -554,10 +583,10 @@ class RouteAuditSelfCheck(unittest.TestCase):
     def test_same_finding_on_most_routes_makes_the_audit_suspect(self):
         import helix_visual, tempfile
         with tempfile.TemporaryDirectory() as d:
-            # niemal wszystkie uwagi są te same na każdej trasie: pomiar ogląda coś wspólnego, nie ekrany
+            # nearly all findings are the same on every route: the measurement sees something common to all routes, not the screens
             check=helix_visual.self_check(self.audits(d,[['okno "Zaczynamy" 95x28','okno: lista','okno: tytuł','okno: stopka']+(['własny'] if i==0 else []) for i in range(12)]))
             self.assertEqual((check['status'],check['shared_total'],check['shared_findings'][0]['routes']),('SUSPECT',4,12))
-            # wspólna powłoka plus dużo własnych uwag na trasach to wynik, nie podejrzenie; trasy są oceniane bez uwag powłoki
+            # a shared shell plus many route-specific findings is a result, not a suspicion; routes are judged without the shell's findings
             mixed=helix_visual.self_check(self.audits(d+'/..',[]) if False else self.audits(tempfile.mkdtemp(dir=d),[['powłoka 36x36']+(['własny '+str(i)+'-'+str(k) for k in range(4)] if i%2 else []) for i in range(12)]))
             self.assertEqual((mixed['status'],mixed['passed_without_shell']),('OK',6))
 
@@ -580,7 +609,7 @@ class RouteAuditSelfCheck(unittest.TestCase):
             Path(results[0]['evidence']).write_text(j.dumps(dict(runs=[dict(tap=['własny'],runtime=['HTTP 500: http://127.0.0.1:5/functions/v1/sales?x=1','console: x'])])))
             Path(results[1]['evidence']).write_text(j.dumps(dict(runs=[dict(runtime=['HTTP 500: http://127.0.0.1:5/functions/v1/sales','HTTP 406: http://127.0.0.1:5/rest/v1/rows'])])))
             results[1]['status']='incomplete'
-            # błąd po kliknięciu i błąd z odrzuconego podejścia liczą się tak samo jak błąd po wejściu
+            # an error after a click or from a rejected attempt counts the same as an error on entry
             Path(results[2]['evidence']).write_text(j.dumps(dict(runs=[dict(states=True),dict(states=[dict(runtime=['HTTP 500: http://127.0.0.1:5/functions/v1/sales'])],attempts=[dict(runtime=['HTTP 404: http://127.0.0.1:5/rpc/x'])])])))
             check=helix_visual.self_check(results)
             self.assertEqual(check['failed_requests'],[dict(status=500,path='/functions/v1/sales',routes=3),dict(status=406,path='/rest/v1/rows',routes=1),dict(status=404,path='/rpc/x',routes=1)])
@@ -803,7 +832,7 @@ class Settings(BaseSettings):
         proxy=helix_runtime.PackageProxy(('localhost',))
         original=socket.create_connection
         try:
-            # tunel do „rejestru” na pętli zwrotnej: test podmienia tylko port docelowy
+            # a tunnel to the "registry" on loopback: the test only swaps the target port
             socket.create_connection=lambda address,timeout=None:original(('127.0.0.1',port),timeout=timeout) if address==('localhost',443) else original(address,timeout=timeout)
             client=original(('127.0.0.1',proxy.port),timeout=5)
             client.sendall(b'CONNECT localhost:443 HTTP/1.1\r\n\r\n')
@@ -894,7 +923,7 @@ class RoleChecks(unittest.TestCase):
         fake.identity_forms['frontend']['identities'][1]['phases']=phases('PASS')
         rows={row['role']:row['result'] for row in helix_runtime.Runner.login_expectations(fake,{'path':'frontend'})}
         self.assertEqual(rows['archived'],'SESSION_GRANTED_TO_DENIED_ROLE')
-        # nieudana próba z innego powodu (dostawca tożsamości, przerwanie) nie dowodzi odmowy aplikacji
+        # an attempt that failed for another reason (identity provider, interruption) does not prove the application refused
         fake.identity_forms['frontend']['identities'][1]['phases']=phases('FAIL','BROWSER_OPERATION_FAILED')
         rows={row['role']:row['result'] for row in helix_runtime.Runner.login_expectations(fake,{'path':'frontend'})}
         self.assertEqual(rows['archived'],'INCONCLUSIVE')
@@ -931,7 +960,7 @@ class ClosingReviewFixes(unittest.TestCase):
             self.assertTrue(probe(None,'http://127.0.0.1:%d/'%api.server_address[1]))
             self.assertFalse(probe(None,'http://127.0.0.1:1/'))
             self.assertFalse(probe(None,'https://example.invalid/'))
-            # odesłanie i błąd HTTP niczego nie rozstrzygają; odesłania nie są śledzone
+            # a redirect or an HTTP error decides nothing; redirects are not followed
             import http.server, threading
             hits=[]
             class Elsewhere(http.server.BaseHTTPRequestHandler):
