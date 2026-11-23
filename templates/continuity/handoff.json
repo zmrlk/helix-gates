@@ -1,0 +1,8 @@
+{
+  "agent": "agent-a",
+  "env": "box",
+  "done": "Zako\u0144czono kontrol\u0119 modu\u0142u.",
+  "evidence": "tests/test_module.py",
+  "next": "Sprawd\u017a wynik bramek.",
+  "risks": "Brak niezale\u017cnego odbioru."
+}

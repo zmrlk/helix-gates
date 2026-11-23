@@ -1,0 +1,1489 @@
+{
+  "schema_version": 1,
+  "providers": [
+    {
+      "provider": "postgres",
+      "family": "storage",
+      "packages": {
+        "npm": [
+          "pg",
+          "postgres",
+          "psycopg",
+          "psycopg2",
+          "psycopg2-binary",
+          "asyncpg",
+          "@neondatabase/serverless"
+        ],
+        "pypi": [
+          "psycopg",
+          "psycopg2",
+          "psycopg2-binary",
+          "asyncpg"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "(?:DATABASE_URL|POSTGRES(?:QL)?_|PG(?:HOST|PORT|DATABASE|USER|PASSWORD)\\b)"
+      ],
+      "default_strategy": "container",
+      "legacy_kind": "database",
+      "legacy_implemented": true,
+      "images": [
+        "postgres"
+      ]
+    },
+    {
+      "provider": "oidc",
+      "family": "identity",
+      "packages": {
+        "npm": [
+          "openid-client",
+          "oidc-client-ts"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "(?:OIDC_|OPENID_|AUTH0_|OKTA_|COGNITO_|(?:AUTH|IDENTITY|LOGIN)_(?:ISSUER|DISCOVERY|REALM))"
+      ],
+      "default_strategy": "emulator",
+      "legacy_kind": "identity",
+      "legacy_implemented": true
+    },
+    {
+      "provider": "keycloak",
+      "family": "identity",
+      "packages": {
+        "npm": [
+          "keycloak-js",
+          "keycloak-connect",
+          "python-keycloak"
+        ],
+        "pypi": [
+          "python-keycloak"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "(?:KEYCLOAK_|KC_(?:URL|REALM|CLIENT|ISSUER))"
+      ],
+      "default_strategy": "container",
+      "legacy_kind": "identity",
+      "legacy_implemented": true,
+      "images": [
+        "keycloak"
+      ]
+    },
+    {
+      "provider": "redis",
+      "family": "queue",
+      "packages": {
+        "npm": [
+          "redis",
+          "ioredis",
+          "bullmq"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "REDIS_"
+      ],
+      "default_strategy": "container",
+      "legacy_kind": "cache",
+      "legacy_implemented": false,
+      "container": "redis",
+      "images": [
+        "redis"
+      ]
+    },
+    {
+      "provider": "resend",
+      "family": "email",
+      "packages": {
+        "npm": [
+          "resend"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [
+        "api.resend.com"
+      ],
+      "env_patterns": [
+        "RESEND_"
+      ],
+      "default_strategy": "emulator",
+      "legacy_kind": "mail",
+      "legacy_implemented": true
+    },
+    {
+      "provider": "smtp",
+      "family": "email",
+      "packages": {
+        "npm": [
+          "nodemailer",
+          "smtplib",
+          "aiosmtplib"
+        ],
+        "pypi": [
+          "smtplib",
+          "aiosmtplib"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "SMTP_"
+      ],
+      "default_strategy": "container",
+      "legacy_kind": "mail",
+      "legacy_implemented": false,
+      "container": "mailpit",
+      "images": [
+        "mailpit",
+        "mailhog"
+      ]
+    },
+    {
+      "provider": "serwersms",
+      "family": "sms",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [
+        "api.serwersms.pl",
+        "api2.serwersms.pl"
+      ],
+      "env_patterns": [
+        "SERWER_?SMS_"
+      ],
+      "default_strategy": "emulator",
+      "legacy_kind": "sms",
+      "legacy_implemented": true
+    },
+    {
+      "provider": "play-sms",
+      "family": "sms",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [
+        "api.sms.play.pl",
+        "uslugidlafirm.play.pl"
+      ],
+      "env_patterns": [
+        "(?:PLAY_SMS_|SMS_PLAY_|PLAY_(?:BASE_URL|CLIENT_ID|CLIENT_SECRET|TOKEN_TTL)\\b)"
+      ],
+      "default_strategy": "emulator",
+      "legacy_kind": "sms",
+      "legacy_implemented": true
+    },
+    {
+      "provider": "meta",
+      "family": "chat",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [
+        "graph.facebook.com",
+        "graph.instagram.com"
+      ],
+      "env_patterns": [
+        "(?:META_|FACEBOOK_|FB_(?:ACCESS|APP|PIXEL|PAGE))"
+      ],
+      "default_strategy": "emulator",
+      "legacy_kind": "social",
+      "legacy_implemented": true
+    },
+    {
+      "provider": "tiktok",
+      "family": "chat",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [
+        "business-api.tiktok.com",
+        "open.tiktokapis.com"
+      ],
+      "env_patterns": [
+        "TIKTOK_"
+      ],
+      "default_strategy": "emulator",
+      "legacy_kind": "social",
+      "legacy_implemented": true
+    },
+    {
+      "provider": "web-push",
+      "family": "push",
+      "packages": {
+        "npm": [
+          "web-push"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "(?:VAPID_|WEB_?PUSH_)"
+      ],
+      "default_strategy": "emulator",
+      "legacy_kind": "push",
+      "legacy_implemented": true
+    },
+    {
+      "provider": "whatsapp",
+      "family": "chat",
+      "packages": {
+        "npm": [
+          "whatsapp-web.js"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "(?:WHATSAPP_|WWEBJS_)"
+      ],
+      "default_strategy": "disabled",
+      "legacy_kind": "messaging",
+      "legacy_implemented": false,
+      "disable_packages": [
+        "whatsapp-web.js"
+      ]
+    },
+    {
+      "provider": "puppeteer",
+      "family": "storage",
+      "packages": {
+        "npm": [
+          "puppeteer",
+          "puppeteer-core"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "PUPPETEER_"
+      ],
+      "default_strategy": "container",
+      "legacy_kind": "browser",
+      "legacy_implemented": false
+    },
+    {
+      "provider": "playwright",
+      "family": "storage",
+      "packages": {
+        "npm": [
+          "playwright",
+          "playwright-core",
+          "@playwright/test"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "PLAYWRIGHT_"
+      ],
+      "default_strategy": "container",
+      "legacy_kind": "browser",
+      "legacy_implemented": false
+    },
+    {
+      "provider": "sharp",
+      "family": "storage",
+      "packages": {
+        "npm": [
+          "sharp"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "SHARP_"
+      ],
+      "default_strategy": "container",
+      "legacy_kind": "native-image",
+      "legacy_implemented": false
+    },
+    {
+      "provider": "satori",
+      "family": "storage",
+      "packages": {
+        "npm": [
+          "satori"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [],
+      "default_strategy": "container",
+      "legacy_kind": "document",
+      "legacy_implemented": false
+    },
+    {
+      "provider": "subiekt",
+      "family": "erp",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "(?:SUBIEKT_|NEXO_|SFERA_)"
+      ],
+      "default_strategy": "replay",
+      "legacy_kind": "erp",
+      "legacy_implemented": false,
+      "code_patterns": [
+        "\\b(?:system_ksiegowy|accounting_system|erp_provider|erp_system|erpProvider|erpSystem|source_system)\\s*(?:===|!==|==|!=|:)\\s*['\\\"](?:subiekt|nexo|sfera)['\\\"]"
+      ],
+      "evidence_kind": "erp_protocol_declaration"
+    },
+    {
+      "provider": "ai",
+      "family": "ai",
+      "packages": {
+        "npm": [
+          "openai",
+          "anthropic",
+          "@anthropic-ai/sdk",
+          "@google/generative-ai",
+          "ollama"
+        ],
+        "pypi": [
+          "anthropic",
+          "ollama"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [
+        "api.openai.com",
+        "api.anthropic.com",
+        "generativelanguage.googleapis.com"
+      ],
+      "env_patterns": [
+        "(?:OPENAI_|ANTHROPIC_|GEMINI_|OLLAMA_|AI_(?:URL|KEY|MODEL|TOKEN|BASE))"
+      ],
+      "default_strategy": "replay",
+      "legacy_kind": "ai",
+      "legacy_implemented": false,
+      "recording_aliases": [
+        "anthropic"
+      ]
+    },
+    {
+      "provider": "cron",
+      "family": "scheduler",
+      "packages": {
+        "npm": [
+          "node-cron",
+          "cron",
+          "apscheduler"
+        ],
+        "pypi": [
+          "apscheduler"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "(?:CRON_|SCHEDULER_)"
+      ],
+      "default_strategy": "disabled",
+      "legacy_kind": "scheduler",
+      "legacy_implemented": false,
+      "disable_packages": [
+        "node-cron",
+        "cron",
+        "apscheduler"
+      ]
+    },
+    {
+      "provider": "worker",
+      "family": "queue",
+      "packages": {
+        "npm": [
+          "celery",
+          "rq"
+        ],
+        "pypi": [
+          "celery",
+          "rq"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "(?:CELERY_|RQ_|WORKER_)"
+      ],
+      "default_strategy": "disabled",
+      "legacy_kind": "worker",
+      "legacy_implemented": false,
+      "disable_packages": [
+        "celery",
+        "rq"
+      ]
+    },
+    {
+      "provider": "webauthn",
+      "family": "identity",
+      "packages": {
+        "npm": [
+          "@simplewebauthn/server",
+          "@simplewebauthn/browser"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "(?:WEBAUTHN_|PASSKEY_)"
+      ],
+      "default_strategy": "emulator",
+      "legacy_kind": "identity-device",
+      "legacy_implemented": false
+    },
+    {
+      "provider": "unknown-http",
+      "family": "chat",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [],
+      "default_strategy": null,
+      "legacy_kind": "unknown",
+      "legacy_implemented": false
+    },
+    {
+      "provider": "stripe",
+      "family": "payments",
+      "packages": {
+        "npm": [
+          "stripe"
+        ],
+        "pypi": [
+          "stripe"
+        ],
+        "go": [
+          "github.com/stripe/stripe-go"
+        ],
+        "composer": [
+          "stripe/stripe-php"
+        ],
+        "gem": [
+          "stripe"
+        ]
+      },
+      "hosts": [
+        "api.stripe.com"
+      ],
+      "env_patterns": [
+        "^STRIPE_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "paynow",
+      "family": "payments",
+      "packages": {
+        "npm": [
+          "paynow"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [
+          "pay-now/paynow-php-sdk"
+        ],
+        "gem": []
+      },
+      "hosts": [
+        "api.paynow.pl",
+        "api.sandbox.paynow.pl"
+      ],
+      "env_patterns": [
+        "^PAYNOW_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "payu",
+      "family": "payments",
+      "packages": {
+        "npm": [
+          "payu"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [
+          "openpayu/openpayu"
+        ],
+        "gem": []
+      },
+      "hosts": [
+        "secure.payu.com",
+        "secure.snd.payu.com"
+      ],
+      "env_patterns": [
+        "^PAYU_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "przelewy24",
+      "family": "payments",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [
+          "przelewy24/przelewy24-php"
+        ],
+        "gem": []
+      },
+      "hosts": [
+        "secure.przelewy24.pl",
+        "sandbox.przelewy24.pl"
+      ],
+      "env_patterns": [
+        "^(P24_|PRZELEWY24_)"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "tpay",
+      "family": "payments",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [
+          "tpay-com/tpay-openapi-php"
+        ],
+        "gem": []
+      },
+      "hosts": [
+        "api.tpay.com",
+        "openapi.tpay.com"
+      ],
+      "env_patterns": [
+        "^TPAY_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "s3",
+      "family": "storage",
+      "packages": {
+        "npm": [
+          "@aws-sdk/client-s3",
+          "aws-sdk"
+        ],
+        "pypi": [
+          "boto3"
+        ],
+        "go": [
+          "github.com/aws/aws-sdk-go-v2/service/s3"
+        ],
+        "composer": [
+          "aws/aws-sdk-php"
+        ],
+        "gem": [
+          "aws-sdk-s3"
+        ]
+      },
+      "hosts": [
+        "s3.amazonaws.com",
+        "*.s3.amazonaws.com",
+        "*.s3.*.amazonaws.com"
+      ],
+      "env_patterns": [
+        "^(AWS_S3_|S3_)"
+      ],
+      "default_strategy": "container",
+      "container": "minio",
+      "images": [
+        "minio"
+      ]
+    },
+    {
+      "provider": "b2",
+      "family": "storage",
+      "packages": {
+        "npm": [
+          "backblaze-b2"
+        ],
+        "pypi": [
+          "b2sdk"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [
+        "*.backblazeb2.com"
+      ],
+      "env_patterns": [
+        "^(B2_|BACKBLAZE_)"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "r2",
+      "family": "storage",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [
+        "*.r2.cloudflarestorage.com"
+      ],
+      "env_patterns": [
+        "^(R2_|CLOUDFLARE_R2_)"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "gcs",
+      "family": "storage",
+      "packages": {
+        "npm": [
+          "@google-cloud/storage"
+        ],
+        "pypi": [
+          "google-cloud-storage"
+        ],
+        "go": [
+          "cloud.google.com/go/storage"
+        ],
+        "composer": [
+          "google/cloud-storage"
+        ],
+        "gem": [
+          "google-cloud-storage"
+        ]
+      },
+      "hosts": [
+        "storage.googleapis.com",
+        "*.storage.googleapis.com"
+      ],
+      "env_patterns": [
+        "^(GCS_|GOOGLE_CLOUD_STORAGE_)"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "cloudinary",
+      "family": "storage",
+      "packages": {
+        "npm": [
+          "cloudinary"
+        ],
+        "pypi": [
+          "cloudinary"
+        ],
+        "go": [],
+        "composer": [
+          "cloudinary/cloudinary_php"
+        ],
+        "gem": [
+          "cloudinary"
+        ]
+      },
+      "hosts": [
+        "api.cloudinary.com",
+        "res.cloudinary.com"
+      ],
+      "env_patterns": [
+        "^CLOUDINARY_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "sendgrid",
+      "family": "email",
+      "packages": {
+        "npm": [
+          "@sendgrid/mail"
+        ],
+        "pypi": [
+          "sendgrid"
+        ],
+        "go": [],
+        "composer": [
+          "sendgrid/sendgrid"
+        ],
+        "gem": [
+          "sendgrid-ruby"
+        ]
+      },
+      "hosts": [
+        "api.sendgrid.com"
+      ],
+      "env_patterns": [
+        "^SENDGRID_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "mailgun",
+      "family": "email",
+      "packages": {
+        "npm": [
+          "mailgun.js",
+          "mailgun-js"
+        ],
+        "pypi": [
+          "mailgun"
+        ],
+        "go": [],
+        "composer": [
+          "mailgun/mailgun-php"
+        ],
+        "gem": [
+          "mailgun-ruby"
+        ]
+      },
+      "hosts": [
+        "api.mailgun.net",
+        "api.eu.mailgun.net"
+      ],
+      "env_patterns": [
+        "^MAILGUN_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "postmark",
+      "family": "email",
+      "packages": {
+        "npm": [
+          "postmark"
+        ],
+        "pypi": [
+          "postmarker"
+        ],
+        "go": [],
+        "composer": [
+          "wildbit/postmark-php"
+        ],
+        "gem": [
+          "postmark"
+        ]
+      },
+      "hosts": [
+        "api.postmarkapp.com"
+      ],
+      "env_patterns": [
+        "^POSTMARK_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "ses",
+      "family": "email",
+      "packages": {
+        "npm": [
+          "@aws-sdk/client-ses",
+          "@aws-sdk/client-sesv2"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [
+        "email.*.amazonaws.com"
+      ],
+      "env_patterns": [
+        "^(AWS_SES_|SES_)"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "twilio",
+      "family": "sms",
+      "packages": {
+        "npm": [
+          "twilio"
+        ],
+        "pypi": [
+          "twilio"
+        ],
+        "go": [],
+        "composer": [
+          "twilio/sdk"
+        ],
+        "gem": [
+          "twilio-ruby"
+        ]
+      },
+      "hosts": [
+        "api.twilio.com"
+      ],
+      "env_patterns": [
+        "^TWILIO_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "smsapi",
+      "family": "sms",
+      "packages": {
+        "npm": [
+          "smsapi"
+        ],
+        "pypi": [
+          "smsapi-client"
+        ],
+        "go": [],
+        "composer": [
+          "smsapi/php-client"
+        ],
+        "gem": []
+      },
+      "hosts": [
+        "api.smsapi.pl",
+        "api.smsapi.com"
+      ],
+      "env_patterns": [
+        "^SMSAPI_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "sentry",
+      "family": "observability",
+      "packages": {
+        "npm": [
+          "@sentry/node",
+          "@sentry/browser",
+          "@sentry/sveltekit"
+        ],
+        "pypi": [
+          "sentry-sdk"
+        ],
+        "go": [
+          "github.com/getsentry/sentry-go"
+        ],
+        "composer": [
+          "sentry/sentry"
+        ],
+        "gem": [
+          "sentry-ruby"
+        ]
+      },
+      "hosts": [
+        "*.ingest.sentry.io",
+        "*.ingest.*.sentry.io"
+      ],
+      "env_patterns": [
+        "^SENTRY_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "slack",
+      "family": "chat",
+      "packages": {
+        "npm": [
+          "@slack/web-api",
+          "@slack/webhook"
+        ],
+        "pypi": [
+          "slack-sdk"
+        ],
+        "go": [],
+        "composer": [
+          "jolicode/slack-php-api"
+        ],
+        "gem": []
+      },
+      "hosts": [
+        "slack.com",
+        "hooks.slack.com"
+      ],
+      "env_patterns": [
+        "^SLACK_"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "firebase",
+      "family": "push",
+      "packages": {
+        "npm": [
+          "firebase-admin",
+          "firebase"
+        ],
+        "pypi": [
+          "firebase-admin"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [
+        "fcm.googleapis.com",
+        "*.firebaseio.com"
+      ],
+      "env_patterns": [
+        "^(FIREBASE_|FCM_)"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "google-maps",
+      "family": "storage",
+      "packages": {
+        "npm": [
+          "@googlemaps/google-maps-services-js"
+        ],
+        "pypi": [
+          "googlemaps"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [
+        "maps.googleapis.com",
+        "routes.googleapis.com"
+      ],
+      "env_patterns": [
+        "^(GOOGLE_MAPS_|MAPS_API_)"
+      ],
+      "default_strategy": "http-sink"
+    },
+    {
+      "provider": "bullmq-repeat",
+      "family": "scheduler",
+      "packages": {
+        "npm": [
+          "bullmq"
+        ],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "^BULLMQ_"
+      ],
+      "default_strategy": "disable"
+    },
+    {
+      "provider": "celery-beat",
+      "family": "scheduler",
+      "packages": {
+        "npm": [],
+        "pypi": [
+          "django-celery-beat"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [
+        "^CELERY_BEAT_"
+      ],
+      "default_strategy": "disable",
+      "code_patterns": [
+        "\\bbeat_schedule\\b",
+        "\\bcelery\\s+[^\\n]*\\bbeat\\b"
+      ]
+    },
+    {
+      "provider": "apscheduler",
+      "family": "scheduler",
+      "packages": {
+        "npm": [],
+        "pypi": [
+          "apscheduler"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [],
+      "default_strategy": "disable"
+    },
+    {
+      "provider": "sidekiq",
+      "family": "scheduler",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "sidekiq",
+          "sidekiq-cron"
+        ]
+      },
+      "hosts": [],
+      "env_patterns": [
+        "^SIDEKIQ_"
+      ],
+      "default_strategy": "disable"
+    },
+    {
+      "provider": "laravel-scheduler",
+      "family": "scheduler",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [
+          "laravel/framework"
+        ],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [],
+      "default_strategy": "disable",
+      "code_patterns": [
+        "\\bSchedule::",
+        "\\bschedule:run\\b",
+        "\\bschedule:work\\b"
+      ]
+    },
+    {
+      "provider": "crontab",
+      "family": "scheduler",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [],
+      "default_strategy": "disable",
+      "file_patterns": [
+        "crontab",
+        "*.cron",
+        "*/cron.d/*"
+      ]
+    },
+    {
+      "provider": "k8s-cronjob",
+      "family": "scheduler",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [],
+      "default_strategy": "disable",
+      "code_patterns": [
+        "(?m)^\\s*kind:\\s*CronJob\\b"
+      ]
+    },
+    {
+      "provider": "systemd-timer",
+      "family": "scheduler",
+      "packages": {
+        "npm": [],
+        "pypi": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "hosts": [],
+      "env_patterns": [],
+      "default_strategy": "disable",
+      "file_patterns": [
+        "*.timer"
+      ]
+    }
+  ],
+  "containers": {
+    "redis": {
+      "image": "docker.io/library/redis@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499",
+      "port": 6379,
+      "command": [
+        "redis-server",
+        "--save",
+        "",
+        "--appendonly",
+        "no"
+      ],
+      "tmpfs": [
+        "/data"
+      ],
+      "environment": {},
+      "env_bindings": {
+        "REDIS_URL": "redis://127.0.0.1:{port}/0",
+        "REDIS_HOST": "127.0.0.1",
+        "REDIS_PORT": "{port}"
+      },
+      "source": "https://hub.docker.com/layers/library/redis/7-alpine/images/sha256-fc0099e9af31874b5520788cf428630f72d82fa44cb775dcbebb382d803b8175"
+    },
+    "mailpit": {
+      "image": "ghcr.io/axllent/mailpit@sha256:ed9b00c609e77e99c79b93f1178255ebc271868920f2c69a8d166bd5634ed10d",
+      "port": 1025,
+      "command": [],
+      "tmpfs": [
+        "/tmp"
+      ],
+      "environment": {},
+      "env_bindings": {
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "{port}",
+        "SMTP_URL": "smtp://127.0.0.1:{port}"
+      },
+      "source": "https://github.com/axllent/mailpit/pkgs/container/mailpit"
+    },
+    "minio": {
+      "image": "docker.io/minio/minio@sha256:13582eff79c6605a2d315bdd0e70164142ea7e98fc8411e9e10d089502a6d883",
+      "port": 9000,
+      "command": [
+        "server",
+        "/data"
+      ],
+      "tmpfs": [
+        "/data",
+        "/tmp"
+      ],
+      "environment": {
+        "MINIO_ROOT_USER": "helix-synthetic",
+        "MINIO_ROOT_PASSWORD": "helix-synthetic-only"
+      },
+      "env_bindings": {
+        "AWS_ENDPOINT_URL": "http://127.0.0.1:{port}",
+        "AWS_ENDPOINT_URL_S3": "http://127.0.0.1:{port}",
+        "S3_ENDPOINT": "http://127.0.0.1:{port}",
+        "AWS_ACCESS_KEY_ID": "helix-synthetic",
+        "AWS_SECRET_ACCESS_KEY": "helix-synthetic-only"
+      },
+      "source": "https://hub.docker.com/layers/minio/minio/RELEASE.2025-09-07T16-13-09Z-cpuv1/images/sha256-e08497cde44985e0c36cacd391c9723831293d789d569cc967685f2fe17a7463"
+    }
+  },
+  "legacy_operations": [
+    {
+      "id": "resend.send",
+      "provider": "resend",
+      "hosts": [
+        "api.resend.com"
+      ],
+      "path_pattern": "^/emails$",
+      "method": "POST",
+      "encoding": "json",
+      "response_status": 200,
+      "response_body": {
+        "id": "$id"
+      },
+      "content_types": [
+        "application/json"
+      ],
+      "query_keys": [],
+      "effect": "capture"
+    },
+    {
+      "id": "serwersms.send",
+      "provider": "serwersms",
+      "hosts": [
+        "api.serwersms.pl",
+        "api2.serwersms.pl"
+      ],
+      "path_pattern": "^/messages/send_sms$",
+      "method": "POST",
+      "encoding": "form",
+      "response_status": 200,
+      "response_body": {
+        "success": true,
+        "unsent": 0,
+        "items": [
+          {
+            "id": "$id"
+          }
+        ]
+      },
+      "content_types": [
+        "application/x-www-form-urlencoded"
+      ],
+      "query_keys": [],
+      "effect": "capture"
+    },
+    {
+      "id": "play.token",
+      "provider": "play-sms",
+      "hosts": [
+        "uslugidlafirm.play.pl"
+      ],
+      "path_pattern": "^/oauth/token-jwt$",
+      "method": "POST",
+      "encoding": "empty",
+      "response_status": 200,
+      "response_body": {
+        "token": "$token"
+      },
+      "content_types": [],
+      "query_keys": [],
+      "effect": "control"
+    },
+    {
+      "id": "play.send",
+      "provider": "play-sms",
+      "hosts": [
+        "uslugidlafirm.play.pl"
+      ],
+      "path_pattern": "^/api/bramkasms/sendSms$",
+      "method": "POST",
+      "encoding": "json",
+      "response_status": 204,
+      "response_body": null,
+      "content_types": [
+        "application/json"
+      ],
+      "query_keys": [],
+      "effect": "capture"
+    },
+    {
+      "id": "meta.events",
+      "provider": "meta",
+      "hosts": [
+        "graph.facebook.com"
+      ],
+      "path_pattern": "^/v[0-9]{1,2}\\.[0-9]{1,2}/[A-Za-z0-9_-]{1,128}/events$",
+      "method": "POST",
+      "encoding": "json",
+      "response_status": 200,
+      "response_body": {},
+      "content_types": [
+        "application/json"
+      ],
+      "query_keys": [
+        "access_token"
+      ],
+      "effect": "capture"
+    },
+    {
+      "id": "meta.photos",
+      "provider": "meta",
+      "hosts": [
+        "graph.facebook.com"
+      ],
+      "path_pattern": "^/v[0-9]{1,2}\\.[0-9]{1,2}/[A-Za-z0-9_-]{1,128}/photos$",
+      "method": "POST",
+      "encoding": "json",
+      "response_status": 200,
+      "response_body": {
+        "id": "$id"
+      },
+      "content_types": [
+        "application/json"
+      ],
+      "query_keys": [],
+      "effect": "capture"
+    },
+    {
+      "id": "meta.videos",
+      "provider": "meta",
+      "hosts": [
+        "graph.facebook.com"
+      ],
+      "path_pattern": "^/v[0-9]{1,2}\\.[0-9]{1,2}/[A-Za-z0-9_-]{1,128}/videos$",
+      "method": "POST",
+      "encoding": "json",
+      "response_status": 200,
+      "response_body": {
+        "id": "$id"
+      },
+      "content_types": [
+        "application/json"
+      ],
+      "query_keys": [],
+      "effect": "capture"
+    },
+    {
+      "id": "meta.feed",
+      "provider": "meta",
+      "hosts": [
+        "graph.facebook.com"
+      ],
+      "path_pattern": "^/v[0-9]{1,2}\\.[0-9]{1,2}/[A-Za-z0-9_-]{1,128}/feed$",
+      "method": "POST",
+      "encoding": "json",
+      "response_status": 200,
+      "response_body": {
+        "id": "$id"
+      },
+      "content_types": [
+        "application/json"
+      ],
+      "query_keys": [],
+      "effect": "capture"
+    },
+    {
+      "id": "tiktok.video",
+      "provider": "tiktok",
+      "hosts": [
+        "open.tiktokapis.com"
+      ],
+      "path_pattern": "^/v2/post/publish/inbox/video/init/$",
+      "method": "POST",
+      "encoding": "json",
+      "response_status": 200,
+      "response_body": {
+        "error": {
+          "code": "ok"
+        },
+        "data": {
+          "publish_id": "$id"
+        }
+      },
+      "content_types": [
+        "application/json"
+      ],
+      "query_keys": [],
+      "effect": "capture"
+    },
+    {
+      "id": "tiktok.photo",
+      "provider": "tiktok",
+      "hosts": [
+        "open.tiktokapis.com"
+      ],
+      "path_pattern": "^/v2/post/publish/content/init/$",
+      "method": "POST",
+      "encoding": "json",
+      "response_status": 200,
+      "response_body": {
+        "error": {
+          "code": "ok"
+        },
+        "data": {
+          "publish_id": "$id"
+        }
+      },
+      "content_types": [
+        "application/json"
+      ],
+      "query_keys": [],
+      "effect": "capture"
+    },
+    {
+      "id": "tiktok.status",
+      "provider": "tiktok",
+      "hosts": [
+        "open.tiktokapis.com"
+      ],
+      "path_pattern": "^/v2/post/publish/status/fetch/$",
+      "method": "POST",
+      "encoding": "json",
+      "response_status": 200,
+      "response_body": {
+        "error": {
+          "code": "ok"
+        },
+        "data": {
+          "status": "PROCESSING"
+        }
+      },
+      "content_types": [
+        "application/json"
+      ],
+      "query_keys": [],
+      "effect": "control"
+    },
+    {
+      "id": "webpush.send",
+      "provider": "web-push",
+      "hosts": [],
+      "path_pattern": "^/web-push/helix-synthetic$",
+      "method": "POST",
+      "encoding": "binary",
+      "response_status": 201,
+      "response_body": null,
+      "content_types": [
+        "application/octet-stream"
+      ],
+      "query_keys": [],
+      "effect": "capture"
+    }
+  ],
+  "legacy_providers": [
+    "resend",
+    "serwersms",
+    "play-sms",
+    "meta",
+    "tiktok",
+    "web-push"
+  ]
+}

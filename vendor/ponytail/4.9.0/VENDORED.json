@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "component": "ponytail",
+  "version_declared": "4.9.0",
+  "source_kind": "local_plugin_cache",
+  "upstream_url": "https://github.com/DietrichGebert/ponytail",
+  "upstream_commit": null,
+  "upstream_tag_verified": false,
+  "imported_at": "2026-10-26T03:41:07.276255+00:00",
+  "license": "MIT",
+  "version_sources": [
+    ".claude-plugin/plugin.json",
+    "package.json"
+  ],
+  "files": [
+    {
+      "path": "review.md",
+      "original_path": "skills/ponytail-review/SKILL.md",
+      "sha256": "40df33b58fc6ef889b93585733feb9566b76e9586efa7f376785c1e995197ac0",
+      "bytes": 2383
+    },
+    {
+      "path": "audit.md",
+      "original_path": "skills/ponytail-audit/SKILL.md",
+      "sha256": "5560b8e383dbe2ddfddc873a1e2bf2e586e23e0cd7d995537482b2315331f6d1",
+      "bytes": 1652
+    },
+    {
+      "path": "debt.md",
+      "original_path": "skills/ponytail-debt/SKILL.md",
+      "sha256": "c84fba75f0ca12bfe83f9a78ea02fd125c5dd3f1fbb18124105a489937f284e6",
+      "bytes": 1703
+    },
+    {
+      "path": "LICENSE",
+      "original_path": "LICENSE",
+      "sha256": "fb1bc6909ac3ef82d5c22106e32ef682b0cff66788fa915fb9b53b15c9d2f3ab",
+      "bytes": 1071
+    }
+  ]
+}

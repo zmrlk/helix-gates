@@ -1,0 +1,11 @@
+name: Load budgets
+on: [push, pull_request]
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Supply setup/start scripts and install k6 in the CI runner image.
+      - run: ./ci/setup-test
+      - run: ./ci/start-test
+      - run: k6 run new/templates/ci/k6-baseline.js

@@ -1,0 +1,69 @@
+{
+  "0.7.3-beta": {
+    "commits": [
+      "3a2050fe1b5124fa798808d0d420d2cca78c0b4c",
+      "fc659f5272f1329c306de6d925d8853cc8ab0fb8"
+    ],
+    "reason": "Jawny wyjątek historyczny sprzed helix release: powtórzony numer w równoległych strumieniach; nie zezwala na kolejne commity."
+  },
+  "0.7.2-beta": {
+    "commits": [
+      "6dadc58e3bd790eac6c3433903d8ac3c71d5def2",
+      "9723e1d745f9f606eede4dac0685a71dc59cfc5b"
+    ],
+    "reason": "Jawny wyjątek historyczny sprzed helix release: powtórzony numer w równoległych strumieniach; nie zezwala na kolejne commity."
+  },
+  "0.7.1-beta": {
+    "commits": [
+      "48a4105dcf74e8ced2191ced8f69dc515f9c7e6b",
+      "b26bf2a7a59586737c96016d4c58ab9c4b5fbf44"
+    ],
+    "reason": "Jawny wyjątek historyczny sprzed helix release: powtórzony numer w równoległych strumieniach; nie zezwala na kolejne commity."
+  },
+  "0.6.0-beta": {
+    "commits": [
+      "4735631cbbcbdd170cc9601fbeb7a5fa78a09991",
+      "533b4ea592966b19fddca1f3e1dd327a7becf541",
+      "720d545e65abab68b2b8521a720c3c51c19c70a1",
+      "af541138cedb9e0c3790e23b72230f3b50c41919",
+      "fd3d906bc20ac7ffcb9607f3c2cf4f1f55b9c202"
+    ],
+    "reason": "Jawny wyjątek historyczny sprzed helix release: powtórzony numer w równoległych strumieniach; nie zezwala na kolejne commity."
+  },
+  "0.4.0-beta": {
+    "commits": [
+      "5c847fbd41726964353f6f466419595eec60f3d4",
+      "a6b7fb3e90404eb85a557b9f23f0fcee8ce33aca",
+      "b951566b01aad215515f76fb784e9e1c65f7b5b7"
+    ],
+    "reason": "Jawny wyjątek historyczny sprzed helix release: powtórzony numer w równoległych strumieniach; nie zezwala na kolejne commity."
+  },
+  "0.3.1-beta": {
+    "commits": [
+      "0894d4e459f79aade2b56cb4c4aed00f873c77f8",
+      "1f25d55d977d602e2e662b75320219be9bcd33b3"
+    ],
+    "reason": "Jawny wyjątek historyczny sprzed helix release: powtórzony numer w równoległych strumieniach; nie zezwala na kolejne commity."
+  },
+  "_enforcement_base": "1ba754827732bb3ba7e038208b9f93eef720bbad",
+  "0.8.3-beta": {
+    "commits": [
+      "f3e2482d7642f246991196b0e98c76ca930cbdc0",
+      "14e38f6a4ba4b28dd08774062fcf615d0ac2dc61",
+      "5ca508d5e75241031af71345dd8cbea8bc7f1cb5"
+    ],
+    "reason": "Jawny wyjątek historyczny: duplikat 0.8.3-beta w strumieniach release, runtime (14e38f6) i etapu 3 (5ca508d), przed egzekwowaniem claimu release w tych strumieniach; obejmuje brak receipt i nie zezwala na kolejne commity."
+  },
+  "0.8.5-beta": {
+    "commits": [
+      "e5269123b54b12f793d4d21fcddd4be256a021c4"
+    ],
+    "reason": "Jawny wyjątek historyczny: strumień runtime e526912 zmienił wersję przed egzekwowaniem claimu release w tym strumieniu, bez receipt; nie zezwala na kolejne commity."
+  },
+  "0.8.4-beta": {
+    "commits": [
+      "14e38f6a4ba4b28dd08774062fcf615d0ac2dc61"
+    ],
+    "reason": "Jawny wyjątek historyczny: runtime 14e38f6 powtarza w temacie 0.8.3-beta, ale w źródle ustawia 0.8.4-beta; przed egzekwowaniem claimu release w tym strumieniu, bez receipt. Wyjątek wyłącznie dla tego SHA, bez zgody na kolejne commity."
+  }
+}

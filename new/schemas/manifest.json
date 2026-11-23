@@ -1,0 +1,163 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        1
+      ]
+    },
+    "mode": {
+      "enum": [
+        "greenfield",
+        "brownfield"
+      ]
+    },
+    "profile": {
+      "enum": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    "risk": {
+      "enum": [
+        "low",
+        "high",
+        "regulated"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "approved"
+      ]
+    },
+    "accepted_by": {
+      "type": "string"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "[0-9a-f]{64}"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "approved"
+            ]
+          },
+          "accepted_by": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "sha256",
+          "status",
+          "accepted_by"
+        ]
+      },
+      "minItems": 1
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tag": {
+            "enum": [
+              "VERIFIED",
+              "ASSUMPTION"
+            ]
+          },
+          "statement": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tag",
+          "statement"
+        ]
+      },
+      "minItems": 1
+    },
+    "traceability": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirement": {
+            "type": "string"
+          },
+          "adr": {
+            "type": "string"
+          },
+          "test": {
+            "type": "string"
+          },
+          "checkpoint": {
+            "type": "string"
+          },
+          "gate": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "requirement",
+          "adr",
+          "test",
+          "checkpoint",
+          "gate"
+        ]
+      },
+      "minItems": 1
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "deadline": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "owner",
+          "deadline"
+        ]
+      },
+      "minItems": 0
+    },
+    "platform": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "mode",
+    "profile",
+    "risk",
+    "status",
+    "accepted_by",
+    "artifacts",
+    "claims",
+    "traceability",
+    "gaps"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

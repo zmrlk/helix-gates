@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "partition_key": {
+      "type": "string"
+    },
+    "shard_strategy": {
+      "type": "string"
+    },
+    "rebalance": {
+      "type": "string"
+    },
+    "threshold": {
+      "type": "number",
+      "minimum": 0.001
+    },
+    "measurement": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "partition_key",
+    "shard_strategy",
+    "rebalance",
+    "threshold",
+    "measurement"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tool": "squawk",
+  "version": "2.70.0",
+  "platform": "darwin-arm64/cp312",
+  "wheels": [
+    {
+      "name": "squawk-cli",
+      "version": "2.70.0",
+      "filename": "squawk_cli-2.70.0-py3-none-macosx_11_0_arm64.whl",
+      "sha256": "c6164a083f8bee368fc7c9c1cd7de4704c0775aa75767eefb371c0bd37d3bf08"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {
+      "enum": [
+        "approved"
+      ]
+    },
+    "accepted_by": {
+      "type": "string"
+    },
+    "accepted_at": {
+      "type": "string"
+    },
+    "selected": {
+      "type": "string"
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "approach": {
+            "type": "string"
+          },
+          "benefits": {
+            "type": "string"
+          },
+          "trade_offs": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "approach",
+          "benefits",
+          "trade_offs"
+        ]
+      },
+      "minItems": 2
+    }
+  },
+  "required": [
+    "status",
+    "accepted_by",
+    "accepted_at",
+    "selected",
+    "alternatives"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

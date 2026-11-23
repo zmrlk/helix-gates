@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tool": "jscpd",
+  "version": "5.4.2",
+  "platform": "darwin-arm64/cp312",
+  "wheels": [
+    {
+      "name": "jscpd",
+      "version": "5.4.2",
+      "filename": "jscpd-5.4.2-py3-none-macosx_11_0_arm64.whl",
+      "sha256": "c852e732e686df6d74fc860e77741ea4ce4beea47f04101ea1b1ca47f9e08404"
+    }
+  ]
+}

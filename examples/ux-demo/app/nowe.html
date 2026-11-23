@@ -1,0 +1,14 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hurtownia Demo – nowe zamówienie</title><link rel="stylesheet" href="style.css"></head><body>
+<header><strong>Hurtownia Demo</strong><a href="zamowienia.html">Zamówienia</a><a href="nowe.html">Nowe zamówienie</a></header>
+<main><div class="card" id="form-card"><h1>Nowe zamówienie <span class="badge">Nowość: dostawa jutro</span></h1>
+<form id="order" onsubmit="event.preventDefault(); done()">
+<label for="product">Produkt</label>
+<select id="product"><option value="">— wybierz —</option><option>Papier A4 80g (karton 5 ryz)</option><option>Toner HP 59A</option><option>Segregator A4 75mm</option></select>
+<label for="qty">Ilość</label><input id="qty" type="number" min="1" value="1">
+<label for="delivery">Dostawa</label><select id="delivery"><option>Kurier (jutro)</option><option>Odbiór osobisty – magazyn Łódź</option></select>
+<p><button class="btn" id="submit" type="submit">Złóż zamówienie</button></p></form></div>
+<div id="ok" hidden class="card"><h2>Zamówienie ZAM/2026/0042 przyjęte</h2><p>Potwierdzenie wysłaliśmy e-mailem.</p>
+<p><a id="invoice" href="faktura-FV-2026-0042.pdf" download>Pobierz fakturę proforma (PDF)</a></p></div></main>
+<script>function done(){ if(!document.getElementById('product').value){ alert('Wybierz produkt'); return; }
+document.getElementById('form-card').hidden = true; document.getElementById('ok').hidden = false; }</script></body></html>

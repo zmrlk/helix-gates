@@ -1,0 +1,80 @@
+{
+  "type": "object",
+  "properties": {
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "spdx": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "notice": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "version",
+          "spdx",
+          "license",
+          "notice"
+        ]
+      },
+      "minItems": 1
+    },
+    "spdx": {
+      "type": "string"
+    },
+    "license": {
+      "type": "string"
+    },
+    "notice": {
+      "type": "string"
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "license",
+          "source"
+        ]
+      },
+      "minItems": 1
+    },
+    "owner": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "components",
+    "spdx",
+    "license",
+    "notice",
+    "assets",
+    "owner"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "requirements": [
+    {
+      "id": "REQ-A-01",
+      "group": "A",
+      "text": "Wymaganie syntetyczne",
+      "priority": "MUST",
+      "sources": [
+        {
+          "file": "docs/owner-statements/synthetic.md:1",
+          "quote": "Sprawdź wynik"
+        }
+      ],
+      "acceptance": "Niepoprawny ledger daje FAIL; poprawny PASS.",
+      "status": "missing",
+      "tests": [],
+      "evidence": [
+        "tests/test_requirements_ledger.py:1"
+      ]
+    }
+  ]
+}

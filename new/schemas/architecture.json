@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "string"
+    },
+    "advanced_features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "feature": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "approved"
+            ]
+          },
+          "threshold": {
+            "type": "number",
+            "minimum": 0.001
+          },
+          "metric": {
+            "type": "string"
+          },
+          "adr": {
+            "type": "string"
+          },
+          "accepted_by": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "feature",
+          "status",
+          "threshold",
+          "metric",
+          "adr",
+          "accepted_by"
+        ]
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "summary",
+    "advanced_features",
+    "decisions"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

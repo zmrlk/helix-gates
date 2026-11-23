@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "component": "web-interface-guidelines",
+  "version_declared": null,
+  "source_kind": "github_contents_api",
+  "upstream_url": "https://github.com/vercel-labs/web-interface-guidelines",
+  "upstream_commit": "4ecfb9fb8d1d3b7009674869b3aaee2f904042e1",
+  "upstream_commit_scope": "last commit touching command.md; repository head at import: 434b7f91364665f2f733b310ec54809bf8f37937",
+  "upstream_tag_verified": false,
+  "imported_at": "2026-11-14T08:44:16.869577+00:00",
+  "license": "MIT",
+  "files": [
+    {
+      "path": "command.md",
+      "original_path": "command.md",
+      "sha256": "d246b026f4f29b5823a9cc857f9edf3d2507002e055e32040cadeaf3b38e0234",
+      "bytes": 8055
+    },
+    {
+      "path": "LICENSE",
+      "original_path": "LICENSE",
+      "sha256": "6cd1609c9c12233507cdd2ce0d32e9a721e3c27494951be06b90090deeeb7af2",
+      "bytes": 1068
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "public_web": {"applicable": false, "reason": "Prywatne API bez publicznych stron"},
+  "tracking": {"applicable": false, "reason": "Produkt nie używa trackerów ani analityki"},
+  "invoicing": true,
+  "ai": true,
+  "ecommerce": true,
+  "promotions": true,
+  "personal_data": true,
+  "database": true,
+  "data": true
+}

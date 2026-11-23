@@ -1,0 +1,338 @@
+[
+  {
+    "name": "svelte-SEC-SCOPE-LATE-True",
+    "detector": "SEC-SCOPE-LATE",
+    "positive": true,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {await db.update({id: params.id}); decide(user, record);}"
+    }
+  },
+  {
+    "name": "svelte-SEC-SCOPE-LATE-False",
+    "detector": "SEC-SCOPE-LATE",
+    "positive": false,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {decide(user, record); await db.update({id: params.id});}"
+    }
+  },
+  {
+    "name": "svelte-SEC-ROW-SCOPE-True",
+    "detector": "SEC-ROW-SCOPE",
+    "positive": true,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {requireCan(user, \"module\"); await db.update({id: params.id});}"
+    }
+  },
+  {
+    "name": "svelte-SEC-ROW-SCOPE-False",
+    "detector": "SEC-ROW-SCOPE",
+    "positive": false,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {decide(user, record); await db.update({id: params.id});}"
+    }
+  },
+  {
+    "name": "svelte-SEC-PUBLIC-COUNTER-True",
+    "detector": "SEC-PUBLIC-COUNTER",
+    "positive": true,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {await db.update({id: params.id, views: increment(1)});}"
+    }
+  },
+  {
+    "name": "svelte-SEC-PUBLIC-COUNTER-False",
+    "detector": "SEC-PUBLIC-COUNTER",
+    "positive": false,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {rateLimit(event); idempotency(event); await db.update({id: params.id, views: increment(1)});}"
+    }
+  },
+  {
+    "name": "svelte-SEC-DELETE-WINDOW-True",
+    "detector": "SEC-DELETE-WINDOW",
+    "positive": true,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {if (Date.now() - record.createdAt < minutes) await db.delete({id: params.id});}"
+    }
+  },
+  {
+    "name": "svelte-SEC-DELETE-WINDOW-False",
+    "detector": "SEC-DELETE-WINDOW",
+    "positive": false,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {decide(user, record); if (Date.now() - record.createdAt < minutes) await db.delete({id: params.id});}"
+    }
+  },
+  {
+    "name": "svelte-SEC-LINK-ROTATION-True",
+    "detector": "SEC-LINK-ROTATION",
+    "positive": true,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {const publicToken = randomUUID(); await db.update({id: params.id, token: publicToken});}"
+    }
+  },
+  {
+    "name": "svelte-SEC-LINK-ROTATION-False",
+    "detector": "SEC-LINK-ROTATION",
+    "positive": false,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {decide(user, record); const publicToken = randomUUID(); await db.update({id: params.id, token: publicToken});}"
+    }
+  },
+  {
+    "name": "svelte-SEC-CONFIRM-TARGET-True",
+    "detector": "SEC-CONFIRM-TARGET",
+    "positive": true,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {await db.update({id: params.id, confirmationEmail: body.email});}"
+    }
+  },
+  {
+    "name": "svelte-SEC-CONFIRM-TARGET-False",
+    "detector": "SEC-CONFIRM-TARGET",
+    "positive": false,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {decide(user, record); await db.update({id: params.id, confirmationEmail: body.email});}"
+    }
+  },
+  {
+    "name": "svelte-asymmetry-True",
+    "detector": "SEC-METHOD-ASYMMETRY",
+    "positive": true,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function GET(event) { decide(user, record); return db.findUnique({id: params.id}); }\nexport async function PATCH(event) {await db.update({id: params.id}); }"
+    }
+  },
+  {
+    "name": "svelte-asymmetry-False",
+    "detector": "SEC-METHOD-ASYMMETRY",
+    "positive": false,
+    "files": {
+      "src/routes/items/[id]/+server.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function GET(event) { decide(user, record); return db.findUnique({id: params.id}); }\nexport async function PATCH(event) {decide(user, record); await db.update({id: params.id}); }"
+    }
+  },
+  {
+    "name": "express-SEC-SCOPE-LATE-True",
+    "detector": "SEC-SCOPE-LATE",
+    "positive": true,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {await db.update({id: params.id}); decide(user, record);});"
+    }
+  },
+  {
+    "name": "express-SEC-SCOPE-LATE-False",
+    "detector": "SEC-SCOPE-LATE",
+    "positive": false,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {decide(user, record); await db.update({id: params.id});});"
+    }
+  },
+  {
+    "name": "express-SEC-ROW-SCOPE-True",
+    "detector": "SEC-ROW-SCOPE",
+    "positive": true,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {requireCan(user, \"module\"); await db.update({id: params.id});});"
+    }
+  },
+  {
+    "name": "express-SEC-ROW-SCOPE-False",
+    "detector": "SEC-ROW-SCOPE",
+    "positive": false,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {decide(user, record); await db.update({id: params.id});});"
+    }
+  },
+  {
+    "name": "express-SEC-PUBLIC-COUNTER-True",
+    "detector": "SEC-PUBLIC-COUNTER",
+    "positive": true,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {await db.update({id: params.id, views: increment(1)});});"
+    }
+  },
+  {
+    "name": "express-SEC-PUBLIC-COUNTER-False",
+    "detector": "SEC-PUBLIC-COUNTER",
+    "positive": false,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {rateLimit(event); idempotency(event); await db.update({id: params.id, views: increment(1)});});"
+    }
+  },
+  {
+    "name": "express-SEC-DELETE-WINDOW-True",
+    "detector": "SEC-DELETE-WINDOW",
+    "positive": true,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {if (Date.now() - record.createdAt < minutes) await db.delete({id: params.id});});"
+    }
+  },
+  {
+    "name": "express-SEC-DELETE-WINDOW-False",
+    "detector": "SEC-DELETE-WINDOW",
+    "positive": false,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {decide(user, record); if (Date.now() - record.createdAt < minutes) await db.delete({id: params.id});});"
+    }
+  },
+  {
+    "name": "express-SEC-LINK-ROTATION-True",
+    "detector": "SEC-LINK-ROTATION",
+    "positive": true,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {const publicToken = randomUUID(); await db.update({id: params.id, token: publicToken});});"
+    }
+  },
+  {
+    "name": "express-SEC-LINK-ROTATION-False",
+    "detector": "SEC-LINK-ROTATION",
+    "positive": false,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {decide(user, record); const publicToken = randomUUID(); await db.update({id: params.id, token: publicToken});});"
+    }
+  },
+  {
+    "name": "express-SEC-CONFIRM-TARGET-True",
+    "detector": "SEC-CONFIRM-TARGET",
+    "positive": true,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {await db.update({id: params.id, confirmationEmail: body.email});});"
+    }
+  },
+  {
+    "name": "express-SEC-CONFIRM-TARGET-False",
+    "detector": "SEC-CONFIRM-TARGET",
+    "positive": false,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.patch('/items/:id', async (req) => {decide(user, record); await db.update({id: params.id, confirmationEmail: body.email});});"
+    }
+  },
+  {
+    "name": "express-asymmetry-True",
+    "detector": "SEC-METHOD-ASYMMETRY",
+    "positive": true,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.get('/items/:id', async (req) => { decide(user, record); return db.findUnique({id: params.id}); });\nrouter.patch('/items/:id', async (req) => {await db.update({id: params.id}); });"
+    }
+  },
+  {
+    "name": "express-asymmetry-False",
+    "detector": "SEC-METHOD-ASYMMETRY",
+    "positive": false,
+    "files": {
+      "routes.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nrouter.get('/items/:id', async (req) => { decide(user, record); return db.findUnique({id: params.id}); });\nrouter.patch('/items/:id', async (req) => {decide(user, record); await db.update({id: params.id}); });"
+    }
+  },
+  {
+    "name": "next-SEC-SCOPE-LATE-True",
+    "detector": "SEC-SCOPE-LATE",
+    "positive": true,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {await db.update({id: params.id}); decide(user, record);}"
+    }
+  },
+  {
+    "name": "next-SEC-SCOPE-LATE-False",
+    "detector": "SEC-SCOPE-LATE",
+    "positive": false,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {decide(user, record); await db.update({id: params.id});}"
+    }
+  },
+  {
+    "name": "next-SEC-ROW-SCOPE-True",
+    "detector": "SEC-ROW-SCOPE",
+    "positive": true,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {requireCan(user, \"module\"); await db.update({id: params.id});}"
+    }
+  },
+  {
+    "name": "next-SEC-ROW-SCOPE-False",
+    "detector": "SEC-ROW-SCOPE",
+    "positive": false,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {decide(user, record); await db.update({id: params.id});}"
+    }
+  },
+  {
+    "name": "next-SEC-PUBLIC-COUNTER-True",
+    "detector": "SEC-PUBLIC-COUNTER",
+    "positive": true,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {await db.update({id: params.id, views: increment(1)});}"
+    }
+  },
+  {
+    "name": "next-SEC-PUBLIC-COUNTER-False",
+    "detector": "SEC-PUBLIC-COUNTER",
+    "positive": false,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {rateLimit(event); idempotency(event); await db.update({id: params.id, views: increment(1)});}"
+    }
+  },
+  {
+    "name": "next-SEC-DELETE-WINDOW-True",
+    "detector": "SEC-DELETE-WINDOW",
+    "positive": true,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {if (Date.now() - record.createdAt < minutes) await db.delete({id: params.id});}"
+    }
+  },
+  {
+    "name": "next-SEC-DELETE-WINDOW-False",
+    "detector": "SEC-DELETE-WINDOW",
+    "positive": false,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {decide(user, record); if (Date.now() - record.createdAt < minutes) await db.delete({id: params.id});}"
+    }
+  },
+  {
+    "name": "next-SEC-LINK-ROTATION-True",
+    "detector": "SEC-LINK-ROTATION",
+    "positive": true,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {const publicToken = randomUUID(); await db.update({id: params.id, token: publicToken});}"
+    }
+  },
+  {
+    "name": "next-SEC-LINK-ROTATION-False",
+    "detector": "SEC-LINK-ROTATION",
+    "positive": false,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {decide(user, record); const publicToken = randomUUID(); await db.update({id: params.id, token: publicToken});}"
+    }
+  },
+  {
+    "name": "next-SEC-CONFIRM-TARGET-True",
+    "detector": "SEC-CONFIRM-TARGET",
+    "positive": true,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {await db.update({id: params.id, confirmationEmail: body.email});}"
+    }
+  },
+  {
+    "name": "next-SEC-CONFIRM-TARGET-False",
+    "detector": "SEC-CONFIRM-TARGET",
+    "positive": false,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function PATCH(event) {decide(user, record); await db.update({id: params.id, confirmationEmail: body.email});}"
+    }
+  },
+  {
+    "name": "next-asymmetry-True",
+    "detector": "SEC-METHOD-ASYMMETRY",
+    "positive": true,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function GET(event) { decide(user, record); return db.findUnique({id: params.id}); }\nexport async function PATCH(event) {await db.update({id: params.id}); }"
+    }
+  },
+  {
+    "name": "next-asymmetry-False",
+    "detector": "SEC-METHOD-ASYMMETRY",
+    "positive": false,
+    "files": {
+      "app/items/[id]/route.ts": "function decide(user, record) { if (record.owner !== user.id) throw error(403); }\nexport async function GET(event) { decide(user, record); return db.findUnique({id: params.id}); }\nexport async function PATCH(event) {decide(user, record); await db.update({id: params.id}); }"
+    }
+  }
+]

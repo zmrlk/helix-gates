@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "helix_version": "0.9.3-beta",
+  "version": "0.9.3-beta",
+  "source_sha": "ebc4240240b78afbfb785bb497af48cff03b3e9e",
+  "claim": {
+    "task_id": "release",
+    "agent": "codex-docs",
+    "created_at": "2026-10-26T11:05:37.696016+00:00",
+    "expires_at": "2026-10-26T15:05:37.696406+00:00",
+    "status": "active",
+    "lease_id": "abbc09767a004b38b7a1d55a5124b5f0"
+  }
+}

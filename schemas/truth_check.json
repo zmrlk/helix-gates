@@ -1,0 +1,8 @@
+{"type":"object","additionalProperties":false,"required":["false_claims","break_risks","summary"],
+ "properties":{"summary":{"type":"string"},
+  "false_claims":{"type":"array","items":{"type":"object","additionalProperties":false,
+   "required":["claim_id","severity","issue","how_to_verify"],
+   "properties":{"claim_id":{"type":"string"},"severity":{"type":"string","enum":["blocker","major","nit"]},"issue":{"type":"string"},"how_to_verify":{"type":"string"}}}},
+  "break_risks":{"type":"array","items":{"type":"object","additionalProperties":false,
+   "required":["file","severity","issue","how_to_verify"],
+   "properties":{"file":{"type":"string"},"severity":{"type":"string","enum":["blocker","major","nit"]},"issue":{"type":"string"},"how_to_verify":{"type":"string"}}}}}}

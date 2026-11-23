@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "agent": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "[A-Za-z0-9][A-Za-z0-9_.-]{0,79}"
+    },
+    "env": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "[A-Za-z0-9][A-Za-z0-9_.-]{0,79}"
+    },
+    "done": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "string",
+      "minLength": 1
+    },
+    "next": {
+      "type": "string",
+      "minLength": 1
+    },
+    "risks": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "head": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "[0-9a-f]{40,64}"
+    }
+  },
+  "required": [
+    "agent",
+    "env",
+    "done",
+    "evidence",
+    "next",
+    "risks",
+    "created_at",
+    "head"
+  ]
+}

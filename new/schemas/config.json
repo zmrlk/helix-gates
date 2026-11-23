@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "properties": {
+    "helix_version": {
+      "enum": [
+        "0.9.3-beta"
+      ]
+    },
+    "mode": {
+      "enum": [
+        "supervised"
+      ]
+    },
+    "truth": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "enum": [
+            true
+          ]
+        }
+      },
+      "required": [
+        "required"
+      ]
+    },
+    "test_cmd": {
+      "type": "string"
+    },
+    "design_decision": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "required"
+      ]
+    }
+  },
+  "required": [
+    "helix_version",
+    "mode",
+    "truth",
+    "test_cmd"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

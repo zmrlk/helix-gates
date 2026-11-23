@@ -1,0 +1,14 @@
+[
+  {"query": "zmień logikę naliczania rabatu w wycenie i wyślij na prod", "should_trigger": true},
+  {"query": "przejdź przez bramki G0–G4 dla tej zmiany", "should_trigger": true},
+  {"query": "helix na to", "should_trigger": true},
+  {"query": "zrecenzuj niezależnie ten PR innym modelem", "should_trigger": true},
+  {"query": "zrób mi raport, co jest nie tak w tym repo", "should_trigger": true},
+  {"query": "dodaj endpoint /api/klienci z testami", "should_trigger": true},
+  {"query": "popraw literówkę w README", "should_trigger": false},
+  {"query": "jak nazwać tę zmienną?", "should_trigger": false},
+  {"query": "wyjaśnij, co robi ten regex", "should_trigger": false},
+  {"query": "zmień kolor przycisku na ciemniejszy", "should_trigger": false},
+  {"query": "sformatuj ten plik prettierem", "should_trigger": false},
+  {"query": "napisz maila do klienta o terminie", "should_trigger": false}
+]

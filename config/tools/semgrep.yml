@@ -1,0 +1,114 @@
+rules:
+  - id: helix-python-eval
+    languages: [python]
+    severity: ERROR
+    message: Dynamiczne eval wymaga usunięcia lub ścisłej walidacji.
+    pattern: eval(...)
+  - id: helix-sveltekit-taint-sql
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Niezaufane wejście SvelteKit dociera do sql; sprawdź walidację i granicę uprawnień.
+    mode: taint
+    pattern-sources:
+      - pattern: params.$FIELD
+        exact: true
+      - pattern: $EVENT.params.$FIELD
+        exact: true
+      - pattern: url.searchParams.get(...)
+        exact: true
+      - pattern: $EVENT.url.searchParams.get(...)
+        exact: true
+      - pattern: url.searchParams.getAll(...)
+        exact: true
+      - pattern: $EVENT.url.searchParams.getAll(...)
+        exact: true
+      - pattern: request.json(...)
+        exact: true
+      - pattern: $EVENT.request.json(...)
+        exact: true
+    pattern-sinks:
+      - patterns:
+          - pattern: $DB.query($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: $DB.execute($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: sql.unsafe($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: $DB.$queryRawUnsafe($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: $DB.$executeRawUnsafe($SINK, ...)
+          - focus-metavariable: $SINK
+  - id: helix-sveltekit-taint-fetch
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Niezaufane wejście SvelteKit dociera do fetch; sprawdź walidację i granicę uprawnień.
+    mode: taint
+    pattern-sources:
+      - pattern: params.$FIELD
+        exact: true
+      - pattern: $EVENT.params.$FIELD
+        exact: true
+      - pattern: url.searchParams.get(...)
+        exact: true
+      - pattern: $EVENT.url.searchParams.get(...)
+        exact: true
+      - pattern: url.searchParams.getAll(...)
+        exact: true
+      - pattern: $EVENT.url.searchParams.getAll(...)
+        exact: true
+      - pattern: request.json(...)
+        exact: true
+      - pattern: $EVENT.request.json(...)
+        exact: true
+    pattern-sinks:
+      - patterns:
+          - pattern: fetch($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: $EVENT.fetch($SINK, ...)
+          - focus-metavariable: $SINK
+  - id: helix-sveltekit-taint-fs
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Niezaufane wejście SvelteKit dociera do fs; sprawdź walidację i granicę uprawnień.
+    mode: taint
+    pattern-sources:
+      - pattern: params.$FIELD
+        exact: true
+      - pattern: $EVENT.params.$FIELD
+        exact: true
+      - pattern: url.searchParams.get(...)
+        exact: true
+      - pattern: $EVENT.url.searchParams.get(...)
+        exact: true
+      - pattern: url.searchParams.getAll(...)
+        exact: true
+      - pattern: $EVENT.url.searchParams.getAll(...)
+        exact: true
+      - pattern: request.json(...)
+        exact: true
+      - pattern: $EVENT.request.json(...)
+        exact: true
+    pattern-sinks:
+      - patterns:
+          - pattern: fs.$OP($SINK, ...)
+          - metavariable-regex:
+              metavariable: $OP
+              regex: ^(readFile|readFileSync|writeFile|writeFileSync|unlink|unlinkSync|rm|rmSync|createReadStream|createWriteStream)$
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: fs.promises.$OP($SINK, ...)
+          - metavariable-regex:
+              metavariable: $OP
+              regex: ^(readFile|readFileSync|writeFile|writeFileSync|unlink|unlinkSync|rm|rmSync|createReadStream|createWriteStream)$
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: $OP($SINK, ...)
+          - metavariable-regex:
+              metavariable: $OP
+              regex: ^(readFile|readFileSync|writeFile|writeFileSync|unlink|unlinkSync|rm|rmSync|createReadStream|createWriteStream)$
+          - focus-metavariable: $SINK

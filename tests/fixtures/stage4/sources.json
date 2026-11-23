@@ -1,0 +1,8 @@
+{
+  "tests/unit/pricing.test.ts": "test('promotion', () => { retries = 2; waitForTimeout(100); });\n",
+  "tests/integration/contract.test.py": "# OpenAPI schema consumer contract\n",
+  "tests/e2e/order.spec.ts": "// user journey\n",
+  "src/invoice.go": "package billing\n// invoice, NIP and KSeF\n",
+  "docs/operations.md": "OpenTelemetry structured logs, trace.id\nretention and data quality\ncost per user, scaling and budget\n",
+  "migrations/002.sql": "-- expand/contract\nALTER TABLE records ADD COLUMN note text;\n"
+}

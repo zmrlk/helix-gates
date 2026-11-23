@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "tool": "ast-grep",
+  "version": "0.51.0",
+  "platform": "darwin-arm64",
+  "lock_sha256": "86861844cc1a1cfd9a7f496fe02ef97250b555879cf8faa08fdeba44f83744c9",
+  "native": {
+    "path": "node_modules/@ast-grep/cli-darwin-arm64/ast-grep",
+    "sha256": "6e4e64393e1cbc67b68f56606982c2834e9ffe771cf10d4811de0f4d15ee3a6d"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        1
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "approved"
+      ]
+    },
+    "accepted_by": {
+      "type": "string"
+    },
+    "logo": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "url",
+                "file",
+                "owner"
+              ]
+            },
+            "reference": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "reference"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "source"
+      ]
+    },
+    "colors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "url",
+                  "file",
+                  "owner"
+                ]
+              },
+              "reference": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "reference"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source"
+        ]
+      },
+      "minItems": 1
+    },
+    "fonts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "url",
+                  "file",
+                  "owner"
+                ]
+              },
+              "reference": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "reference"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "status",
+    "accepted_by",
+    "logo",
+    "colors",
+    "fonts"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

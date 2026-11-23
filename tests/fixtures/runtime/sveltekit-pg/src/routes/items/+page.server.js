@@ -1,0 +1,1 @@
+import pg from 'pg'; import {env} from '$env/dynamic/private'; const pool=new pg.Pool({connectionString:env.DATABASE_URL}); export async function load(){return {items:(await pool.query('SELECT label FROM runtime_items ORDER BY id')).rows};}

@@ -1,0 +1,12 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="base.css"><title>Admin</title></head><body>
+<header><a href="shop.html">Start</a><a href="#">Katalog</a><a href="#">Ulubione</a><a href="#">Koszyk</a><a href="#">0,00 zł</a></header>
+<div class="layout"><aside><a href="admin.html">Pulpit</a><a href="#">Zamówienia</a><a href="#">Kontrahenci</a></aside>
+<main><h1>Zamówienia</h1>
+<div role="alert" style="background:#fee2e2;color:#991b1b;border-radius:8px;padding:12px;margin-bottom:12px">Insufficient permissions. Required: orders.approve</div>
+<button class="btn btn-secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg> Eksport</button> <button class="btn btn-primary" style="font-size:13px">Zapisz</button>
+<table><thead><tr><th>Numer</th><th>Data</th><th>Wartość</th><th>Status</th><th></th></tr></thead><tbody>
+<tr><td>B2B-1</td><td>2026-10-24</td><td>1234.56 PLN</td><td><span class="pill" style="font-size:11px">Oczekuje</span></td><td><button class="btn btn-secondary" onclick="openD()">Szczegóły</button></td></tr>
+<tr><td>B2B-2</td><td>2026-10-23</td><td>99.00 PLN</td><td><span class="pill" style="font-size:11px">Oczekuje</span></td><td><button class="btn btn-secondary" onclick="openD()">Szczegóły</button></td></tr>
+</tbody></table></main></div><footer>Pomoc · Regulamin</footer>
+<script>function openD(){const d=document.createElement('div');d.setAttribute('role','dialog');d.style.cssText='position:fixed;top:0;right:0;width:420px;height:100vh;background:#fff;box-shadow:0 0 20px #0003';d.innerHTML='<h2>Zamówienie B2B-1</h2>';document.body.appendChild(d)}</script>
+</body></html>

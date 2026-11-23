@@ -1,0 +1,15 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hurtownia Demo – zamówienia</title><link rel="stylesheet" href="style.css"></head><body>
+<header><strong>Hurtownia Demo</strong><a href="zamowienia.html">Zamówienia</a><a href="nowe.html">Nowe zamówienie</a></header>
+<main><h1>Twoje zamówienia</h1>
+<div class="filter" onclick="alert('Filtr')">Filtruj</div> <div class="spinner" id="spin" style="display:inline-block;vertical-align:middle"></div>
+<table class="orders"><thead><tr><th>Nr</th><th>Data</th><th>Firma</th><th>Status</th><th>Wartość netto</th><th>Wartość brutto</th><th>Faktura</th></tr></thead>
+<tbody id="rows"></tbody></table>
+<p class="note">Kwoty w PLN. Faktury dostępne po zaksięgowaniu przez dział księgowości.</p></main>
+<script>
+fetch('api/orders.json').then(r => r.json()).then(rows => {
+  document.getElementById('spin').style.display = 'none';
+  document.getElementById('rows').innerHTML = rows.map(o => `<tr><td>${o.nr}</td><td>${o.data}</td><td><span class="name">${o.firma}</span></td>
+    <td>${o.status}</td><td>${o.netto}</td><td>${o.brutto}</td><td><button class="icon-btn" title="Pobierz">⬇</button></td></tr>`).join('');
+});   // BUG: brak obsługi błędu i pustej listy
+</script></body></html>

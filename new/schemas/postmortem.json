@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "properties": {
+    "timeline": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "at": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "at",
+          "event"
+        ]
+      },
+      "minItems": 1
+    },
+    "impact": {
+      "type": "string"
+    },
+    "causes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "deadline": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "owner",
+          "deadline"
+        ]
+      },
+      "minItems": 1
+    },
+    "owner": {
+      "type": "string"
+    },
+    "deadline": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "timeline",
+    "impact",
+    "causes",
+    "actions",
+    "owner",
+    "deadline"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

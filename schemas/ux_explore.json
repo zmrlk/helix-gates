@@ -1,0 +1,7 @@
+{"type":"object","additionalProperties":false,"required":["thought","action","i","value","success","friction","confusing_copy"],
+ "properties":{"thought":{"type":"string"},
+  "action":{"type":"string","enum":["click","fill","select","check","press","scroll","back","goto","done","give_up"]},
+  "i":{"type":"integer"},"value":{"type":"string"},"success":{"type":"boolean"},
+  "friction":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["severity","description"],
+   "properties":{"severity":{"type":"string","enum":["high","medium","low"]},"description":{"type":"string"}}}},
+  "confusing_copy":{"type":"array","items":{"type":"string"}}}}

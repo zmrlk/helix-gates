@@ -1,0 +1,19 @@
+{
+  "helix_version": "0.9.2-beta",
+  "conventions": [
+    "Zmiany mają dowody w repo."
+  ],
+  "gates": [
+    "G0",
+    "behavior",
+    "review",
+    "owner"
+  ],
+  "test_commands": [
+    "python3 -m unittest discover -s tests"
+  ],
+  "prohibitions": [
+    "Bez force push i sekretów."
+  ],
+  "rules": []
+}

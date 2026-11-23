@@ -1,0 +1,5 @@
+{
+  "raw": {"files": {"api.py": "pass\n"}, "range": [0, 0]},
+  "medium": {"files": {"api.py": "pass\n", "README.md": "Kontrakt API i ograniczenia.\n"}, "range": [8, 8]},
+  "mature": {"files": {"api.py": "pass\n", "README.md": "Kontrakt API i ograniczenia.\n", "tests/test_api.py": "def test_contract():\n    assert True\n", "Makefile": "check:\n\tpython3 -m unittest discover -s tests\n"}, "range": [24, 24]}
+}

@@ -1,0 +1,7 @@
+{
+  "name": "runtime-synthetic-identity",
+  "private": true,
+  "scripts": {
+    "start": "node server.cjs"
+  }
+}

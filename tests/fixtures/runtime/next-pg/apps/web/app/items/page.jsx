@@ -1,0 +1,1 @@
+import pg from 'pg'; export const dynamic='force-dynamic'; const pool=new pg.Pool({connectionString:process.env.DATABASE_URL}); export default async function Items(){const {rows}=await pool.query('SELECT label FROM runtime_items ORDER BY id');return <main><h1>Items</h1><ul>{rows.map((x,i)=><li key={i}>{x.label}</li>)}</ul><a href="/">Home</a></main>;}

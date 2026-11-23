@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "decision",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "DEC-[0-9]{4,}"
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "[A-Za-z0-9][A-Za-z0-9_.-]{0,79}"
+    },
+    "decision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supersedes": {
+      "type": "string",
+      "pattern": "(?:DEC-[0-9]{4,})?"
+    }
+  },
+  "required": [
+    "id",
+    "created_at",
+    "agent",
+    "decision",
+    "rationale",
+    "supersedes"
+  ]
+}

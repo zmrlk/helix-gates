@@ -1,0 +1,13 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hurtownia Demo – logowanie</title><link rel="stylesheet" href="style.css"></head><body>
+<header><strong>Hurtownia Demo</strong></header>
+<main><div class="card"><h1>Zaloguj się</h1>
+<form id="login" onsubmit="event.preventDefault(); localStorage.setItem('user', this.email.value); location.href='zamowienia.html'">
+<input name="email" id="email" type="email" placeholder="E-mail" required>
+<input name="password" id="password" type="password" placeholder="Hasło" required style="margin-top:12px">
+<p class="hint">Hasło znajdziesz w mailu powitalnym od opiekuna handlowego.</p>
+<button class="btn" id="login-btn" type="submit">Zaloguj</button></form>
+<p class="note">Logując się akceptujesz regulamin hurtowni (wersja 3.2) oraz politykę prywatności.</p></div></main>
+<div class="cookie" id="cookie">Używamy plików cookie, żeby panel działał poprawnie i żeby mierzyć ruch. Szczegóły w polityce prywatności.
+<br><button onclick="document.getElementById('cookie').remove()" style="margin-top:8px">OK</button></div>
+</body></html>

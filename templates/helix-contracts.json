@@ -1,0 +1,13 @@
+{
+  "helix_version": "0.9.0-beta",
+  "decisions": [{"number": 1, "executors": ["executor"], "acknowledged": [], "test": "", "run": {}}],
+  "merge": {"conflicts": ["component:1"], "resolutions": []},
+  "runs": [{"status": "unexecuted", "who": "host", "where": "local", "sha": "", "command": "", "log": "", "tree": ""}],
+  "rule_changes": [],
+  "budget": {"rules": [], "components": {}, "shards": 1, "fast": false, "affected": []},
+  "registry": [],
+  "domain": {"mechanisms": {"M1": ["P1"]}, "patterns": {"P1": ["C1"]}, "components": {"C1": ["I1"]}, "industries": {"I1": []}},
+  "catalog": [], "modules": [],
+  "owner_report": {"state": "draft", "current": "", "screenshots": [], "gates": {}, "decisions": [], "obsolete": []},
+  "comparisons": [], "documentation": []
+}

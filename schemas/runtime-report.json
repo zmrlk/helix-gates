@@ -1,0 +1,2089 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Helix disposable runtime evidence",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "project",
+    "scope",
+    "engine",
+    "parts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "engine": {
+      "enum": [
+        null,
+        "native",
+        "podman",
+        "docker",
+        "service",
+        "supabase"
+      ]
+    },
+    "parts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "checks"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "checks": {
+            "type": "object",
+            "required": [
+              "e2e",
+              "a11y",
+              "lighthouse",
+              "load",
+              "backup"
+            ],
+            "additionalProperties": {
+              "type": "object",
+              "required": [
+                "status",
+                "metrics",
+                "log",
+                "reason"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "PASS",
+                    "FAIL",
+                    "BLOCKED",
+                    "SKIPPED",
+                    "DEGRADED"
+                  ]
+                },
+                "metrics": {
+                  "type": "object"
+                },
+                "log": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "database": {
+            "type": "object",
+            "properties": {
+              "variants": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "order",
+                    "name",
+                    "status",
+                    "applied",
+                    "failed",
+                    "first_error",
+                    "seconds",
+                    "selected",
+                    "commands",
+                    "suggestion"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "PASS",
+                        "FAIL",
+                        "SKIPPED",
+                        "REFUSED"
+                      ]
+                    }
+                  }
+                }
+              },
+              "selected": {
+                "type": "array"
+              },
+              "selection_reason": {
+                "type": "array"
+              }
+            }
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "transport": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "selected",
+              "gaps",
+              "limits",
+              "cleanup"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "not_checked",
+                  "starting",
+                  "ready",
+                  "blocked"
+                ]
+              },
+              "selected": {
+                "enum": [
+                  "http",
+                  "https"
+                ]
+              },
+              "gaps": {
+                "type": "array"
+              },
+              "limits": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "cleanup": {
+                "enum": [
+                  "not_needed",
+                  "pending",
+                  "stopped",
+                  "unknown",
+                  "kept"
+                ]
+              },
+              "public_origin": {
+                "type": "string",
+                "pattern": "^https://(?:localhost|127\\.0\\.0\\.1):[0-9]+$"
+              },
+              "backend_origin": {
+                "type": "string",
+                "pattern": "^http://127\\.0\\.0\\.1:[0-9]+$"
+              },
+              "public_port": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 65535
+              },
+              "backend_port": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 65535
+              },
+              "log": {
+                "type": "string",
+                "pattern": "^logs/https-[0-9]+\\.log$"
+              },
+              "trusted_key_count": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2
+              },
+              "tls_health": {
+                "const": "verified_by_executor_ca_probe"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "status",
+          "metrics",
+          "log",
+          "reason",
+          "id",
+          "part"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "BLOCKED",
+              "SKIPPED",
+              "DEGRADED"
+            ]
+          },
+          "metrics": {
+            "type": "object"
+          },
+          "log": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "id": {
+            "enum": [
+              "e2e",
+              "a11y",
+              "lighthouse",
+              "load",
+              "backup",
+              "schema-apply",
+              "auth-flow",
+              "timezone-utc",
+              "pdf-render",
+              "inbound-replay",
+              "worker-tests"
+            ]
+          },
+          "part": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "helix_version",
+        "source_ref",
+        "target_ref",
+        "python",
+        "tools",
+        "models"
+      ],
+      "properties": {
+        "helix_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ref": {
+          "type": "object",
+          "required": [
+            "head",
+            "dirty",
+            "status"
+          ]
+        },
+        "target_ref": {
+          "type": "object",
+          "required": [
+            "head",
+            "dirty",
+            "status"
+          ]
+        },
+        "python": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tools": {
+          "type": "object",
+          "required": [
+            "gitleaks",
+            "semgrep",
+            "trivy",
+            "playwright",
+            "chromium",
+            "node",
+            "python"
+          ]
+        },
+        "models": {
+          "type": "array"
+        }
+      }
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,99}$"
+    },
+    "integrations": {
+      "$ref": "#/$defs/integrations"
+    },
+    "integration_receipts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/integration_receipt"
+      }
+    },
+    "coverage_status": {
+      "enum": [
+        "RECORDED",
+        "INCOMPLETE",
+        "NOT_RECORDED"
+      ]
+    },
+    "measurement_status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "BLOCKED",
+        "DEGRADED",
+        "SKIPPED"
+      ]
+    },
+    "transport_coverage": {
+      "enum": [
+        "RECORDED",
+        "INCOMPLETE"
+      ]
+    },
+    "transport_plan": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "plan_id",
+        "scope",
+        "parts",
+        "gaps",
+        "execution"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "plan_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "scope": {
+          "const": "source_declarations_only"
+        },
+        "parts": {
+          "type": "array"
+        },
+        "gaps": {
+          "type": "array"
+        },
+        "execution": {
+          "type": "object",
+          "properties": {
+            "application": {
+              "const": false
+            },
+            "commands": {
+              "const": 0
+            },
+            "network": {
+              "const": 0
+            }
+          }
+        }
+      }
+    },
+    "identity_plan": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "status",
+        "parts"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "status": {
+          "enum": [
+            "READY",
+            "BLOCKED",
+            "NOT_DETECTED"
+          ]
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "identity_forms": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/identityFormSuite"
+      }
+    },
+    "identity_coverage": {
+      "enum": [
+        "INCOMPLETE",
+        "NOT_RECORDED",
+        "NOT_DETECTED"
+      ]
+    },
+    "identity_policy_plan": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "kind",
+        "plan_id",
+        "source_digest",
+        "identity_plan_digest",
+        "status",
+        "parts",
+        "execution"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "identity-policy-plan"
+        },
+        "status": {
+          "enum": [
+            "NOT_DETECTED",
+            "NOT_CONFIGURED",
+            "PLANNED",
+            "BLOCKED"
+          ]
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "identity_policy_receipts": {
+      "type": "array",
+      "const": []
+    },
+    "identity_policy_executions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "schema_version",
+          "type",
+          "binding",
+          "identities",
+          "cells"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "schema_version": {
+            "const": 1
+          },
+          "type": {
+            "const": "identity-policy-suite"
+          },
+          "binding": {
+            "type": "object",
+            "required": [
+              "run_id",
+              "integration_id",
+              "integration_plan_id",
+              "identity_plan_id",
+              "policy_plan_id",
+              "policy_hash",
+              "form_attempt_id",
+              "policy_attempt_id",
+              "part"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "run_id": {
+                "type": "string"
+              },
+              "integration_id": {
+                "type": "string"
+              },
+              "integration_plan_id": {
+                "type": "string"
+              },
+              "identity_plan_id": {
+                "type": "string"
+              },
+              "policy_plan_id": {
+                "type": "string"
+              },
+              "policy_hash": {
+                "type": "string"
+              },
+              "form_attempt_id": {
+                "type": "string"
+              },
+              "policy_attempt_id": {
+                "type": "string"
+              },
+              "part": {
+                "type": "string"
+              }
+            }
+          },
+          "identities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "identity_id",
+                "anonymous_session",
+                "session",
+                "cleanup"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "identity_id": {
+                  "type": "string",
+                  "pattern": "^role-[0-9a-f]{12}$"
+                },
+                "anonymous_session": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "http_status",
+                    "reason_code"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "NOT_RUN",
+                        "PASS",
+                        "FAIL",
+                        "BLOCKED"
+                      ]
+                    },
+                    "http_status": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 100,
+                      "maximum": 599
+                    },
+                    "reason_code": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "session": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "http_status",
+                    "reason_code"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "NOT_RUN",
+                        "PASS",
+                        "FAIL",
+                        "BLOCKED"
+                      ]
+                    },
+                    "http_status": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 100,
+                      "maximum": 599
+                    },
+                    "reason_code": {
+                      "type": "string"
+                    },
+                    "identity_matched": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    },
+                    "roles_matched": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    }
+                  }
+                },
+                "cleanup": {
+                  "enum": [
+                    "not_needed",
+                    "closed",
+                    "unknown"
+                  ]
+                }
+              }
+            }
+          },
+          "cells": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "cell_id",
+                "identity_id",
+                "anonymous",
+                "access",
+                "result"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "cell_id": {
+                  "type": "string",
+                  "pattern": "^cell-[0-9a-f]{16}$"
+                },
+                "identity_id": {
+                  "type": "string",
+                  "pattern": "^role-[0-9a-f]{12}$"
+                },
+                "anonymous": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "http_status",
+                    "reason_code"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "NOT_RUN",
+                        "PASS",
+                        "FAIL",
+                        "BLOCKED"
+                      ]
+                    },
+                    "http_status": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 100,
+                      "maximum": 599
+                    },
+                    "reason_code": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "access": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "http_status",
+                    "reason_code"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "NOT_RUN",
+                        "PASS",
+                        "FAIL",
+                        "BLOCKED"
+                      ]
+                    },
+                    "http_status": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 100,
+                      "maximum": 599
+                    },
+                    "reason_code": {
+                      "type": "string"
+                    },
+                    "assertions_matched": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    }
+                  }
+                },
+                "result": {
+                  "enum": [
+                    "NOT_RUN",
+                    "PASS",
+                    "FAIL",
+                    "BLOCKED"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "identity_assessment": {
+      "type": "object",
+      "required": [
+        "scope",
+        "status",
+        "coverage_status",
+        "outcome",
+        "form_status",
+        "policy_execution_status",
+        "unconfigured_identities"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "scope": {
+          "const": "declared_identity_policy"
+        },
+        "status": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "INCOMPLETE",
+            "NOT_DETECTED",
+            "NOT_RECORDED"
+          ]
+        },
+        "coverage_status": {
+          "enum": [
+            "RECORDED",
+            "INCOMPLETE",
+            "NOT_DETECTED",
+            "NOT_RECORDED"
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNKNOWN",
+            "NOT_RUN"
+          ]
+        },
+        "form_status": {
+          "type": "string"
+        },
+        "policy_execution_status": {
+          "type": "string"
+        },
+        "unconfigured_identities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "part",
+              "identity_id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "part": {
+                "type": "string"
+              },
+              "identity_id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "webauthn_plan": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "kind",
+        "plan_id",
+        "source_digest",
+        "integration_plan_id",
+        "identity_plan_digest",
+        "identity_policy_plan_id",
+        "transport_plan_id",
+        "status",
+        "parts",
+        "unscoped_declarations",
+        "excluded_declarations",
+        "gaps",
+        "execution"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "webauthn-plan"
+        },
+        "status": {
+          "enum": [
+            "NOT_DETECTED",
+            "BLOCKED",
+            "PLANNED",
+            "DISABLED"
+          ]
+        },
+        "parts": {
+          "type": "array"
+        },
+        "execution": {
+          "const": {
+            "files_opened": 0,
+            "commands": 0,
+            "models": 0,
+            "network": 0,
+            "application": false
+          }
+        }
+      }
+    },
+    "webauthn_receipts": {
+      "type": "array",
+      "const": []
+    },
+    "webauthn_coverage": {
+      "enum": [
+        "INCOMPLETE",
+        "NOT_DETECTED",
+        "RECORDED"
+      ]
+    },
+    "webauthn_executions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "schema_version",
+          "type",
+          "binding",
+          "capability",
+          "registration",
+          "logout",
+          "authentication",
+          "session_after_authentication",
+          "cells",
+          "cleanup"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": 1
+          },
+          "type": {
+            "const": "webauthn-suite"
+          }
+        }
+      }
+    },
+    "database_fidelity": {
+      "type": "object",
+      "properties": {
+        "extension_checks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/extension_check"
+          }
+        }
+      }
+    },
+    "network_isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "scope",
+        "status",
+        "records"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "scope": {
+          "const": "project_processes_and_owned_database"
+        },
+        "status": {
+          "enum": [
+            "ENFORCED",
+            "SIMULATED",
+            "BLOCKED",
+            "NOT_RUN"
+          ]
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "enforcement",
+              "proof_kind",
+              "backend",
+              "reason_code",
+              "policy_hash",
+              "scope",
+              "phase",
+              "command_invoked"
+            ],
+            "properties": {
+              "enforcement": {
+                "enum": [
+                  "enforced",
+                  "simulated",
+                  "blocked"
+                ]
+              },
+              "proof_kind": {
+                "enum": [
+                  "execution",
+                  "synthetic_test",
+                  "none"
+                ]
+              },
+              "backend": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason_code": {
+                "type": "string",
+                "minLength": 1
+              },
+              "policy_hash": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "scope": {
+                "enum": [
+                  "project",
+                  "database_server",
+                  "measurement"
+                ]
+              },
+              "phase": {
+                "enum": [
+                  "install",
+                  "migration",
+                  "build",
+                  "application",
+                  "measurement",
+                  "database_server"
+                ]
+              },
+              "command_invoked": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "sink_plan": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "kind",
+        "plan_id",
+        "parts"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "runtime-sink-plan"
+        }
+      }
+    },
+    "sink_observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "schema_version",
+          "binding",
+          "status",
+          "cleanup",
+          "observations",
+          "gaps"
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "integration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "plan_id",
+        "provider",
+        "kind",
+        "area",
+        "parts",
+        "evidence",
+        "env_names",
+        "declared_versions",
+        "strategy",
+        "affected_paths",
+        "affected_routes",
+        "unresolved_paths",
+        "required_for_startup",
+        "execution",
+        "coverage"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+:[0-9a-f]{12}$"
+        },
+        "plan_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "provider": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,63}$"
+        },
+        "kind": {
+          "enum": [
+            "ai",
+            "browser",
+            "cache",
+            "chat",
+            "database",
+            "document",
+            "email",
+            "erp",
+            "identity",
+            "identity-device",
+            "mail",
+            "messaging",
+            "native-image",
+            "observability",
+            "payments",
+            "push",
+            "queue",
+            "scheduler",
+            "sms",
+            "social",
+            "storage",
+            "unknown",
+            "worker"
+          ]
+        },
+        "area": {
+          "enum": [
+            "active",
+            "docs",
+            "legacy",
+            "tests",
+            "examples"
+          ]
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[\\\\?\\x00-\\x1f:]).+$"
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "line",
+              "kind",
+              "area"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500,
+                "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[\\\\?\\x00-\\x1f:]).+$"
+              },
+              "line": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "kind": {
+                "type": "string",
+                "minLength": 1
+              },
+              "area": {
+                "enum": [
+                  "active",
+                  "docs",
+                  "legacy",
+                  "tests",
+                  "examples"
+                ]
+              }
+            }
+          }
+        },
+        "env_names": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$"
+          }
+        },
+        "declared_versions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "strategy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "requested",
+            "selected",
+            "resolution",
+            "implemented",
+            "reason"
+          ],
+          "properties": {
+            "requested": {
+              "enum": [
+                null,
+                "container",
+                "disable",
+                "disabled",
+                "emulator",
+                "http-sink",
+                "record-replay",
+                "replay"
+              ]
+            },
+            "selected": {
+              "enum": [
+                null,
+                "container",
+                "disable",
+                "disabled",
+                "emulator",
+                "http-sink",
+                "record-replay",
+                "replay"
+              ]
+            },
+            "resolution": {
+              "enum": [
+                "explicit",
+                "proposed",
+                "unresolved"
+              ]
+            },
+            "implemented": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "affected_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[\\\\?\\x00-\\x1f:]).+$"
+          }
+        },
+        "affected_routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "method",
+              "source",
+              "line",
+              "relation"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "maxLength": 300,
+                "pattern": "^/(?!.*[\\s?#\\\\])(?!.*://).*$"
+              },
+              "method": {
+                "enum": [
+                  "ALL",
+                  "DELETE",
+                  "GET",
+                  "HEAD",
+                  "OPTIONS",
+                  "PATCH",
+                  "POST",
+                  "PUT",
+                  "unknown"
+                ]
+              },
+              "source": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500,
+                "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[\\\\?\\x00-\\x1f:]).+$"
+              },
+              "line": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "relation": {
+                "enum": [
+                  "direct_file",
+                  "import_chain"
+                ]
+              }
+            }
+          }
+        },
+        "unresolved_paths": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "line",
+              "reason"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500,
+                "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[\\\\?\\x00-\\x1f:]).+$"
+              },
+              "line": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "required_for_startup": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "readiness",
+            "actual_version",
+            "logs"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "ready",
+                "completed",
+                "failed",
+                "blocked",
+                "incomplete",
+                "not_run"
+              ]
+            },
+            "readiness": {
+              "enum": [
+                "ready",
+                "failed",
+                "unknown"
+              ]
+            },
+            "actual_version": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^v?\\d+(?:\\.\\d+){0,3}(?:[-+][A-Za-z0-9.-]+)?$"
+            },
+            "logs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500,
+                "pattern": "^(?!\\.$)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[\\\\?\\x00-\\x1f:]).+$"
+              }
+            },
+            "disabled_verified": {
+              "type": "boolean"
+            },
+            "receipts": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "tested_routes",
+            "untested_because"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "not_checked",
+                "partial",
+                "tested",
+                "not_applicable"
+              ]
+            },
+            "tested_routes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "route",
+                  "method",
+                  "status",
+                  "evidence"
+                ],
+                "properties": {
+                  "route": {
+                    "type": "string",
+                    "maxLength": 300,
+                    "pattern": "^/(?!.*[\\s?#\\\\])(?!.*://).*$"
+                  },
+                  "method": {
+                    "enum": [
+                      "ALL",
+                      "DELETE",
+                      "GET",
+                      "HEAD",
+                      "OPTIONS",
+                      "PATCH",
+                      "POST",
+                      "PUT",
+                      "unknown"
+                    ]
+                  },
+                  "status": {
+                    "enum": [
+                      "PASS",
+                      "FAIL"
+                    ]
+                  },
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "pattern": "^(?!\\.$)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[\\\\?\\x00-\\x1f:]).+$"
+                  }
+                }
+              }
+            },
+            "untested_because": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "family": {
+          "enum": [
+            "ai",
+            "chat",
+            "email",
+            "erp",
+            "identity",
+            "observability",
+            "payments",
+            "push",
+            "queue",
+            "scheduler",
+            "sms",
+            "storage"
+          ]
+        }
+      }
+    },
+    "integration_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "integration_id",
+        "plan_id",
+        "run_id",
+        "strategy",
+        "status",
+        "readiness",
+        "actual_version",
+        "logs",
+        "tested_routes"
+      ],
+      "properties": {
+        "integration_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+:[0-9a-f]{12}$"
+        },
+        "plan_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "run_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,99}$"
+        },
+        "strategy": {
+          "enum": [
+            "container",
+            "disable",
+            "disabled",
+            "emulator",
+            "http-sink",
+            "record-replay",
+            "replay"
+          ]
+        },
+        "status": {
+          "enum": [
+            "ready",
+            "completed",
+            "failed",
+            "blocked",
+            "incomplete",
+            "not_run"
+          ]
+        },
+        "readiness": {
+          "enum": [
+            "ready",
+            "failed",
+            "unknown"
+          ]
+        },
+        "actual_version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^v?\\d+(?:\\.\\d+){0,3}(?:[-+][A-Za-z0-9.-]+)?$"
+        },
+        "logs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^(?!\\.$)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[\\\\?\\x00-\\x1f:]).+$"
+          }
+        },
+        "disabled_verified": {
+          "type": "boolean"
+        },
+        "tested_routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "route",
+              "method",
+              "status",
+              "evidence",
+              "integration_exercised"
+            ],
+            "properties": {
+              "route": {
+                "type": "string",
+                "maxLength": 300,
+                "pattern": "^/(?!.*[\\s?#\\\\])(?!.*://).*$"
+              },
+              "method": {
+                "enum": [
+                  "ALL",
+                  "DELETE",
+                  "GET",
+                  "HEAD",
+                  "OPTIONS",
+                  "PATCH",
+                  "POST",
+                  "PUT",
+                  "unknown"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "PASS",
+                  "FAIL"
+                ]
+              },
+              "evidence": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500,
+                "pattern": "^(?!\\.$)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[\\\\?\\x00-\\x1f:]).+$"
+              },
+              "integration_exercised": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "integrations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "plan_id",
+        "run_id",
+        "scope",
+        "status",
+        "integrations",
+        "discovery",
+        "receipt_errors"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "plan_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "run_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,99}$"
+        },
+        "scope": {
+          "const": "execution_receipts"
+        },
+        "status": {
+          "enum": [
+            "RECORDED",
+            "INCOMPLETE"
+          ]
+        },
+        "integrations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/integration"
+          }
+        },
+        "discovery": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "files",
+            "excluded",
+            "errors",
+            "limitations"
+          ],
+          "properties": {
+            "files": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "excluded": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "path",
+                  "reason"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[\\\\?\\x00-\\x1f:]).+$"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "reason"
+                ],
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "receipt_errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "index",
+              "reason"
+            ],
+            "properties": {
+              "index": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "registry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sha256",
+            "providers"
+          ],
+          "properties": {
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "providers": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,63}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "identityFormBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "integration_id",
+        "integration_plan_id",
+        "identity_plan_id",
+        "attempt_id",
+        "part"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,99}$"
+        },
+        "integration_id": {
+          "type": "string",
+          "pattern": "^keycloak:[0-9a-f]{12}$"
+        },
+        "integration_plan_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "identity_plan_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "attempt_id": {
+          "type": "string",
+          "pattern": "^login-[0-9a-f]{32}$"
+        },
+        "part": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "identityFormSuite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "binding",
+        "status",
+        "form_status",
+        "identities",
+        "session_coverage",
+        "authorization_coverage"
+      ],
+      "properties": {
+        "type": {
+          "const": "identity-form-suite"
+        },
+        "binding": {
+          "$ref": "#/$defs/identityFormBinding"
+        },
+        "status": {
+          "const": "INCOMPLETE"
+        },
+        "form_status": {
+          "enum": [
+            "PASS",
+            "INCOMPLETE"
+          ]
+        },
+        "identities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "binding",
+              "identity_id",
+              "status",
+              "form_status",
+              "phases",
+              "execution",
+              "limits",
+              "cleanup"
+            ],
+            "properties": {
+              "type": {
+                "const": "identity-flow"
+              },
+              "binding": {
+                "$ref": "#/$defs/identityFormBinding"
+              },
+              "identity_id": {
+                "type": "string",
+                "pattern": "^role-[0-9a-f]{12}$"
+              },
+              "status": {
+                "enum": [
+                  "INCOMPLETE",
+                  "FAIL",
+                  "BLOCKED"
+                ]
+              },
+              "form_status": {
+                "enum": [
+                  "NOT_RUN",
+                  "PASS",
+                  "FAIL",
+                  "BLOCKED"
+                ]
+              },
+              "phases": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "phase",
+                    "status",
+                    "reason_code"
+                  ],
+                  "properties": {
+                    "phase": {
+                      "enum": [
+                        "authorization",
+                        "form",
+                        "callback",
+                        "application_session",
+                        "protected_routes"
+                      ]
+                    },
+                    "status": {
+                      "enum": [
+                        "NOT_RUN",
+                        "PASS",
+                        "FAIL",
+                        "BLOCKED"
+                      ]
+                    },
+                    "reason_code": {
+                      "type": "string",
+                      "pattern": "^[A-Z_0-9]+$"
+                    }
+                  }
+                }
+              },
+              "execution": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "form_submitted",
+                  "callback_observed",
+                  "session_asserted",
+                  "protected_routes_tested"
+                ],
+                "properties": {
+                  "form_submitted": {
+                    "type": "boolean"
+                  },
+                  "callback_observed": {
+                    "type": "boolean"
+                  },
+                  "session_asserted": {
+                    "const": false
+                  },
+                  "protected_routes_tested": {
+                    "const": 0
+                  }
+                }
+              },
+              "limits": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "cleanup": {
+                "enum": [
+                  "closed",
+                  "not_needed",
+                  "unknown"
+                ]
+              }
+            }
+          }
+        },
+        "session_coverage": {
+          "const": "NOT_RUN"
+        },
+        "authorization_coverage": {
+          "const": "NOT_RUN"
+        }
+      }
+    },
+    "extension_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "database",
+        "part",
+        "candidate",
+        "status",
+        "reason_code",
+        "requirements_status",
+        "required",
+        "declarations",
+        "gaps",
+        "observed",
+        "missing",
+        "version_check",
+        "log"
+      ],
+      "properties": {
+        "scope": {
+          "enum": [
+            "base",
+            "trial",
+            "restore"
+          ]
+        },
+        "database": {
+          "type": "string",
+          "minLength": 1
+        },
+        "part": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "candidate": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "checking",
+            "ready",
+            "blocked",
+            "incomplete"
+          ]
+        },
+        "reason_code": {
+          "enum": [
+            "CHECK_PENDING",
+            "CATALOG_OBSERVED",
+            "REQUIRED_EXTENSION_UNAVAILABLE",
+            "CATALOG_QUERY_FAILED",
+            "CATALOG_INVALID",
+            "RESOURCE_PAUSED",
+            "INTERRUPTED"
+          ]
+        },
+        "requirements_status": {
+          "enum": [
+            "recorded",
+            "unknown"
+          ]
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "declarations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "path",
+              "line",
+              "declared_version"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "line": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "declared_version": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "line",
+              "reason_code"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "line": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "reason_code": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "observed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "available",
+              "default_version",
+              "installed_version"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "available": {
+                "type": "boolean"
+              },
+              "default_version": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "installed_version": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "version_check": {
+          "const": "not_checked"
+        },
+        "log": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

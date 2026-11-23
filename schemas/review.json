@@ -1,0 +1,5 @@
+{"type":"object","additionalProperties":false,"required":["verdict","findings","summary"],
+ "properties":{"verdict":{"type":"string","enum":["approve","changes"]},"summary":{"type":"string"},
+  "findings":{"type":"array","items":{"type":"object","additionalProperties":false,
+   "required":["severity","file","issue","fix"],
+   "properties":{"severity":{"type":"string","enum":["blocker","major","nit"]},"file":{"type":"string"},"issue":{"type":"string"},"fix":{"type":"string"}}}}}}

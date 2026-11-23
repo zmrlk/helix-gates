@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "properties": {
+    "flows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "recipient": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "data",
+          "purpose",
+          "recipient"
+        ]
+      },
+      "minItems": 1
+    },
+    "retention": {
+      "type": "string"
+    },
+    "deletion": {
+      "type": "string"
+    },
+    "subprocessors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "fixture_policy": {
+      "type": "string"
+    },
+    "owner": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "flows",
+    "retention",
+    "deletion",
+    "subprocessors",
+    "fixture_policy",
+    "owner"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

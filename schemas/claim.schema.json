@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "claim",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "[A-Za-z0-9][A-Za-z0-9_.-]{0,79}"
+    },
+    "agent": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "[A-Za-z0-9][A-Za-z0-9_.-]{0,79}"
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expires_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "released"
+      ]
+    },
+    "lease_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "[0-9a-f]{32}"
+    }
+  },
+  "required": [
+    "task_id",
+    "agent",
+    "created_at",
+    "expires_at",
+    "status",
+    "lease_id"
+  ]
+}

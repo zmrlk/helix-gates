@@ -1,0 +1,4 @@
+:root { --fg: #000; --bg: #fff; --alias: var(--fg); }
+.card { color: var(--alias); background-color: var(--bg); padding: var(--spacing); }
+button:focus-visible { outline: 2px solid blue; }
+/* .bad { color: #888; background: #fff; outline: none; } */

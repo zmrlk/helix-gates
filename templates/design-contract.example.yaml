@@ -1,0 +1,27 @@
+# Helix: kontrakt spójności UI (przykład). Wzorce zatwierdza człowiek: status: approved | proposal
+version: 1
+areas:
+  shop: {routes: ["/catalog", "/produkt/*"]}
+  company: {routes: ["/company/*"]}
+  admin: {routes: ["/admin/*"], chrome_forbidden: ["Koszyk", "Ulubione", "\\d+,\\d\\d zł"]}
+chrome:
+  shared: [[shop, company]]          # te obszary CELOWO mają wspólny nagłówek
+tokens:
+  font_size: [11, 12, 13, 16, 22]
+  radius: [8, 12, 16]
+  spacing: [2, 4, 6, 8, 12, 16, 20, 24]
+  colors: ["#1a160f", "#9a6a34", "#e6e3dd"]
+components:
+  button: {component: src/lib/components/ui/Button.svelte, require: true}
+  input: {component: src/lib/components/ui/Input.svelte, require: true}
+patterns:
+  details: {canonical: drawer-right, phone: fullscreen, status: approved}
+  notification: {canonical: toast, status: approved, note: "trwały stan strony = Alert w treści (wyjątek niżej)"}
+  list_phone: {canonical: cards/list, status: proposal}
+copy:
+  language: pl
+  actions: {details: Szczegóły, save: Zapisz}
+  date_format: DD.MM.RRRR
+tolerances: {fs: 2, radius: 4, pad: 4, de: 12}
+exceptions:
+  - {rule: pattern-notification, match: "inline", reason: "Alert w treści dla stanu zamówienia jest zamierzony"}

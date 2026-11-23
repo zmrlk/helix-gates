@@ -1,0 +1,74 @@
+{
+  "runtime": {
+    "integrations": {
+      "learning": false,
+      "custom": [
+        {
+          "provider": "example-api",
+          "family": "erp",
+          "packages": {},
+          "hosts": [
+            "api.example.invalid"
+          ],
+          "env_patterns": [
+            "^EXAMPLE_API_"
+          ],
+          "default_strategy": "record-replay"
+        }
+      ],
+      "example-api": {
+        "strategy": "record-replay",
+        "recordings": [
+          {
+            "synthetic": true,
+            "request": {
+              "url": "https://api.example.invalid/status",
+              "method": "POST",
+              "body": {
+                "probe": true
+              }
+            },
+            "response": {
+              "status": 200,
+              "body": {
+                "ok": true
+              }
+            }
+          }
+        ]
+      }
+    },
+    "adapters": {
+      "timezone": "Europe/Warsaw",
+      "scheduler_routes": [
+        "/jobs/daily"
+      ],
+      "synthetic_rows": [
+        {
+          "synthetic": true,
+          "table": "public.preferences",
+          "values": {
+            "label": "Synthetic fixture",
+            "enabled": false
+          }
+        }
+      ],
+      "inbound_replay": [
+        {
+          "synthetic": true,
+          "path": "/callbacks/jobs/42",
+          "method": "POST",
+          "headers": {
+            "x-job-token": {
+              "env": "EXAMPLE_JOB_TOKEN"
+            }
+          },
+          "body": {
+            "ok": true
+          },
+          "expected_status": 200
+        }
+      ]
+    }
+  }
+}

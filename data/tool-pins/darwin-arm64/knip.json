@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "tool": "knip",
+  "version": "6.43.0",
+  "platform": "darwin-arm64",
+  "lock_sha256": "4817f3b67e0ba22b691f71715bfcad024c632e70c67662ffa531c7327b4a0b53"
+}

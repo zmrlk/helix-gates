@@ -1,0 +1,6 @@
+{
+  "mechanisms": {},
+  "patterns": {},
+  "components": {},
+  "industries": {}
+}

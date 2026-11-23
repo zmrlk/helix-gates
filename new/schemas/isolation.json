@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "tenant_model": {
+      "type": "string"
+    },
+    "database": {
+      "type": "string"
+    },
+    "cache": {
+      "type": "string"
+    },
+    "files": {
+      "type": "string"
+    },
+    "queues": {
+      "type": "string"
+    },
+    "analytics": {
+      "type": "string"
+    },
+    "isolation_tests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "decision": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_model",
+    "database",
+    "cache",
+    "files",
+    "queues",
+    "analytics",
+    "isolation_tests",
+    "decision"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

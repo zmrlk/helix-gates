@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "requirements": [
+    {
+      "id": "REQ-A-01",
+      "group": "A",
+      "text": "Recenzent i weryfikator należą do innej rodziny modelu niż autor; brak niezależnej rodziny to LIMITED, nie PASS.",
+      "priority": "MUST",
+      "sources": [
+        {
+          "file": "SKILL.md:92",
+          "quote": "Recenzenci i weryfikator muszą być z innej rodziny niż autor"
+        }
+      ],
+      "acceptance": "Jawnie wskazany weryfikator z tej samej rodziny nie jest uznany za niezależnego.",
+      "status": "done",
+      "tests": [
+        "tests/test_provider_plan.py::ProviderPlanTests.test_explicit_same_family_verifier_cannot_be_independent"
+      ],
+      "evidence": [
+        "tests/test_provider_plan.py:225"
+      ]
+    },
+    {
+      "id": "REQ-A-02",
+      "group": "A",
+      "text": "Zapadka wagi tras: init bez nadpisu, update tylko obniża, wzrost odrzucony.",
+      "priority": "MUST",
+      "sources": [
+        {
+          "file": "SKILL.md:33",
+          "quote": "It may not move forward until it is proven"
+        }
+      ],
+      "acceptance": "Próba nadpisania bazy albo zatwierdzenia wzrostu kończy się błędem.",
+      "status": "done",
+      "tests": [
+        "tests/test_old_port.py::OldPort.test_ratchet_cannot_overwrite_or_approve_growth"
+      ],
+      "evidence": [
+        "tests/test_old_port.py:104"
+      ]
+    },
+    {
+      "id": "REQ-B-01",
+      "group": "B",
+      "text": "Ledger wymagań odrzuca niepoprawne wpisy i przyjmuje poprawne.",
+      "priority": "MUST",
+      "sources": [
+        {
+          "file": "docs/requirements-ledger.md:1",
+          "quote": "Ledger wymagań"
+        }
+      ],
+      "acceptance": "Niepoprawny ledger daje FAIL; poprawny PASS.",
+      "status": "done",
+      "tests": [
+        "tests/test_requirements_ledger.py::RequirementsLedger.test_valid_fixture"
+      ],
+      "evidence": [
+        "tests/test_requirements_ledger.py:68"
+      ]
+    }
+  ]
+}

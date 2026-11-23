@@ -1,0 +1,1 @@
+{"name": "runtime-dbmate-style", "private": true, "scripts": {"start": "node server.cjs"}}

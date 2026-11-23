@@ -1,0 +1,6 @@
+{
+  "S": {"function_lines": 60, "file_lines": 600, "cyclomatic": 10, "cognitive": 15, "nesting": 4, "sentence_words": 30},
+  "M": {"function_lines": 60, "file_lines": 600, "cyclomatic": 10, "cognitive": 15, "nesting": 4, "sentence_words": 30},
+  "L": {"function_lines": 50, "file_lines": 500, "cyclomatic": 10, "cognitive": 15, "nesting": 4, "sentence_words": 25},
+  "XL": {"function_lines": 50, "file_lines": 500, "cyclomatic": 10, "cognitive": 15, "nesting": 4, "sentence_words": 25}
+}

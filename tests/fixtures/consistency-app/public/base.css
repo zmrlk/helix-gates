@@ -1,0 +1,18 @@
+body{font-family:Arial,sans-serif;margin:0;color:#1a160f;background:#fff}
+header{display:flex;gap:16px;align-items:center;padding:12px 20px;border-bottom:1px solid #e6e3dd}
+header a{color:#1a160f;text-decoration:none;font-size:14px}
+.layout{display:flex;gap:24px;padding:20px}
+aside{width:220px}
+aside a{display:block;padding:8px 12px;font-size:14px;color:#1a160f;text-decoration:none;border-radius:8px}
+aside.card{border:1px solid #e6e3dd;border-radius:12px;padding:12px;background:#fff}
+main{flex:1}
+h1{font-size:24px;font-weight:700;margin:0 0 16px}
+.btn{display:inline-flex;align-items:center;gap:6px;font:600 14px Arial,sans-serif;height:36px;padding:0 16px;border-radius:8px;border:1px solid transparent;cursor:pointer}
+.btn-primary{background:#1a160f;color:#fff}
+.btn-secondary{background:#fff;color:#1a160f;border-color:#d6d2c9}
+.btn svg{width:16px;height:16px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:9999px;background:rgba(194,118,31,.12);color:#8a4f12}
+.input{font-size:14px;height:36px;padding:0 10px;border:1px solid #d6d2c9;border-radius:8px}
+table{border-collapse:collapse;width:100%}th{font-size:12px;text-transform:uppercase;text-align:left;padding:8px}td{font-size:14px;padding:8px;border-top:1px solid #eee}
+.card{border:1px solid #e6e3dd;border-radius:8px;padding:16px;background:#fff}
+footer{padding:20px;border-top:1px solid #e6e3dd;font-size:12px}

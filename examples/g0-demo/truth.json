@@ -1,0 +1,65 @@
+{
+ "checkpoint": "g0",
+ "kind": "report",
+ "target": "local",
+ "base": "a9a73d764ee09423bed64393577092b88d97816f",
+ "created": "2026-10-24 13:02:50",
+ "_help": "kind: fix|report. target: local|pr (pr = will become a PR; report = findings only). Evidence kinds: path:line (code), config:path:line, deploy:path:line, sha:<commit>, cmd:<file with command + output, relative to repo or evidence dir>, owner:<who, when, where>, prod:<observation>. Claims with affects_prod=true need at least one of owner:/config:/deploy:/sha:/cmd:/prod: — a code reference alone never proves what runs in production.",
+ "systems": [
+  {
+   "name": "Sklep demo (prod, hipotetycznie)",
+   "flow": "koszyk -> płatność",
+   "touched": true,
+   "status": "unconfirmed",
+   "confirmed_by": "",
+   "evidence": []
+  }
+ ],
+ "claims": [
+  {
+   "id": "C1",
+   "text": "Suma koszyka uwzględnia ilość sztuk",
+   "tag": "VERIFIED",
+   "affects_prod": false,
+   "evidence": [
+    "app/cart.js:1",
+    "sha:d772bfe"
+   ]
+  },
+  {
+   "id": "C2",
+   "text": "Produkcja (jeśli istnieje) liczy koszyk tym samym kodem co app/cart.js — niepotwierdzone",
+   "tag": "ASSUMPTION",
+   "affects_prod": true,
+   "evidence": [
+    "app/cart.js:1"
+   ]
+  },
+  {
+   "id": "C3",
+   "text": "Kwoty są formatowane tylko przez formatPLN",
+   "tag": "VERIFIED",
+   "affects_prod": false,
+   "evidence": [
+    "app/cart.js:17",
+    "ARCHITECTURE.md:4"
+   ]
+  }
+ ],
+ "behaviour": {
+  "characterization_tests": [
+   "<test id that pins CURRENT behaviour around the change>"
+  ],
+  "suite_before": null,
+  "suite_after": null,
+  "diff_allowlist": [
+   "<only files the fix needs>"
+  ]
+ },
+ "independent_check": {
+  "file": "truth-check.json",
+  "resolutions": {
+   "F1": "Zgoda: C2 przetagowane na ASSUMPTION, system oznaczony jako niepotwierdzony w raporcie."
+  }
+ }
+}

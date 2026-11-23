@@ -1,0 +1,5 @@
+{"type":"object","additionalProperties":false,"required":["valid","invalid_reason","differences","summary"],
+ "properties":{"valid":{"type":"boolean"},"invalid_reason":{"type":"string"},"summary":{"type":"string"},
+  "differences":{"type":"array","items":{"type":"object","additionalProperties":false,
+   "required":["severity","location","description","code_fixable"],
+   "properties":{"severity":{"type":"string","enum":["high","medium","low"]},"location":{"type":"string"},"description":{"type":"string"},"code_fixable":{"type":"boolean"}}}}}}

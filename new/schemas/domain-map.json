@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "mechanisms": {
+      "type": "object"
+    },
+    "patterns": {
+      "type": "object"
+    },
+    "components": {
+      "type": "object"
+    },
+    "industries": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "mechanisms",
+    "patterns",
+    "components",
+    "industries"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

@@ -1,0 +1,369 @@
+{
+  "type": "object",
+  "properties": {
+    "products": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "owner"
+        ]
+      },
+      "minItems": 1
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "product": {
+            "type": "string"
+          },
+          "context": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "product",
+          "context",
+          "owner"
+        ]
+      },
+      "minItems": 1
+    },
+    "contexts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "team": {
+            "type": "string"
+          },
+          "data_owner": {
+            "type": "string"
+          },
+          "api_owner": {
+            "type": "string"
+          },
+          "depends_on": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "id",
+          "team",
+          "data_owner",
+          "api_owner",
+          "depends_on"
+        ]
+      },
+      "minItems": 1
+    },
+    "adr": {
+      "type": "object",
+      "properties": {
+        "approach": {
+          "enum": [
+            "modular-monolith-first"
+          ]
+        },
+        "accepted_by": {
+          "type": "string"
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "trade_offs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "extraction_metric": {
+          "type": "string"
+        },
+        "extraction_threshold": {
+          "type": "number",
+          "minimum": 0.001
+        },
+        "import_boundaries": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "approach",
+        "accepted_by",
+        "alternatives",
+        "trade_offs",
+        "extraction_metric",
+        "extraction_threshold",
+        "import_boundaries"
+      ]
+    },
+    "api": {
+      "type": "object",
+      "properties": {
+        "versioning": {
+          "type": "string"
+        },
+        "deprecation": {
+          "type": "string"
+        },
+        "webhook_signatures": {
+          "type": "string"
+        },
+        "replay": {
+          "type": "string"
+        },
+        "idempotency": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "string"
+        },
+        "app_installation": {
+          "type": "string"
+        },
+        "extension_isolation": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "versioning",
+        "deprecation",
+        "webhook_signatures",
+        "replay",
+        "idempotency",
+        "scopes",
+        "app_installation",
+        "extension_isolation"
+      ]
+    },
+    "tenancy": {
+      "type": "object",
+      "properties": {
+        "routing": {
+          "type": "string"
+        },
+        "isolation": {
+          "type": "string"
+        },
+        "sharding": {
+          "type": "string"
+        },
+        "rebalance": {
+          "type": "string"
+        },
+        "shard_migration": {
+          "type": "string"
+        },
+        "noisy_neighbor_budget": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "routing",
+        "isolation",
+        "sharding",
+        "rebalance",
+        "shard_migration",
+        "noisy_neighbor_budget"
+      ]
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "cross_product": {
+          "type": "string"
+        },
+        "session": {
+          "type": "string"
+        },
+        "authorization": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "cross_product",
+        "session",
+        "authorization"
+      ]
+    },
+    "design_system": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "adoption": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "owner",
+        "adoption"
+      ]
+    },
+    "milestones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "product": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "team": {
+            "type": "string"
+          },
+          "acceptance": {
+            "type": "string"
+          },
+          "depends_on": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0
+          },
+          "dependency_contracts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "milestone": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "approved"
+                  ]
+                },
+                "accepted_by": {
+                  "type": "string"
+                },
+                "reference": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "milestone",
+                "status",
+                "accepted_by",
+                "reference"
+              ]
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "id",
+          "product",
+          "owner",
+          "team",
+          "acceptance",
+          "depends_on",
+          "dependency_contracts"
+        ]
+      },
+      "minItems": 1
+    },
+    "teams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "contexts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "agent_streams": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "handoff": {
+            "type": "string"
+          },
+          "conflict_lock": {
+            "type": "string"
+          },
+          "integration": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "owner",
+          "contexts",
+          "agent_streams",
+          "handoff",
+          "conflict_lock",
+          "integration"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "products",
+    "capabilities",
+    "contexts",
+    "adr",
+    "api",
+    "tenancy",
+    "identity",
+    "design_system",
+    "milestones",
+    "teams"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

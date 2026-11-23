@@ -1,0 +1,488 @@
+{
+  "brief": "Commerce platform + consumer shop; storefront is one channel of the consumer product.",
+  "program": {
+    "products": [
+      {
+        "id": "merchant-admin",
+        "owner": "Product lead"
+      },
+      {
+        "id": "consumer-app",
+        "owner": "Product lead"
+      },
+      {
+        "id": "pos",
+        "owner": "Product lead"
+      },
+      {
+        "id": "payments",
+        "owner": "Product lead"
+      },
+      {
+        "id": "fulfillment",
+        "owner": "Product lead"
+      },
+      {
+        "id": "billing",
+        "owner": "Product lead"
+      },
+      {
+        "id": "partner-app-ecosystem",
+        "owner": "Product lead"
+      },
+      {
+        "id": "analytics",
+        "owner": "Product lead"
+      },
+      {
+        "id": "internal-tools",
+        "owner": "Product lead"
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "merchant-admin-capability",
+        "product": "merchant-admin",
+        "context": "merchant-admin",
+        "owner": "Domain lead"
+      },
+      {
+        "id": "consumer-app-capability",
+        "product": "consumer-app",
+        "context": "consumer-app",
+        "owner": "Domain lead"
+      },
+      {
+        "id": "pos-capability",
+        "product": "pos",
+        "context": "pos",
+        "owner": "Domain lead"
+      },
+      {
+        "id": "payments-capability",
+        "product": "payments",
+        "context": "payments",
+        "owner": "Domain lead"
+      },
+      {
+        "id": "fulfillment-capability",
+        "product": "fulfillment",
+        "context": "fulfillment",
+        "owner": "Domain lead"
+      },
+      {
+        "id": "billing-capability",
+        "product": "billing",
+        "context": "billing",
+        "owner": "Domain lead"
+      },
+      {
+        "id": "partner-app-ecosystem-capability",
+        "product": "partner-app-ecosystem",
+        "context": "partner-app-ecosystem",
+        "owner": "Domain lead"
+      },
+      {
+        "id": "analytics-capability",
+        "product": "analytics",
+        "context": "analytics",
+        "owner": "Domain lead"
+      },
+      {
+        "id": "internal-tools-capability",
+        "product": "internal-tools",
+        "context": "internal-tools",
+        "owner": "Domain lead"
+      }
+    ],
+    "contexts": [
+      {
+        "id": "merchant-admin",
+        "team": "merchant-admin-team",
+        "data_owner": "Data lead",
+        "api_owner": "API lead",
+        "depends_on": []
+      },
+      {
+        "id": "consumer-app",
+        "team": "consumer-app-team",
+        "data_owner": "Data lead",
+        "api_owner": "API lead",
+        "depends_on": []
+      },
+      {
+        "id": "pos",
+        "team": "pos-team",
+        "data_owner": "Data lead",
+        "api_owner": "API lead",
+        "depends_on": []
+      },
+      {
+        "id": "payments",
+        "team": "payments-team",
+        "data_owner": "Data lead",
+        "api_owner": "API lead",
+        "depends_on": []
+      },
+      {
+        "id": "fulfillment",
+        "team": "fulfillment-team",
+        "data_owner": "Data lead",
+        "api_owner": "API lead",
+        "depends_on": []
+      },
+      {
+        "id": "billing",
+        "team": "billing-team",
+        "data_owner": "Data lead",
+        "api_owner": "API lead",
+        "depends_on": []
+      },
+      {
+        "id": "partner-app-ecosystem",
+        "team": "partner-app-ecosystem-team",
+        "data_owner": "Data lead",
+        "api_owner": "API lead",
+        "depends_on": []
+      },
+      {
+        "id": "analytics",
+        "team": "analytics-team",
+        "data_owner": "Data lead",
+        "api_owner": "API lead",
+        "depends_on": []
+      },
+      {
+        "id": "internal-tools",
+        "team": "internal-tools-team",
+        "data_owner": "Data lead",
+        "api_owner": "API lead",
+        "depends_on": []
+      }
+    ],
+    "adr": {
+      "approach": "modular-monolith-first",
+      "accepted_by": "Architecture owner",
+      "alternatives": [
+        "Distributed services"
+      ],
+      "trade_offs": [
+        "Single deployment simplifies consistency but limits independent release cadence"
+      ],
+      "extraction_metric": "sustained independent scaling demand in requests per second",
+      "extraction_threshold": 10000,
+      "import_boundaries": "Only published module interfaces; forbid direct internal imports"
+    },
+    "api": {
+      "versioning": "Versioned major routes",
+      "deprecation": "Two supported versions, six month notice",
+      "webhook_signatures": "HMAC signature with rotating key identifiers",
+      "replay": "Timestamp window and event identifier ledger",
+      "idempotency": "Tenant scoped idempotency keys",
+      "scopes": "Product and action scopes",
+      "app_installation": "Owner approval with scoped grant",
+      "extension_isolation": "Sandbox with explicit capabilities"
+    },
+    "tenancy": {
+      "routing": "Tenant routing registry",
+      "isolation": "Tenant row policies and negative tests",
+      "sharding": "Start single shard, route by tenant",
+      "rebalance": "Copy verify switch with rollback",
+      "shard_migration": "Dual routing with verification",
+      "noisy_neighbor_budget": "Per tenant request and queue quotas"
+    },
+    "identity": {
+      "cross_product": "Shared subject with product memberships",
+      "session": "Short sessions with revocation",
+      "authorization": "Membership and tenant checks per request"
+    },
+    "design_system": {
+      "version": "1.0.0",
+      "owner": "Design platform team",
+      "adoption": "Shared tokens with per product compatibility tests"
+    },
+    "milestones": [
+      {
+        "id": "merchant-admin-m1",
+        "product": "merchant-admin",
+        "owner": "Delivery owner",
+        "team": "merchant-admin-team",
+        "acceptance": "Published contract and negative acceptance tests pass",
+        "depends_on": [],
+        "dependency_contracts": []
+      },
+      {
+        "id": "consumer-app-m1",
+        "product": "consumer-app",
+        "owner": "Delivery owner",
+        "team": "consumer-app-team",
+        "acceptance": "Published contract and negative acceptance tests pass",
+        "depends_on": [
+          "merchant-admin-m1"
+        ],
+        "dependency_contracts": [
+          {
+            "milestone": "merchant-admin-m1",
+            "status": "approved",
+            "accepted_by": "Contract owner",
+            "reference": "contracts/merchant-v1.md"
+          }
+        ]
+      },
+      {
+        "id": "pos-m1",
+        "product": "pos",
+        "owner": "Delivery owner",
+        "team": "pos-team",
+        "acceptance": "Published contract and negative acceptance tests pass",
+        "depends_on": [
+          "merchant-admin-m1"
+        ],
+        "dependency_contracts": [
+          {
+            "milestone": "merchant-admin-m1",
+            "status": "approved",
+            "accepted_by": "Contract owner",
+            "reference": "contracts/merchant-v1.md"
+          }
+        ]
+      },
+      {
+        "id": "payments-m1",
+        "product": "payments",
+        "owner": "Delivery owner",
+        "team": "payments-team",
+        "acceptance": "Published contract and negative acceptance tests pass",
+        "depends_on": [
+          "merchant-admin-m1"
+        ],
+        "dependency_contracts": [
+          {
+            "milestone": "merchant-admin-m1",
+            "status": "approved",
+            "accepted_by": "Contract owner",
+            "reference": "contracts/merchant-v1.md"
+          }
+        ]
+      },
+      {
+        "id": "fulfillment-m1",
+        "product": "fulfillment",
+        "owner": "Delivery owner",
+        "team": "fulfillment-team",
+        "acceptance": "Published contract and negative acceptance tests pass",
+        "depends_on": [
+          "merchant-admin-m1"
+        ],
+        "dependency_contracts": [
+          {
+            "milestone": "merchant-admin-m1",
+            "status": "approved",
+            "accepted_by": "Contract owner",
+            "reference": "contracts/merchant-v1.md"
+          }
+        ]
+      },
+      {
+        "id": "billing-m1",
+        "product": "billing",
+        "owner": "Delivery owner",
+        "team": "billing-team",
+        "acceptance": "Published contract and negative acceptance tests pass",
+        "depends_on": [
+          "merchant-admin-m1"
+        ],
+        "dependency_contracts": [
+          {
+            "milestone": "merchant-admin-m1",
+            "status": "approved",
+            "accepted_by": "Contract owner",
+            "reference": "contracts/merchant-v1.md"
+          }
+        ]
+      },
+      {
+        "id": "partner-app-ecosystem-m1",
+        "product": "partner-app-ecosystem",
+        "owner": "Delivery owner",
+        "team": "partner-app-ecosystem-team",
+        "acceptance": "Published contract and negative acceptance tests pass",
+        "depends_on": [
+          "merchant-admin-m1"
+        ],
+        "dependency_contracts": [
+          {
+            "milestone": "merchant-admin-m1",
+            "status": "approved",
+            "accepted_by": "Contract owner",
+            "reference": "contracts/merchant-v1.md"
+          }
+        ]
+      },
+      {
+        "id": "analytics-m1",
+        "product": "analytics",
+        "owner": "Delivery owner",
+        "team": "analytics-team",
+        "acceptance": "Published contract and negative acceptance tests pass",
+        "depends_on": [
+          "merchant-admin-m1"
+        ],
+        "dependency_contracts": [
+          {
+            "milestone": "merchant-admin-m1",
+            "status": "approved",
+            "accepted_by": "Contract owner",
+            "reference": "contracts/merchant-v1.md"
+          }
+        ]
+      },
+      {
+        "id": "internal-tools-m1",
+        "product": "internal-tools",
+        "owner": "Delivery owner",
+        "team": "internal-tools-team",
+        "acceptance": "Published contract and negative acceptance tests pass",
+        "depends_on": [
+          "merchant-admin-m1"
+        ],
+        "dependency_contracts": [
+          {
+            "milestone": "merchant-admin-m1",
+            "status": "approved",
+            "accepted_by": "Contract owner",
+            "reference": "contracts/merchant-v1.md"
+          }
+        ]
+      }
+    ],
+    "teams": [
+      {
+        "id": "merchant-admin-team",
+        "owner": "Team lead",
+        "contexts": [
+          "merchant-admin"
+        ],
+        "agent_streams": [
+          "merchant-admin-implementation",
+          "merchant-admin-verification"
+        ],
+        "handoff": "Versioned API and acceptance fixture",
+        "conflict_lock": "One writer per context migration",
+        "integration": "Integrate at contract milestones"
+      },
+      {
+        "id": "consumer-app-team",
+        "owner": "Team lead",
+        "contexts": [
+          "consumer-app"
+        ],
+        "agent_streams": [
+          "consumer-app-implementation",
+          "consumer-app-verification"
+        ],
+        "handoff": "Versioned API and acceptance fixture",
+        "conflict_lock": "One writer per context migration",
+        "integration": "Integrate at contract milestones"
+      },
+      {
+        "id": "pos-team",
+        "owner": "Team lead",
+        "contexts": [
+          "pos"
+        ],
+        "agent_streams": [
+          "pos-implementation",
+          "pos-verification"
+        ],
+        "handoff": "Versioned API and acceptance fixture",
+        "conflict_lock": "One writer per context migration",
+        "integration": "Integrate at contract milestones"
+      },
+      {
+        "id": "payments-team",
+        "owner": "Team lead",
+        "contexts": [
+          "payments"
+        ],
+        "agent_streams": [
+          "payments-implementation",
+          "payments-verification"
+        ],
+        "handoff": "Versioned API and acceptance fixture",
+        "conflict_lock": "One writer per context migration",
+        "integration": "Integrate at contract milestones"
+      },
+      {
+        "id": "fulfillment-team",
+        "owner": "Team lead",
+        "contexts": [
+          "fulfillment"
+        ],
+        "agent_streams": [
+          "fulfillment-implementation",
+          "fulfillment-verification"
+        ],
+        "handoff": "Versioned API and acceptance fixture",
+        "conflict_lock": "One writer per context migration",
+        "integration": "Integrate at contract milestones"
+      },
+      {
+        "id": "billing-team",
+        "owner": "Team lead",
+        "contexts": [
+          "billing"
+        ],
+        "agent_streams": [
+          "billing-implementation",
+          "billing-verification"
+        ],
+        "handoff": "Versioned API and acceptance fixture",
+        "conflict_lock": "One writer per context migration",
+        "integration": "Integrate at contract milestones"
+      },
+      {
+        "id": "partner-app-ecosystem-team",
+        "owner": "Team lead",
+        "contexts": [
+          "partner-app-ecosystem"
+        ],
+        "agent_streams": [
+          "partner-app-ecosystem-implementation",
+          "partner-app-ecosystem-verification"
+        ],
+        "handoff": "Versioned API and acceptance fixture",
+        "conflict_lock": "One writer per context migration",
+        "integration": "Integrate at contract milestones"
+      },
+      {
+        "id": "analytics-team",
+        "owner": "Team lead",
+        "contexts": [
+          "analytics"
+        ],
+        "agent_streams": [
+          "analytics-implementation",
+          "analytics-verification"
+        ],
+        "handoff": "Versioned API and acceptance fixture",
+        "conflict_lock": "One writer per context migration",
+        "integration": "Integrate at contract milestones"
+      },
+      {
+        "id": "internal-tools-team",
+        "owner": "Team lead",
+        "contexts": [
+          "internal-tools"
+        ],
+        "agent_streams": [
+          "internal-tools-implementation",
+          "internal-tools-verification"
+        ],
+        "handoff": "Versioned API and acceptance fixture",
+        "conflict_lock": "One writer per context migration",
+        "integration": "Integrate at contract milestones"
+      }
+    ]
+  }
+}

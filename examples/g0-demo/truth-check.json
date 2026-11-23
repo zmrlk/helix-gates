@@ -1,0 +1,20 @@
+{
+  "summary": "C1 i C3 potwierdza bieżący kod lokalnej aplikacji. C2 pozostaje nieudowodnione. Brak zmian kodu oznacza brak zidentyfikowanych ryzyk regresji z diffu. Uruchomienie testów zakończyło się błędem.",
+  "false_claims": [
+    {
+      "claim_id": "C2",
+      "severity": "major",
+      "issue": "app/cart.js potwierdza implementację lokalną, ale nie dowodzi, że produkcja używa tego pliku. System produkcyjny i przepływ koszyk → płatność mają status unconfirmed; brak dowodów wdrożenia i potwierdzenia właściciela.",
+      "how_to_verify": "Potwierdzić z właścicielem rzeczywisty system produkcyjny, ustalić wdrożony artefakt i wersję oraz prześledzić obliczanie koszyka i kwoty przekazywanej do płatności.",
+      "id": "F1"
+    }
+  ],
+  "break_risks": [],
+  "_used": {
+    "provider": "codex",
+    "model": "default",
+    "seconds": 21.7,
+    "attempts": [],
+    "fallback_used": false
+  }
+}

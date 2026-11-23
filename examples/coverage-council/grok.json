@@ -1,0 +1,541 @@
+[
+ {
+  "category": "UX/devices",
+  "item": "Foldable posture",
+  "check": "On a foldable, complete checkout in book and tabletop postures and confirm the hinge, taskbar, and split-screen divider never cover totals or the pay button.",
+  "how": "model",
+  "why_forgotten": "Width matrices treat a foldable as a tall phone or a small tablet."
+ },
+ {
+  "category": "UX/devices",
+  "item": "Keyboard and safe area",
+  "check": "On a phone, focus the last checkout fields and confirm errors and the submit button stay visible above the virtual keyboard, notch, and home indicator.",
+  "how": "model",
+  "why_forgotten": "Screenshot passes run with the keyboard closed and no safe-area inset."
+ },
+ {
+  "category": "UX/devices",
+  "item": "Touch without hover",
+  "check": "Run picking, row menus, filters, and tooltips on a touch tablet using tap and long-press only.",
+  "how": "manual",
+  "why_forgotten": "Desktop automation and hover screenshots make pointer-only actions look done."
+ },
+ {
+  "category": "UX/devices",
+  "item": "Autofill and managers",
+  "check": "Autofill login, NIP, address, and phone from the browser and a password manager and confirm controlled fields and checksum validation accept the values.",
+  "how": "manual",
+  "why_forgotten": "Tests type character by character and never fire autofill events."
+ },
+ {
+  "category": "UX/devices",
+  "item": "Scanner wedge",
+  "check": "Send a fast keyboard-wedge burst plus Enter into a picking quantity and confirm it commits once and does not submit or duplicate the order.",
+  "how": "manual",
+  "why_forgotten": "Warehouse hardware input is outside the browser device lab."
+ },
+ {
+  "category": "UX/devices",
+  "item": "Abandoned checkout",
+  "check": "Refresh, go back, rotate, and let the session expire mid-order, then confirm the cart is recoverable and a second order is not created.",
+  "how": "automated",
+  "why_forgotten": "Happy-path suites always submit a clean, still-authenticated form."
+ },
+ {
+  "category": "UX/devices",
+  "item": "Shared warehouse tablet",
+  "check": "Sign out on a shared tablet and confirm the next person cannot open the previous cart, prices, or pages from the back-forward cache.",
+  "how": "automated",
+  "why_forgotten": "Each automated role gets a fresh browser profile."
+ },
+ {
+  "category": "Accessibility",
+  "item": "Keyboard and screen reader order",
+  "check": "Place an order with keyboard only and a screen reader, including combobox, date picker, dialog, and the return from Tpay.",
+  "how": "manual",
+  "why_forgotten": "axe inspects static DOM and never drives widgets or speech."
+ },
+ {
+  "category": "Accessibility",
+  "item": "Focus, names, errors",
+  "check": "Confirm every dialog traps and restores focus, every input has a programmatic name, and an invalid submit moves focus to a Polish error summary linked to the fields.",
+  "how": "automated",
+  "why_forgotten": "Assertions check that error text exists somewhere on the page."
+ },
+ {
+  "category": "Accessibility",
+  "item": "Color, motion, reflow",
+  "check": "At 400% zoom, in dark mode, with forced-colors and reduced motion, confirm status is not color-only and checkout needs no two-dimensional scroll.",
+  "how": "model",
+  "why_forgotten": "Gates stop at axe contrast on one light-mode screenshot."
+ },
+ {
+  "category": "Accessibility",
+  "item": "Documents and mail",
+  "check": "Read a PDF invoice and the plain-text email with a screen reader and confirm reading order, language pl, and totals are present without the images.",
+  "how": "manual",
+  "why_forgotten": "Accessibility scope is limited to HTML pages that axe can crawl."
+ },
+ {
+  "category": "Performance",
+  "item": "INP on real grids",
+  "check": "Measure INP while filtering, selecting, and editing a production-sized order grid on a mid-range Android phone.",
+  "how": "automated",
+  "why_forgotten": "Lab checks track LCP and CLS on a small fixture."
+ },
+ {
+  "category": "Performance",
+  "item": "Shift-long session",
+  "check": "Leave the warehouse or admin SPA open for a full shift with polling and confirm memory, timers, and duplicate requests stay bounded.",
+  "how": "automated",
+  "why_forgotten": "CI sessions last seconds, so leaks never surface."
+ },
+ {
+  "category": "Performance",
+  "item": "Deploy and cache",
+  "check": "Deploy while a session is open and confirm stale chunks recover, and confirm CDN or SW caches never serve one role's or user's JSON to another.",
+  "how": "automated",
+  "why_forgotten": "Tests always cold-load a bundle that matches the server."
+ },
+ {
+  "category": "Performance",
+  "item": "Heavy work isolation",
+  "check": "Generate a large XLSX and a multi-page PDF during checkout and confirm export work uses a queue, a memory cap, and does not starve order requests.",
+  "how": "automated",
+  "why_forgotten": "Functional fixtures are tiny and finish inside the web request."
+ },
+ {
+  "category": "Performance",
+  "item": "Polish search plan",
+  "check": "On a production-volume copy, explain product and contractor search for unaccented and leading-substring Polish queries and confirm an index is used.",
+  "how": "automated",
+  "why_forgotten": "Staging data is small enough that a sequential scan feels fine."
+ },
+ {
+  "category": "Security",
+  "item": "Object-level access",
+  "check": "Call every order, invoice, attachment, and export URL as customer, sales rep, warehouse, accountant, and admin and confirm each id is limited to that role's scope.",
+  "how": "automated",
+  "why_forgotten": "New agent endpoints authenticate the caller and skip object ownership."
+ },
+ {
+  "category": "Security",
+  "item": "Mass assignment",
+  "check": "Post extra fields for role, price, discount, payment status, and ERP id and confirm each role's allowlist drops them.",
+  "how": "automated",
+  "why_forgotten": "Tests send the exact payload the UI builds."
+ },
+ {
+  "category": "Security",
+  "item": "Stale privileges",
+  "check": "Change or revoke a role, disable a user, and confirm the next request and the existing SPA session lose access without waiting for token expiry.",
+  "how": "automated",
+  "why_forgotten": "The permission matrix is checked only at login."
+ },
+ {
+  "category": "Security",
+  "item": "Tpay notification integrity",
+  "check": "Reject Tpay notifications with a bad signature, stale timestamp, reused id, or amount, currency, or order id that differs from the stored order.",
+  "how": "automated",
+  "why_forgotten": "Sandbox tests accept any success callback."
+ },
+ {
+  "category": "Security",
+  "item": "Cross-site payment return",
+  "check": "Return from Tpay as a cross-site request and confirm the session survives SameSite rules and the paid order is not opened for a different browser.",
+  "how": "automated",
+  "why_forgotten": "Local checkout never crosses a real third-party site boundary."
+ },
+ {
+  "category": "Security",
+  "item": "Prefetched one-time links",
+  "check": "Prefetch activation, password-reset, and order links the way Outlook Safe Links does and confirm the real user can still complete them once.",
+  "how": "automated",
+  "why_forgotten": "Developers open each link once in a normal browser."
+ },
+ {
+  "category": "Security",
+  "item": "ERP stored XSS",
+  "check": "Sync product, contractor, and note fields containing markup from ExampleERP and confirm UI, email, and PDF encode them.",
+  "how": "automated",
+  "why_forgotten": "ERP data is treated as a trusted system of record."
+ },
+ {
+  "category": "Security",
+  "item": "Formula, XXE, upload",
+  "check": "Reject or neutralize spreadsheet formulas, XML external entities, zip-slip imports, and HTML content types on every export and import path.",
+  "how": "automated",
+  "why_forgotten": "File tests open a benign sample and check column values."
+ },
+ {
+  "category": "Security",
+  "item": "Secret leakage surface",
+  "check": "Confirm tokens and NIPs stay out of query strings, Referer, access logs, source maps, and client bundles, and confirm debug consoles and seed passwords are absent in production.",
+  "how": "automated",
+  "why_forgotten": "The flow works in the browser while secrets leave through side channels."
+ },
+ {
+  "category": "Security",
+  "item": "Impersonation and bulk export",
+  "check": "Require step-up authentication, a reason, and an audit event for impersonation and for exporting the full customer or order set.",
+  "how": "manual",
+  "why_forgotten": "Role tests cover ordinary CRUD, not break-glass paths."
+ },
+ {
+  "category": "Privacy/RODO",
+  "item": "Erasure versus retention",
+  "check": "Run an erasure request and confirm contact data is anonymized while invoices and payment records stay intact for the statutory accounting period.",
+  "how": "manual",
+  "why_forgotten": "Delete-account work collides with a five-year invoice duty and is postponed."
+ },
+ {
+  "category": "Privacy/RODO",
+  "item": "PII in tooling",
+  "check": "Inspect logs, traces, visual-regression screenshots, session replay, and agent fixtures for names, NIP, email, phone, address, and order notes.",
+  "how": "automated",
+  "why_forgotten": "QA and error tools capture full pages by default."
+ },
+ {
+  "category": "Privacy/RODO",
+  "item": "Prod data sprawl",
+  "check": "Confirm staging restores and agent environments use anonymized data and cannot reach production ExampleERP, Tpay, or SMTP.",
+  "how": "manual",
+  "why_forgotten": "A realistic copy quietly becomes a second production."
+ },
+ {
+  "category": "Privacy/RODO",
+  "item": "Notices match reality",
+  "check": "Compare the privacy notice, cookie list, and retention schedule with actual subprocessors, regions, employee admin telemetry, and log storage.",
+  "how": "manual",
+  "why_forgotten": "Legal text is written once and the vendor list keeps changing."
+ },
+ {
+  "category": "i18n/locale",
+  "item": "Polish collation and fold",
+  "check": "Sort and search ą, ć, ę, ł, ń, ó, ś, ź, and ż in NFC and NFD and confirm the chosen alphabet order and accent folding.",
+  "how": "automated",
+  "why_forgotten": "Database and UI collations are exercised with ASCII."
+ },
+ {
+  "category": "i18n/locale",
+  "item": "Formats, week, DST",
+  "check": "Render dates as DD.MM.YYYY in Europe/Warsaw, numbers as 1 234,56, PLN with zł, Monday-first calendars, genitive month names, and a delivery slot across the DST change.",
+  "how": "automated",
+  "why_forgotten": "The server locale stays en-US and screenshots hide the exported values."
+ },
+ {
+  "category": "i18n/locale",
+  "item": "Identifier round-trip",
+  "check": "Round-trip NIP, REGON, postal code, phone, EAN, and NRB through forms, CSV, and XLSX without scientific notation, dropped zeros, or a failed checksum.",
+  "how": "automated",
+  "why_forgotten": "JavaScript and Excel treat long digit strings as numbers."
+ },
+ {
+  "category": "i18n/locale",
+  "item": "Plurals and amount in words",
+  "check": "Format 1, 2, and 5 orders with Polish plural rules and print the invoice total in words with correct złoty and grosz forms.",
+  "how": "automated",
+  "why_forgotten": "English plural logic and a numeric total look sufficient."
+ },
+ {
+  "category": "i18n/locale",
+  "item": "ExampleERP code pages",
+  "check": "Round-trip Polish text through the real ExampleERP encoding, reject mojibake, and strip control characters that would break the SOAP or XML payload.",
+  "how": "automated",
+  "why_forgotten": "Stubs return clean UTF-8 while production still speaks Windows-1250."
+ },
+ {
+  "category": "i18n/locale",
+  "item": "Business calendar",
+  "check": "Calculate dispatch and payment due dates with Polish public holidays, warehouse cutoffs, and a Monday week start.",
+  "how": "automated",
+  "why_forgotten": "Date widgets default to Sunday and a generic weekend rule."
+ },
+ {
+  "category": "Email/XLSX",
+  "item": "Polish mailbox render",
+  "check": "Open the order mail in Outlook desktop, Gmail, and WP.pl or Onet, in light and dark mode, with images blocked and a matching plain-text part.",
+  "how": "model",
+  "why_forgotten": "The HTML file is reviewed in Chrome."
+ },
+ {
+  "category": "Email/XLSX",
+  "item": "Authentication and bounces",
+  "check": "Send seed mail and confirm SPF, DKIM, and DMARC alignment, inbox placement, diacritics in the From name, and a handled bounce.",
+  "how": "automated",
+  "why_forgotten": "The staging SMTP sink accepts every message."
+ },
+ {
+  "category": "Email/XLSX",
+  "item": "Accountant spreadsheet contract",
+  "check": "Open the XLSX in Polish Excel and confirm text NIPs, real date types, Polish number formats, frozen headers, stable columns, and no hidden cost sheet.",
+  "how": "automated",
+  "why_forgotten": "CI checks that a file exists and has the expected headers."
+ },
+ {
+  "category": "Email/XLSX",
+  "item": "Recipient and retry",
+  "check": "Fail the SMTP connection after acceptance and confirm a retry cannot send customer A's attachment to customer B or send a second copy.",
+  "how": "automated",
+  "why_forgotten": "The happy path sends one message to one inbox."
+ },
+ {
+  "category": "Email/XLSX",
+  "item": "Filename, type, size",
+  "check": "Confirm RFC 5987 filenames with diacritics, the real XLSX media type, nosniff, and a defined failure at the mailbox size limit.",
+  "how": "automated",
+  "why_forgotten": "Dev catchers accept small ASCII filenames."
+ },
+ {
+  "category": "Print/PDF",
+  "item": "A4 multi-page invoice",
+  "check": "Print a long order to A4 and confirm repeating headers, unsplit rows, totals on the last page, embedded Polish glyphs, and readable grayscale.",
+  "how": "model",
+  "why_forgotten": "Responsive on-screen layout is what the visual gate captures."
+ },
+ {
+  "category": "Print/PDF",
+  "item": "Variant and archive PDF",
+  "check": "Confirm the customer PDF omits margins and internal notes, the picking sheet omits prices, and the archive file is tagged PDF/A without private metadata or scripts.",
+  "how": "automated",
+  "why_forgotten": "One HTML template is copied for every audience."
+ },
+ {
+  "category": "SEO",
+  "item": "Index and share cards",
+  "check": "Confirm admin, account, order, and staging URLs are noindex and disallowed, and that any public share card cannot reveal order or customer data.",
+  "how": "automated",
+  "why_forgotten": "A login wall is assumed to be equivalent to noindex."
+ },
+ {
+  "category": "Analytics",
+  "item": "Consent and payment funnel",
+  "check": "With non-essential cookies rejected, confirm no analytics or replay call fires, and confirm a paid order counts once when both return URL and webhook succeed.",
+  "how": "automated",
+  "why_forgotten": "Tags are verified in an already-consented profile, one path at a time."
+ },
+ {
+  "category": "Analytics",
+  "item": "Event contents",
+  "check": "Confirm events carry role and internal id only, and confirm payment and magic-link URLs do not send tokens or NIP to analytics.",
+  "how": "automated",
+  "why_forgotten": "Debug payloads are copied into the production tracker."
+ },
+ {
+  "category": "Error monitoring",
+  "item": "Correlated safe failures",
+  "check": "Trigger a browser, API, and ERP failure and confirm one correlation id and release version, a Polish customer message, and no stack trace or PII.",
+  "how": "automated",
+  "why_forgotten": "The SDK is installed and the failure path is never asserted."
+ },
+ {
+  "category": "Error monitoring",
+  "item": "Business rejects",
+  "check": "Alert when ExampleERP or Tpay returns a transport success with a business rejection, even if trace sampling is low.",
+  "how": "automated",
+  "why_forgotten": "Dashboards watch HTTP 5xx and treat 200 as healthy."
+ },
+ {
+  "category": "Backups/restore",
+  "item": "Restore drill",
+  "check": "Restore the latest backup into isolation, record RPO and RTO, and reconcile orders, payments, files, and sequences with the source.",
+  "how": "manual",
+  "why_forgotten": "A successful backup job is treated as proof of restore."
+ },
+ {
+  "category": "Backups/restore",
+  "item": "Files and keys",
+  "check": "Confirm PDFs, XLSX, KSeF XML, and secrets needed to read encrypted backups are restorable and access-controlled.",
+  "how": "automated",
+  "why_forgotten": "The database dump is scheduled and object storage is omitted."
+ },
+ {
+  "category": "Migrations/rollback",
+  "item": "Rolling compatibility",
+  "check": "Run the old app on the new schema and the new app on the old schema, then roll back a failed migration without losing orders placed during the window.",
+  "how": "automated",
+  "why_forgotten": "Staging applies the migration and deploys one version."
+ },
+ {
+  "category": "Migrations/rollback",
+  "item": "Invoice-safe backfill",
+  "check": "Rehearse backfills on a production-sized copy and confirm they are idempotent and do not rewrite issued invoices, numbers, or stored totals.",
+  "how": "manual",
+  "why_forgotten": "Agent migrations are tested on an empty database."
+ },
+ {
+  "category": "Rate limits",
+  "item": "Abuse of costly routes",
+  "check": "Limit login, NIP lookup, search, export, and mail per user and per real client IP, and confirm a spoofed forwarding header cannot reset the counter.",
+  "how": "automated",
+  "why_forgotten": "Only the login form gets a limiter."
+ },
+ {
+  "category": "Rate limits",
+  "item": "Upstream pressure",
+  "check": "On ExampleERP and Tpay timeouts and 429s, retry with jitter, open a circuit, and show a Polish degraded state instead of a retry storm.",
+  "how": "automated",
+  "why_forgotten": "Stubs never fail slowly or return 429."
+ },
+ {
+  "category": "Rate limits",
+  "item": "Single scheduler",
+  "check": "Run two instances across a Warsaw DST change and confirm exports, dunning, and ERP sync execute once at the intended local time.",
+  "how": "automated",
+  "why_forgotten": "Cron is verified on one developer process in UTC."
+ },
+ {
+  "category": "Browser support",
+  "item": "Real client matrix",
+  "check": "Complete checkout on the oldest supported warehouse Chrome, current Safari iOS, and Firefox, including ITP, private mode, and back-forward cache.",
+  "how": "manual",
+  "why_forgotten": "CI runs one Chromium version."
+ },
+ {
+  "category": "PWA/offline",
+  "item": "Offline replay safety",
+  "check": "Queue an order offline, restore the network twice, and confirm exactly one order is created and the service worker does not reveal the previous user's cache.",
+  "how": "automated",
+  "why_forgotten": "Offline checks cover a banner, not replay and cache partitioning."
+ },
+ {
+  "category": "PWA/offline",
+  "item": "iOS install limits",
+  "check": "Install the PWA on iOS and confirm storage eviction, missing web push, and an update after deploy are handled without a stuck shell.",
+  "how": "manual",
+  "why_forgotten": "Installability is tested on desktop Chromium."
+ },
+ {
+  "category": "Notifications",
+  "item": "Channel duplication",
+  "check": "For a new warehouse order and a payment result, confirm email, push, and in-app alerts respect preferences and produce one action, with a deep link that survives login.",
+  "how": "automated",
+  "why_forgotten": "Each channel is demonstrated alone."
+ },
+ {
+  "category": "Legal",
+  "item": "Cookies and regulamin",
+  "check": "Reject non-essential cookies and confirm they stay off, and confirm regulamin acceptance stores user, time, and policy version and blocks checkout when the version changes.",
+  "how": "automated",
+  "why_forgotten": "A banner click and a static terms page are checked once."
+ },
+ {
+  "category": "Legal",
+  "item": "KSeF lifecycle",
+  "check": "Validate the current FA schema, submit, store the UPO, show the QR visualization, and issue a correction that references the original KSeF id.",
+  "how": "automated",
+  "why_forgotten": "PDF invoices ship first and e-invoicing stays a side project."
+ },
+ {
+  "category": "Legal",
+  "item": "VAT payment rules",
+  "check": "For invoices at the split-payment threshold, confirm MPP marking, the NRB checksum, and a VAT-account whitelist result before a transfer is instructed.",
+  "how": "automated",
+  "why_forgotten": "Online Tpay coverage hides high-value bank-transfer rules."
+ },
+ {
+  "category": "Legal",
+  "item": "Issued document lock",
+  "check": "Confirm a posted invoice cannot be edited or deleted, a later contractor rename does not change it, and a refund creates a correction.",
+  "how": "automated",
+  "why_forgotten": "CRUD permissions are reused for legal documents."
+ },
+ {
+  "category": "Observability",
+  "item": "Cross-system trace",
+  "check": "Follow one order across web, mail, Tpay, and ExampleERP with a shared id and alert when sync lag or the unpaid-but-charged queue breaks its SLO.",
+  "how": "automated",
+  "why_forgotten": "Each integration has its own log and no business SLO."
+ },
+ {
+  "category": "Observability",
+  "item": "Synthetics and kill switch",
+  "check": "Run a synthetic login and order probe per role after deploy, and confirm a kill switch stops ExampleERP and mail side effects without blocking read-only work.",
+  "how": "automated",
+  "why_forgotten": "Health checks only request the login page."
+ },
+ {
+  "category": "Data integrity",
+  "item": "Money and VAT math",
+  "check": "Store money in grosze or decimal, apply Polish per-line VAT rounding, and reject an order whose total differs from the sum of lines.",
+  "how": "automated",
+  "why_forgotten": "Float totals match on small demo orders."
+ },
+ {
+  "category": "Data integrity",
+  "item": "Side-effect exactly once",
+  "check": "Crash after payment and before ERP or mail commit, replay the webhook and the outbox, and confirm one payment capture, one ExampleERP document, and one email.",
+  "how": "automated",
+  "why_forgotten": "Each step's unit test commits its own happy path."
+ },
+ {
+  "category": "Data integrity",
+  "item": "Stock, units, prices",
+  "check": "Reserve the last unit, expire a stale reservation, accept kg precision, and confirm the order keeps the price snapshot rather than today's catalog price.",
+  "how": "automated",
+  "why_forgotten": "Catalog tests use unlimited integer stock and live prices."
+ },
+ {
+  "category": "Data integrity",
+  "item": "Reconciliation",
+  "check": "Run the daily tie-out of panel totals, Tpay settlements, and ExampleERP documents and alert on any grosz difference or unmatched payment.",
+  "how": "automated",
+  "why_forgotten": "Success of each API call is taken as end-to-end agreement."
+ },
+ {
+  "category": "Permissions",
+  "item": "Full role matrix",
+  "check": "Assert an explicit allow and deny for every role against orders, margins, exports, refunds, master data, and direct API calls, including hidden export columns.",
+  "how": "automated",
+  "why_forgotten": "A new feature is clicked through as admin and the buttons are hidden for others."
+ },
+ {
+  "category": "Permissions",
+  "item": "Segregation of duties",
+  "check": "Block a sales rep from overriding price or credit hold alone, and require a second person plus an audit record above the configured threshold.",
+  "how": "manual",
+  "why_forgotten": "Functional tests grant the acting user every permission they need."
+ },
+ {
+  "category": "Load/concurrency",
+  "item": "Double action and last unit",
+  "check": "Submit the same cart from two tabs and let two sessions buy the last unit, and confirm one winner, one stock figure, and no duplicate payment.",
+  "how": "automated",
+  "why_forgotten": "Load scripts use read-only browsing or a single user."
+ },
+ {
+  "category": "Load/concurrency",
+  "item": "Peak isolation",
+  "check": "During a month-end export and an ExampleERP slowdown, confirm checkout keeps its pool, statement timeout, and replica read-your-writes behavior.",
+  "how": "automated",
+  "why_forgotten": "Average-load tests run against an idle staging database."
+ },
+ {
+  "category": "Integrations",
+  "item": "Mapping and duplicates",
+  "check": "Normalize NIP with PL, dashes, and non-breaking spaces, and confirm a retry updates the same ExampleERP contractor and never drops a line silently.",
+  "how": "automated",
+  "why_forgotten": "Mapping is checked on one clean sandbox contractor."
+ },
+ {
+  "category": "Integrations",
+  "item": "Poison messages",
+  "check": "Park a permanently rejected ERP order on a dead-letter queue with a visible reason, and confirm the rest of the queue keeps moving.",
+  "how": "automated",
+  "why_forgotten": "Queue consumers are tested with valid messages only."
+ },
+ {
+  "category": "Integrations",
+  "item": "Payment state races",
+  "check": "Close the tab during 3DS, deliver the webhook before the browser returns, and confirm pending, paid, failed, and refunded states stay consistent.",
+  "how": "automated",
+  "why_forgotten": "The test waits for the webhook and the redirect in the expected order."
+ },
+ {
+  "category": "AI-generated code",
+  "item": "False confidence",
+  "check": "Review new agent changes for mocked integration boundaries, client/server validation drift, missing audit logs, hardcoded en-US formats, and secrets in fixtures.",
+  "how": "model",
+  "why_forgotten": "Generated tests pass while asserting the mock the agent also wrote."
+ }
+]

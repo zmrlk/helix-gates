@@ -1,0 +1,5 @@
+{"type":"object","additionalProperties":false,"required":["checkpoints"],
+ "properties":{"checkpoints":{"type":"array","items":{"type":"object","additionalProperties":false,
+  "required":["id","title","goal","test_cases","visual","visual_scope"],
+  "properties":{"id":{"type":"string"},"title":{"type":"string"},"goal":{"type":"string"},
+   "test_cases":{"type":"array","items":{"type":"string"}},"visual":{"type":"boolean"},"visual_scope":{"type":"string"}}}}}}

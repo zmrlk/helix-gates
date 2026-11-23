@@ -1,0 +1,13 @@
+{
+  "bad": [
+    ["Form.tsx", 2, "UX-LABEL"], ["Form.tsx", 3, "UX-ALT"],
+    ["Form.tsx", 4, "UX-CLICK"], ["Form.tsx", 5, "UI-REUSE"], ["Form.tsx", 5, "UX-DESTRUCTIVE"],
+    ["Page.vue", 2, "UX-LABEL"], ["Page.vue", 3, "UX-ALT"], ["Page.vue", 4, "UX-CLICK"], ["Page.vue", 5, "UX-STATES"],
+    ["Panel.svelte", 1, "UX-STATES"], ["Panel.svelte", 2, "UX-LABEL"], ["Panel.svelte", 3, "UX-ALT"],
+    ["Panel.svelte", 4, "UX-CLICK"], ["Panel.svelte", 4, "UX-LANGUAGE"], ["Panel.svelte", 5, "UX-DESTRUCTIVE"],
+    ["Panel.svelte", 7, "UX-COPY"], ["Panel.svelte", 9, "UI-TOKENS"], ["Panel.svelte", 10, "UX-FOCUS"],
+    ["page.html", 1, "UX-LABEL"], ["page.html", 2, "UX-ALT"], ["page.html", 3, "UX-CLICK"],
+    ["page.html", 4, "UX-DESTRUCTIVE"], ["theme.css", 2, "UI-CONTRAST"]
+  ],
+  "good": []
+}

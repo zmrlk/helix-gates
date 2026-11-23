@@ -1,0 +1,1567 @@
+{
+  "capture": {
+    "name": "ast-grep",
+    "version": "0.51.0",
+    "receipt_sha256": "3b484529588d1b7dd0aef11c5bc6d21ed7a9112b2ab0f5e136bac6f46fd40c75",
+    "used": true,
+    "proof_kind": "subprocess"
+  },
+  "cases": [
+    {
+      "name": "discarded",
+      "path": "src/hooks.server.ts",
+      "source": "export const handle = async (input) => { await dispatch(input); return input.resolve(input.event); };\nasync function dispatch({event,resolve}) { if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }\n",
+      "record": {
+        "status": "PARSED",
+        "facts": [
+          {
+            "id": "f2a6fbcd1ef66b325af1bdcde72f0ded5ec6fb8a621308b46e9b09bde4ead637",
+            "kind": "export_statement",
+            "start": 0,
+            "end": 101,
+            "text": "export const handle = async (input) => { await dispatch(input); return input.resolve(input.event); };",
+            "captures": {
+              "declaration": {
+                "text": "const handle = async (input) => { await dispatch(input); return input.resolve(input.event); };",
+                "start": 7,
+                "end": 101
+              }
+            },
+            "owner_function": null,
+            "parent_id": "f1c95db2d2e54774a6a1783e3e9e03e1f1765e992c41ea8add9b71e71d7a2eff",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "f1c95db2d2e54774a6a1783e3e9e03e1f1765e992c41ea8add9b71e71d7a2eff",
+            "kind": "program",
+            "start": 0,
+            "end": 235,
+            "text": "export const handle = async (input) => { await dispatch(input); return input.resolve(input.event); };\nasync function dispatch({event,resolve}) { if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }\n",
+            "captures": {},
+            "owner_function": null,
+            "parent_id": null,
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "c161ec64ebaf9e7e3f08ae069e65f90fd1fb7882d4fa7e1b398c24f8b5f69441",
+            "kind": "lexical_declaration",
+            "start": 7,
+            "end": 101,
+            "text": "const handle = async (input) => { await dispatch(input); return input.resolve(input.event); };",
+            "captures": {},
+            "owner_function": null,
+            "parent_id": "f2a6fbcd1ef66b325af1bdcde72f0ded5ec6fb8a621308b46e9b09bde4ead637",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "e3fbe3b6305b13eba1cfaa213eee37de9be07a4c0a4189e88794d4cf4679bbe7",
+            "kind": "variable_declarator",
+            "start": 13,
+            "end": 100,
+            "text": "handle = async (input) => { await dispatch(input); return input.resolve(input.event); }",
+            "captures": {
+              "name": {
+                "text": "handle",
+                "start": 13,
+                "end": 19
+              },
+              "value": {
+                "text": "async (input) => { await dispatch(input); return input.resolve(input.event); }",
+                "start": 22,
+                "end": 100
+              }
+            },
+            "owner_function": null,
+            "parent_id": "c161ec64ebaf9e7e3f08ae069e65f90fd1fb7882d4fa7e1b398c24f8b5f69441",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "kind": "arrow_function",
+            "start": 22,
+            "end": 100,
+            "text": "async (input) => { await dispatch(input); return input.resolve(input.event); }",
+            "captures": {
+              "parameters": {
+                "text": "(input)",
+                "start": 28,
+                "end": 35
+              },
+              "body": {
+                "text": "{ await dispatch(input); return input.resolve(input.event); }",
+                "start": 39,
+                "end": 100
+              }
+            },
+            "owner_function": null,
+            "parent_id": "e3fbe3b6305b13eba1cfaa213eee37de9be07a4c0a4189e88794d4cf4679bbe7",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "f09549910cf7f11e081866a5b2f0a8cb0976a8e3f514561e1d013b682dfc2c2c",
+            "kind": "statement_block",
+            "start": 39,
+            "end": 100,
+            "text": "{ await dispatch(input); return input.resolve(input.event); }",
+            "captures": {},
+            "owner_function": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "parent_id": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "696facdbb533c5d307fe82def2a1718e9c05f1a40f939c42db6d323d69cfcae6",
+            "kind": "await_expression",
+            "start": 41,
+            "end": 62,
+            "text": "await dispatch(input)",
+            "captures": {
+              "argument": {
+                "text": "dispatch(input)",
+                "start": 47,
+                "end": 62
+              }
+            },
+            "owner_function": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "parent_id": "161775811f5f5ba7b7f9093d0e65072c4b7484abc54c427b19214a6c075cc25d",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "161775811f5f5ba7b7f9093d0e65072c4b7484abc54c427b19214a6c075cc25d",
+            "kind": "expression_statement",
+            "start": 41,
+            "end": 63,
+            "text": "await dispatch(input);",
+            "captures": {
+              "expression": {
+                "text": "await dispatch(input)",
+                "start": 41,
+                "end": 62
+              }
+            },
+            "owner_function": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "parent_id": "f09549910cf7f11e081866a5b2f0a8cb0976a8e3f514561e1d013b682dfc2c2c",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "60c59827a6aa4cc660dad150be545245eea5cf92b617f0b8cae84876199b0f7b",
+            "kind": "call_expression",
+            "start": 47,
+            "end": 62,
+            "text": "dispatch(input)",
+            "captures": {
+              "arguments": {
+                "text": "(input)",
+                "start": 55,
+                "end": 62
+              },
+              "function": {
+                "text": "dispatch",
+                "start": 47,
+                "end": 55
+              }
+            },
+            "owner_function": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "parent_id": "696facdbb533c5d307fe82def2a1718e9c05f1a40f939c42db6d323d69cfcae6",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "74792b293b710a5c21ce8740cf7456bfc11ac49cdf38e9667c5b8d48bf869cba",
+            "kind": "arguments",
+            "start": 55,
+            "end": 62,
+            "text": "(input)",
+            "captures": {},
+            "owner_function": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "parent_id": "60c59827a6aa4cc660dad150be545245eea5cf92b617f0b8cae84876199b0f7b",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "0d919684433139e3535a494fe5811691f2818062cd54d811f3498bb0fd64ade6",
+            "kind": "return_statement",
+            "start": 64,
+            "end": 98,
+            "text": "return input.resolve(input.event);",
+            "captures": {
+              "argument": {
+                "text": "input.resolve(input.event)",
+                "start": 71,
+                "end": 97
+              }
+            },
+            "owner_function": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "parent_id": "f09549910cf7f11e081866a5b2f0a8cb0976a8e3f514561e1d013b682dfc2c2c",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "5ba5dd4f5c1ae4bea4fb8a55ad4cf1634a455b65dd3dd3a163589293ff75ca46",
+            "kind": "member_expression",
+            "start": 71,
+            "end": 84,
+            "text": "input.resolve",
+            "captures": {
+              "property": {
+                "text": "resolve",
+                "start": 77,
+                "end": 84
+              },
+              "object": {
+                "text": "input",
+                "start": 71,
+                "end": 76
+              }
+            },
+            "owner_function": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "parent_id": "0fedf6e8a03d0ec3e83e080194d58bad0c7cf9b0041227660473be9ad055cbe0",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "0fedf6e8a03d0ec3e83e080194d58bad0c7cf9b0041227660473be9ad055cbe0",
+            "kind": "call_expression",
+            "start": 71,
+            "end": 97,
+            "text": "input.resolve(input.event)",
+            "captures": {
+              "arguments": {
+                "text": "(input.event)",
+                "start": 84,
+                "end": 97
+              },
+              "function": {
+                "text": "input.resolve",
+                "start": 71,
+                "end": 84
+              }
+            },
+            "owner_function": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "parent_id": "0d919684433139e3535a494fe5811691f2818062cd54d811f3498bb0fd64ade6",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "55f15c56c2794491ba49d2427c3f651f63b8d0ddf15a1167c1683a07e642dbb7",
+            "kind": "arguments",
+            "start": 84,
+            "end": 97,
+            "text": "(input.event)",
+            "captures": {},
+            "owner_function": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "parent_id": "0fedf6e8a03d0ec3e83e080194d58bad0c7cf9b0041227660473be9ad055cbe0",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "b9ecfa319c0c38b322c1a4e95bc604c7ebf38f9ef321c8438d056f9df1183fb0",
+            "kind": "member_expression",
+            "start": 85,
+            "end": 96,
+            "text": "input.event",
+            "captures": {
+              "property": {
+                "text": "event",
+                "start": 91,
+                "end": 96
+              },
+              "object": {
+                "text": "input",
+                "start": 85,
+                "end": 90
+              }
+            },
+            "owner_function": "73556aba54d1c4f52fa0d91016874f706f695c8d9e4eeffcea845a0dce68328b",
+            "parent_id": "55f15c56c2794491ba49d2427c3f651f63b8d0ddf15a1167c1683a07e642dbb7",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "kind": "function_declaration",
+            "start": 102,
+            "end": 234,
+            "text": "async function dispatch({event,resolve}) { if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }",
+            "captures": {
+              "body": {
+                "text": "{ if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }",
+                "start": 143,
+                "end": 234
+              },
+              "name": {
+                "text": "dispatch",
+                "start": 117,
+                "end": 125
+              },
+              "parameters": {
+                "text": "({event,resolve})",
+                "start": 125,
+                "end": 142
+              }
+            },
+            "owner_function": null,
+            "parent_id": "f1c95db2d2e54774a6a1783e3e9e03e1f1765e992c41ea8add9b71e71d7a2eff",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "a8bf7f50673bbb9a7e43e0c9ef94c2c522a4190a66ccf9ad1583ba00e270c98d",
+            "kind": "statement_block",
+            "start": 143,
+            "end": 234,
+            "text": "{ if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }",
+            "captures": {},
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "2f109012e4b7c4780cde663ef2bf81d636dcf9da19668a501064b4e7a22b8673",
+            "kind": "if_statement",
+            "start": 145,
+            "end": 209,
+            "text": "if (!event.locals.user) return new Response(null, {status:401});",
+            "captures": {
+              "consequence": {
+                "text": "return new Response(null, {status:401});",
+                "start": 169,
+                "end": 209
+              },
+              "condition": {
+                "text": "(!event.locals.user)",
+                "start": 148,
+                "end": 168
+              }
+            },
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "a8bf7f50673bbb9a7e43e0c9ef94c2c522a4190a66ccf9ad1583ba00e270c98d",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "851f4e7a5b7c0caf12e59162df165e68261c0ffaa7c1af3aec247b5f8d066fb9",
+            "kind": "parenthesized_expression",
+            "start": 148,
+            "end": 168,
+            "text": "(!event.locals.user)",
+            "captures": {
+              "expression": {
+                "text": "!event.locals.user",
+                "start": 149,
+                "end": 167
+              }
+            },
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "2f109012e4b7c4780cde663ef2bf81d636dcf9da19668a501064b4e7a22b8673",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "11a8ef7f2b1c3a333df0e86a89dbce02f00123c06f5405523ab26c64657122ba",
+            "kind": "unary_expression",
+            "start": 149,
+            "end": 167,
+            "text": "!event.locals.user",
+            "captures": {
+              "argument": {
+                "text": "event.locals.user",
+                "start": 150,
+                "end": 167
+              }
+            },
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "851f4e7a5b7c0caf12e59162df165e68261c0ffaa7c1af3aec247b5f8d066fb9",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "43f9bfad3e9afb7687afc94a941ecb0721c0a1bd118a5af8021a770c53ec5f7c",
+            "kind": "member_expression",
+            "start": 150,
+            "end": 162,
+            "text": "event.locals",
+            "captures": {
+              "object": {
+                "text": "event",
+                "start": 150,
+                "end": 155
+              },
+              "property": {
+                "text": "locals",
+                "start": 156,
+                "end": 162
+              }
+            },
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "655b27c001513e62ac5f0d9cf8f2bc7f2861b2d1ae345d3a86365ea7edeae3bc",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "655b27c001513e62ac5f0d9cf8f2bc7f2861b2d1ae345d3a86365ea7edeae3bc",
+            "kind": "member_expression",
+            "start": 150,
+            "end": 167,
+            "text": "event.locals.user",
+            "captures": {
+              "object": {
+                "text": "event.locals",
+                "start": 150,
+                "end": 162
+              },
+              "property": {
+                "text": "user",
+                "start": 163,
+                "end": 167
+              }
+            },
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "11a8ef7f2b1c3a333df0e86a89dbce02f00123c06f5405523ab26c64657122ba",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "379540da6d5abcbd0322c65aef9bb506ee1b8bf70e0b70834c011099629d5cda",
+            "kind": "return_statement",
+            "start": 169,
+            "end": 209,
+            "text": "return new Response(null, {status:401});",
+            "captures": {
+              "argument": {
+                "text": "new Response(null, {status:401})",
+                "start": 176,
+                "end": 208
+              }
+            },
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "2f109012e4b7c4780cde663ef2bf81d636dcf9da19668a501064b4e7a22b8673",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "94f9534277da8aa14df26ec4d637ab6da19685549a2c2bd2ebb4e809f85cf0df",
+            "kind": "new_expression",
+            "start": 176,
+            "end": 208,
+            "text": "new Response(null, {status:401})",
+            "captures": {
+              "constructor": {
+                "text": "Response",
+                "start": 180,
+                "end": 188
+              },
+              "arguments": {
+                "text": "(null, {status:401})",
+                "start": 188,
+                "end": 208
+              }
+            },
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "379540da6d5abcbd0322c65aef9bb506ee1b8bf70e0b70834c011099629d5cda",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "43380bbda7c0ef93506ca76879e8881a7b4682c7c677359a288125b1ec502437",
+            "kind": "arguments",
+            "start": 188,
+            "end": 208,
+            "text": "(null, {status:401})",
+            "captures": {},
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "94f9534277da8aa14df26ec4d637ab6da19685549a2c2bd2ebb4e809f85cf0df",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "7e6f8981d370406e7c9aa95e2566bdd19fbc082b625aa3be03b67ee594d845e7",
+            "kind": "object",
+            "start": 195,
+            "end": 207,
+            "text": "{status:401}",
+            "captures": {},
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "43380bbda7c0ef93506ca76879e8881a7b4682c7c677359a288125b1ec502437",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "1270e9c3a9b953bfaedfc3210eb31014b02118ec7ff34183629dec8660bbd74f",
+            "kind": "pair",
+            "start": 196,
+            "end": 206,
+            "text": "status:401",
+            "captures": {
+              "value": {
+                "text": "401",
+                "start": 203,
+                "end": 206
+              },
+              "key": {
+                "text": "status",
+                "start": 196,
+                "end": 202
+              }
+            },
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "7e6f8981d370406e7c9aa95e2566bdd19fbc082b625aa3be03b67ee594d845e7",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "3bfe751deb2902ddfc5f276f7643d9711ada09a0d723f5121dd3a9e54ebe0d9a",
+            "kind": "return_statement",
+            "start": 210,
+            "end": 232,
+            "text": "return resolve(event);",
+            "captures": {
+              "argument": {
+                "text": "resolve(event)",
+                "start": 217,
+                "end": 231
+              }
+            },
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "a8bf7f50673bbb9a7e43e0c9ef94c2c522a4190a66ccf9ad1583ba00e270c98d",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "80d34c3b2027ff0ee731f75edf9691c2c4865aa16f216a2ac3fbbc08045be06b",
+            "kind": "call_expression",
+            "start": 217,
+            "end": 231,
+            "text": "resolve(event)",
+            "captures": {
+              "function": {
+                "text": "resolve",
+                "start": 217,
+                "end": 224
+              },
+              "arguments": {
+                "text": "(event)",
+                "start": 224,
+                "end": 231
+              }
+            },
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "3bfe751deb2902ddfc5f276f7643d9711ada09a0d723f5121dd3a9e54ebe0d9a",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "de16e9dc75736cd61c2548d2c18deb8a68300c44a91b9a7fef2edc04454f38e1",
+            "kind": "arguments",
+            "start": 224,
+            "end": 231,
+            "text": "(event)",
+            "captures": {},
+            "owner_function": "d3d80e3f97e02b4ad75ed2a936eb2ca3f1a0e5b4559c4f899a0f498d3d13bebd",
+            "parent_id": "80d34c3b2027ff0ee731f75edf9691c2c4865aa16f216a2ac3fbbc08045be06b",
+            "unit": "file",
+            "line": 2
+          }
+        ],
+        "gaps": [
+          {
+            "code": "MISSING_NODES_NOT_EXPOSED"
+          }
+        ],
+        "source_sha256": "7f9889ea54e1b2a054e21379e3e35b08e3527e3b00cf09d999fec1ad9bdf3667",
+        "parser_completeness": "PARTIAL"
+      }
+    },
+    {
+      "name": "returned",
+      "path": "src/hooks.server.ts",
+      "source": "export const handle = async (input) => { return await dispatch(input); };\nasync function dispatch({event,resolve}) { if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }\n",
+      "record": {
+        "status": "PARSED",
+        "facts": [
+          {
+            "id": "aa3e978b69dc79cfa237d6118c5da1e08f60a40ce53160734fd6803803d9933e",
+            "kind": "export_statement",
+            "start": 0,
+            "end": 73,
+            "text": "export const handle = async (input) => { return await dispatch(input); };",
+            "captures": {
+              "declaration": {
+                "text": "const handle = async (input) => { return await dispatch(input); };",
+                "start": 7,
+                "end": 73
+              }
+            },
+            "owner_function": null,
+            "parent_id": "087d310573cdf8747d3c238e96cb0c0d13b8916ffa6f882ce5410c486ae34112",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "087d310573cdf8747d3c238e96cb0c0d13b8916ffa6f882ce5410c486ae34112",
+            "kind": "program",
+            "start": 0,
+            "end": 207,
+            "text": "export const handle = async (input) => { return await dispatch(input); };\nasync function dispatch({event,resolve}) { if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }\n",
+            "captures": {},
+            "owner_function": null,
+            "parent_id": null,
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "08f176e881d5e4085e01fdc11cc3798a125b482f925564d2fb009e7474d4e532",
+            "kind": "lexical_declaration",
+            "start": 7,
+            "end": 73,
+            "text": "const handle = async (input) => { return await dispatch(input); };",
+            "captures": {},
+            "owner_function": null,
+            "parent_id": "aa3e978b69dc79cfa237d6118c5da1e08f60a40ce53160734fd6803803d9933e",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "d2f545ad97bb66eb94f356f71a64e8b51f20a550d3ac8399fe306fe3f93f756f",
+            "kind": "variable_declarator",
+            "start": 13,
+            "end": 72,
+            "text": "handle = async (input) => { return await dispatch(input); }",
+            "captures": {
+              "value": {
+                "text": "async (input) => { return await dispatch(input); }",
+                "start": 22,
+                "end": 72
+              },
+              "name": {
+                "text": "handle",
+                "start": 13,
+                "end": 19
+              }
+            },
+            "owner_function": null,
+            "parent_id": "08f176e881d5e4085e01fdc11cc3798a125b482f925564d2fb009e7474d4e532",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "b2fb8e475fde658de2fb4bb7d1520044e9522db17838fe1cbe8f2c1dfe1e2b9c",
+            "kind": "arrow_function",
+            "start": 22,
+            "end": 72,
+            "text": "async (input) => { return await dispatch(input); }",
+            "captures": {
+              "parameters": {
+                "text": "(input)",
+                "start": 28,
+                "end": 35
+              },
+              "body": {
+                "text": "{ return await dispatch(input); }",
+                "start": 39,
+                "end": 72
+              }
+            },
+            "owner_function": null,
+            "parent_id": "d2f545ad97bb66eb94f356f71a64e8b51f20a550d3ac8399fe306fe3f93f756f",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "0be31d5514b3c08b602d4f251d6c8d80d1243015e9abfbec6ca463137566acb9",
+            "kind": "statement_block",
+            "start": 39,
+            "end": 72,
+            "text": "{ return await dispatch(input); }",
+            "captures": {},
+            "owner_function": "b2fb8e475fde658de2fb4bb7d1520044e9522db17838fe1cbe8f2c1dfe1e2b9c",
+            "parent_id": "b2fb8e475fde658de2fb4bb7d1520044e9522db17838fe1cbe8f2c1dfe1e2b9c",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "e02c72cfcfdc2aa3f4e4708c54f42c45254b6f78715d9213fe26494aa3cce113",
+            "kind": "return_statement",
+            "start": 41,
+            "end": 70,
+            "text": "return await dispatch(input);",
+            "captures": {
+              "argument": {
+                "text": "await dispatch(input)",
+                "start": 48,
+                "end": 69
+              }
+            },
+            "owner_function": "b2fb8e475fde658de2fb4bb7d1520044e9522db17838fe1cbe8f2c1dfe1e2b9c",
+            "parent_id": "0be31d5514b3c08b602d4f251d6c8d80d1243015e9abfbec6ca463137566acb9",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "898d97908c9ec8ff38c06b2de55911c5f7bb61095df2386e808c52b85604d12f",
+            "kind": "await_expression",
+            "start": 48,
+            "end": 69,
+            "text": "await dispatch(input)",
+            "captures": {
+              "argument": {
+                "text": "dispatch(input)",
+                "start": 54,
+                "end": 69
+              }
+            },
+            "owner_function": "b2fb8e475fde658de2fb4bb7d1520044e9522db17838fe1cbe8f2c1dfe1e2b9c",
+            "parent_id": "e02c72cfcfdc2aa3f4e4708c54f42c45254b6f78715d9213fe26494aa3cce113",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "b66ec8109fb56a085314fd5c3919999b01b0762c8569dad4d5bc424b82baa96d",
+            "kind": "call_expression",
+            "start": 54,
+            "end": 69,
+            "text": "dispatch(input)",
+            "captures": {
+              "function": {
+                "text": "dispatch",
+                "start": 54,
+                "end": 62
+              },
+              "arguments": {
+                "text": "(input)",
+                "start": 62,
+                "end": 69
+              }
+            },
+            "owner_function": "b2fb8e475fde658de2fb4bb7d1520044e9522db17838fe1cbe8f2c1dfe1e2b9c",
+            "parent_id": "898d97908c9ec8ff38c06b2de55911c5f7bb61095df2386e808c52b85604d12f",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "9bf75f16ece2e87d2a2a0d78e3cab27a560570293e8852e655bf22c4d2d93b0f",
+            "kind": "arguments",
+            "start": 62,
+            "end": 69,
+            "text": "(input)",
+            "captures": {},
+            "owner_function": "b2fb8e475fde658de2fb4bb7d1520044e9522db17838fe1cbe8f2c1dfe1e2b9c",
+            "parent_id": "b66ec8109fb56a085314fd5c3919999b01b0762c8569dad4d5bc424b82baa96d",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "kind": "function_declaration",
+            "start": 74,
+            "end": 206,
+            "text": "async function dispatch({event,resolve}) { if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }",
+            "captures": {
+              "parameters": {
+                "text": "({event,resolve})",
+                "start": 97,
+                "end": 114
+              },
+              "body": {
+                "text": "{ if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }",
+                "start": 115,
+                "end": 206
+              },
+              "name": {
+                "text": "dispatch",
+                "start": 89,
+                "end": 97
+              }
+            },
+            "owner_function": null,
+            "parent_id": "087d310573cdf8747d3c238e96cb0c0d13b8916ffa6f882ce5410c486ae34112",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "9fd0ce9902f890aea6ec3fa171c36e7708d73e9d2621787463f54f0c935501df",
+            "kind": "statement_block",
+            "start": 115,
+            "end": 206,
+            "text": "{ if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }",
+            "captures": {},
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "eec381416076afadea4e303aa223a5274ba1bb3ac7cbee5c708d0e1fcf485efc",
+            "kind": "if_statement",
+            "start": 117,
+            "end": 181,
+            "text": "if (!event.locals.user) return new Response(null, {status:401});",
+            "captures": {
+              "condition": {
+                "text": "(!event.locals.user)",
+                "start": 120,
+                "end": 140
+              },
+              "consequence": {
+                "text": "return new Response(null, {status:401});",
+                "start": 141,
+                "end": 181
+              }
+            },
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "9fd0ce9902f890aea6ec3fa171c36e7708d73e9d2621787463f54f0c935501df",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "8f406fcc0f137f9f7f605a72858186b4947d1d9e7dfdb5c912fb3ece9964018f",
+            "kind": "parenthesized_expression",
+            "start": 120,
+            "end": 140,
+            "text": "(!event.locals.user)",
+            "captures": {
+              "expression": {
+                "text": "!event.locals.user",
+                "start": 121,
+                "end": 139
+              }
+            },
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "eec381416076afadea4e303aa223a5274ba1bb3ac7cbee5c708d0e1fcf485efc",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "fa29e1f18e8257371451fe7698aef6b5e6cfae594debadd1c4bb2e1d7e856b4e",
+            "kind": "unary_expression",
+            "start": 121,
+            "end": 139,
+            "text": "!event.locals.user",
+            "captures": {
+              "argument": {
+                "text": "event.locals.user",
+                "start": 122,
+                "end": 139
+              }
+            },
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "8f406fcc0f137f9f7f605a72858186b4947d1d9e7dfdb5c912fb3ece9964018f",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "55f2668d85c36eb0161a8b21b7b9c921bcc1f57860e8a9dd3a457e390235108a",
+            "kind": "member_expression",
+            "start": 122,
+            "end": 134,
+            "text": "event.locals",
+            "captures": {
+              "object": {
+                "text": "event",
+                "start": 122,
+                "end": 127
+              },
+              "property": {
+                "text": "locals",
+                "start": 128,
+                "end": 134
+              }
+            },
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "df902ef15be3f8be7d14e38095a1e05a51bd09079956843929b2202e96cf408f",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "df902ef15be3f8be7d14e38095a1e05a51bd09079956843929b2202e96cf408f",
+            "kind": "member_expression",
+            "start": 122,
+            "end": 139,
+            "text": "event.locals.user",
+            "captures": {
+              "property": {
+                "text": "user",
+                "start": 135,
+                "end": 139
+              },
+              "object": {
+                "text": "event.locals",
+                "start": 122,
+                "end": 134
+              }
+            },
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "fa29e1f18e8257371451fe7698aef6b5e6cfae594debadd1c4bb2e1d7e856b4e",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "4d5a47a5889f9aa22220c3e605f636d08f834f2dc48e20818484904e09aadb30",
+            "kind": "return_statement",
+            "start": 141,
+            "end": 181,
+            "text": "return new Response(null, {status:401});",
+            "captures": {
+              "argument": {
+                "text": "new Response(null, {status:401})",
+                "start": 148,
+                "end": 180
+              }
+            },
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "eec381416076afadea4e303aa223a5274ba1bb3ac7cbee5c708d0e1fcf485efc",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "ff0940cdac4a4777410c25bd34e40d32cf476435317539b988dd79176611f4b3",
+            "kind": "new_expression",
+            "start": 148,
+            "end": 180,
+            "text": "new Response(null, {status:401})",
+            "captures": {
+              "arguments": {
+                "text": "(null, {status:401})",
+                "start": 160,
+                "end": 180
+              },
+              "constructor": {
+                "text": "Response",
+                "start": 152,
+                "end": 160
+              }
+            },
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "4d5a47a5889f9aa22220c3e605f636d08f834f2dc48e20818484904e09aadb30",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "ac6dc395874b67d70b827460ebfce11ac76206fabf1eb2a0166d70f3a6c62187",
+            "kind": "arguments",
+            "start": 160,
+            "end": 180,
+            "text": "(null, {status:401})",
+            "captures": {},
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "ff0940cdac4a4777410c25bd34e40d32cf476435317539b988dd79176611f4b3",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "8ea6823210714bf72bb68f71dcb6536c96b3e23080609c88adf4851dcbf75747",
+            "kind": "object",
+            "start": 167,
+            "end": 179,
+            "text": "{status:401}",
+            "captures": {},
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "ac6dc395874b67d70b827460ebfce11ac76206fabf1eb2a0166d70f3a6c62187",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "1a698dfe74cb07e00c9719884996b6d9aa81c109f5e8c531fbdab991f690d6f4",
+            "kind": "pair",
+            "start": 168,
+            "end": 178,
+            "text": "status:401",
+            "captures": {
+              "value": {
+                "text": "401",
+                "start": 175,
+                "end": 178
+              },
+              "key": {
+                "text": "status",
+                "start": 168,
+                "end": 174
+              }
+            },
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "8ea6823210714bf72bb68f71dcb6536c96b3e23080609c88adf4851dcbf75747",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "90efdb779c6086738a695fe6647ff8a50a1be6be88877ed929407df31ecabd5e",
+            "kind": "return_statement",
+            "start": 182,
+            "end": 204,
+            "text": "return resolve(event);",
+            "captures": {
+              "argument": {
+                "text": "resolve(event)",
+                "start": 189,
+                "end": 203
+              }
+            },
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "9fd0ce9902f890aea6ec3fa171c36e7708d73e9d2621787463f54f0c935501df",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "a99103d41bca1a8e168a6178a2da2a1875fdd773d96f606d9ad2c97b2e8eb5dc",
+            "kind": "call_expression",
+            "start": 189,
+            "end": 203,
+            "text": "resolve(event)",
+            "captures": {
+              "arguments": {
+                "text": "(event)",
+                "start": 196,
+                "end": 203
+              },
+              "function": {
+                "text": "resolve",
+                "start": 189,
+                "end": 196
+              }
+            },
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "90efdb779c6086738a695fe6647ff8a50a1be6be88877ed929407df31ecabd5e",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "eb0c1cf5f4b7beff4604f443861fef2758f2e65ebe070f6c3c77b745065f778e",
+            "kind": "arguments",
+            "start": 196,
+            "end": 203,
+            "text": "(event)",
+            "captures": {},
+            "owner_function": "f1b7914952bb2abe66057f6f1ddd8c02ee66035546f2b26e6135f5c883a6ac45",
+            "parent_id": "a99103d41bca1a8e168a6178a2da2a1875fdd773d96f606d9ad2c97b2e8eb5dc",
+            "unit": "file",
+            "line": 2
+          }
+        ],
+        "gaps": [
+          {
+            "code": "MISSING_NODES_NOT_EXPOSED"
+          }
+        ],
+        "source_sha256": "b6dc9c4ae833777482fb4b206aebc0495f144089c7f4d4c127b279bffe8356f4",
+        "parser_completeness": "PARTIAL"
+      }
+    },
+    {
+      "name": "assigned",
+      "path": "src/hooks.server.ts",
+      "source": "export const handle = async (input) => { const result = await dispatch(input); return result; };\nasync function dispatch({event,resolve}) { if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }\n",
+      "record": {
+        "status": "PARSED",
+        "facts": [
+          {
+            "id": "e4baac10ef1c92fffb21129d7f0b0b99e538382e5426f7a6eba0027bf1bdfdfd",
+            "kind": "export_statement",
+            "start": 0,
+            "end": 96,
+            "text": "export const handle = async (input) => { const result = await dispatch(input); return result; };",
+            "captures": {
+              "declaration": {
+                "text": "const handle = async (input) => { const result = await dispatch(input); return result; };",
+                "start": 7,
+                "end": 96
+              }
+            },
+            "owner_function": null,
+            "parent_id": "12ca2f15b4489adbe4e4b7209800bba31cea1357eb70c2b6a0a16cd578f948a3",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "12ca2f15b4489adbe4e4b7209800bba31cea1357eb70c2b6a0a16cd578f948a3",
+            "kind": "program",
+            "start": 0,
+            "end": 230,
+            "text": "export const handle = async (input) => { const result = await dispatch(input); return result; };\nasync function dispatch({event,resolve}) { if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }\n",
+            "captures": {},
+            "owner_function": null,
+            "parent_id": null,
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "11382336daddc053a6d3fbaba0728b36b16bdcb866b157f3581ea4db4846ff1e",
+            "kind": "lexical_declaration",
+            "start": 7,
+            "end": 96,
+            "text": "const handle = async (input) => { const result = await dispatch(input); return result; };",
+            "captures": {},
+            "owner_function": null,
+            "parent_id": "e4baac10ef1c92fffb21129d7f0b0b99e538382e5426f7a6eba0027bf1bdfdfd",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "0e9b4ca8b3c929941b7b53d966e3a72e9e1cb5395b1b1cda1680de6ad4ea1445",
+            "kind": "variable_declarator",
+            "start": 13,
+            "end": 95,
+            "text": "handle = async (input) => { const result = await dispatch(input); return result; }",
+            "captures": {
+              "name": {
+                "text": "handle",
+                "start": 13,
+                "end": 19
+              },
+              "value": {
+                "text": "async (input) => { const result = await dispatch(input); return result; }",
+                "start": 22,
+                "end": 95
+              }
+            },
+            "owner_function": null,
+            "parent_id": "11382336daddc053a6d3fbaba0728b36b16bdcb866b157f3581ea4db4846ff1e",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "cb8e260f7922f8a01776944be361c970fd9f1da39e1dfa741b6e02715aa67a6f",
+            "kind": "arrow_function",
+            "start": 22,
+            "end": 95,
+            "text": "async (input) => { const result = await dispatch(input); return result; }",
+            "captures": {
+              "parameters": {
+                "text": "(input)",
+                "start": 28,
+                "end": 35
+              },
+              "body": {
+                "text": "{ const result = await dispatch(input); return result; }",
+                "start": 39,
+                "end": 95
+              }
+            },
+            "owner_function": null,
+            "parent_id": "0e9b4ca8b3c929941b7b53d966e3a72e9e1cb5395b1b1cda1680de6ad4ea1445",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "dcd9ede675ce4a848f2c331eccd4f178f0acc4e03a17f4bb85915f747b8dbc0e",
+            "kind": "statement_block",
+            "start": 39,
+            "end": 95,
+            "text": "{ const result = await dispatch(input); return result; }",
+            "captures": {},
+            "owner_function": "cb8e260f7922f8a01776944be361c970fd9f1da39e1dfa741b6e02715aa67a6f",
+            "parent_id": "cb8e260f7922f8a01776944be361c970fd9f1da39e1dfa741b6e02715aa67a6f",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "4c2b009c31550110fda5c14159873300c49e95d03e92779620fe22c1211a0842",
+            "kind": "lexical_declaration",
+            "start": 41,
+            "end": 78,
+            "text": "const result = await dispatch(input);",
+            "captures": {},
+            "owner_function": "cb8e260f7922f8a01776944be361c970fd9f1da39e1dfa741b6e02715aa67a6f",
+            "parent_id": "dcd9ede675ce4a848f2c331eccd4f178f0acc4e03a17f4bb85915f747b8dbc0e",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "1bf196158105b11e409f112e37e3f084933f9a321c1b1ca4a65433b7ad737dda",
+            "kind": "variable_declarator",
+            "start": 47,
+            "end": 77,
+            "text": "result = await dispatch(input)",
+            "captures": {
+              "name": {
+                "text": "result",
+                "start": 47,
+                "end": 53
+              },
+              "value": {
+                "text": "await dispatch(input)",
+                "start": 56,
+                "end": 77
+              }
+            },
+            "owner_function": "cb8e260f7922f8a01776944be361c970fd9f1da39e1dfa741b6e02715aa67a6f",
+            "parent_id": "4c2b009c31550110fda5c14159873300c49e95d03e92779620fe22c1211a0842",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "8b6e8da93e716dc92ce57b8d02d5673de3de1bb91ba2d5f3fc342ad9f043f560",
+            "kind": "await_expression",
+            "start": 56,
+            "end": 77,
+            "text": "await dispatch(input)",
+            "captures": {
+              "argument": {
+                "text": "dispatch(input)",
+                "start": 62,
+                "end": 77
+              }
+            },
+            "owner_function": "cb8e260f7922f8a01776944be361c970fd9f1da39e1dfa741b6e02715aa67a6f",
+            "parent_id": "1bf196158105b11e409f112e37e3f084933f9a321c1b1ca4a65433b7ad737dda",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "c53ab6e8aca6803efaea15562681cdaefba3b43509ee5130daf2aed14701e1c2",
+            "kind": "call_expression",
+            "start": 62,
+            "end": 77,
+            "text": "dispatch(input)",
+            "captures": {
+              "arguments": {
+                "text": "(input)",
+                "start": 70,
+                "end": 77
+              },
+              "function": {
+                "text": "dispatch",
+                "start": 62,
+                "end": 70
+              }
+            },
+            "owner_function": "cb8e260f7922f8a01776944be361c970fd9f1da39e1dfa741b6e02715aa67a6f",
+            "parent_id": "8b6e8da93e716dc92ce57b8d02d5673de3de1bb91ba2d5f3fc342ad9f043f560",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "9dcd9a766e4a0645a82b5b92bbfbadff42bc6036d4e4344f1b14467d1747cea2",
+            "kind": "arguments",
+            "start": 70,
+            "end": 77,
+            "text": "(input)",
+            "captures": {},
+            "owner_function": "cb8e260f7922f8a01776944be361c970fd9f1da39e1dfa741b6e02715aa67a6f",
+            "parent_id": "c53ab6e8aca6803efaea15562681cdaefba3b43509ee5130daf2aed14701e1c2",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "006fd1b13f2ec129a54c15c0a6b6b4c5078d944a935776adffe4819109582fa3",
+            "kind": "return_statement",
+            "start": 79,
+            "end": 93,
+            "text": "return result;",
+            "captures": {
+              "argument": {
+                "text": "result",
+                "start": 86,
+                "end": 92
+              }
+            },
+            "owner_function": "cb8e260f7922f8a01776944be361c970fd9f1da39e1dfa741b6e02715aa67a6f",
+            "parent_id": "dcd9ede675ce4a848f2c331eccd4f178f0acc4e03a17f4bb85915f747b8dbc0e",
+            "unit": "file",
+            "line": 1
+          },
+          {
+            "id": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "kind": "function_declaration",
+            "start": 97,
+            "end": 229,
+            "text": "async function dispatch({event,resolve}) { if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }",
+            "captures": {
+              "body": {
+                "text": "{ if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }",
+                "start": 138,
+                "end": 229
+              },
+              "name": {
+                "text": "dispatch",
+                "start": 112,
+                "end": 120
+              },
+              "parameters": {
+                "text": "({event,resolve})",
+                "start": 120,
+                "end": 137
+              }
+            },
+            "owner_function": null,
+            "parent_id": "12ca2f15b4489adbe4e4b7209800bba31cea1357eb70c2b6a0a16cd578f948a3",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "cefc7e71b62de67906275381a26742f0e51c547677efaba229dedebf1160e6c7",
+            "kind": "statement_block",
+            "start": 138,
+            "end": 229,
+            "text": "{ if (!event.locals.user) return new Response(null, {status:401}); return resolve(event); }",
+            "captures": {},
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "77d7bdf262dea7863a087e72051776343e56fb8c6d205fdbd3cf4c138c539aa3",
+            "kind": "if_statement",
+            "start": 140,
+            "end": 204,
+            "text": "if (!event.locals.user) return new Response(null, {status:401});",
+            "captures": {
+              "consequence": {
+                "text": "return new Response(null, {status:401});",
+                "start": 164,
+                "end": 204
+              },
+              "condition": {
+                "text": "(!event.locals.user)",
+                "start": 143,
+                "end": 163
+              }
+            },
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "cefc7e71b62de67906275381a26742f0e51c547677efaba229dedebf1160e6c7",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "b63c874e0f78650dc853c93384cb90b8182d8aba1765c96d9e7642fa12ebd89d",
+            "kind": "parenthesized_expression",
+            "start": 143,
+            "end": 163,
+            "text": "(!event.locals.user)",
+            "captures": {
+              "expression": {
+                "text": "!event.locals.user",
+                "start": 144,
+                "end": 162
+              }
+            },
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "77d7bdf262dea7863a087e72051776343e56fb8c6d205fdbd3cf4c138c539aa3",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "717f80583d27816cce9b5570cc75d3e06d13b1b6e14764c0054f334ae81c36fb",
+            "kind": "unary_expression",
+            "start": 144,
+            "end": 162,
+            "text": "!event.locals.user",
+            "captures": {
+              "argument": {
+                "text": "event.locals.user",
+                "start": 145,
+                "end": 162
+              }
+            },
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "b63c874e0f78650dc853c93384cb90b8182d8aba1765c96d9e7642fa12ebd89d",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "64c6682d5519d86f49562c5b8a2ed191a41d8cf45c2a685544da9c38fb193b66",
+            "kind": "member_expression",
+            "start": 145,
+            "end": 157,
+            "text": "event.locals",
+            "captures": {
+              "property": {
+                "text": "locals",
+                "start": 151,
+                "end": 157
+              },
+              "object": {
+                "text": "event",
+                "start": 145,
+                "end": 150
+              }
+            },
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "081ead90a5dfa5688d9597fc3b336f69a8b29b55bf611e1861067c812d87cbde",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "081ead90a5dfa5688d9597fc3b336f69a8b29b55bf611e1861067c812d87cbde",
+            "kind": "member_expression",
+            "start": 145,
+            "end": 162,
+            "text": "event.locals.user",
+            "captures": {
+              "property": {
+                "text": "user",
+                "start": 158,
+                "end": 162
+              },
+              "object": {
+                "text": "event.locals",
+                "start": 145,
+                "end": 157
+              }
+            },
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "717f80583d27816cce9b5570cc75d3e06d13b1b6e14764c0054f334ae81c36fb",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "84cb30fc879b0710f867de05c2fa588c93b28955d08b540148a30aaec88cd619",
+            "kind": "return_statement",
+            "start": 164,
+            "end": 204,
+            "text": "return new Response(null, {status:401});",
+            "captures": {
+              "argument": {
+                "text": "new Response(null, {status:401})",
+                "start": 171,
+                "end": 203
+              }
+            },
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "77d7bdf262dea7863a087e72051776343e56fb8c6d205fdbd3cf4c138c539aa3",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "440fa6492b9b27e976314ce58be302665b22625f19454ff9f9337dfacedc8abf",
+            "kind": "new_expression",
+            "start": 171,
+            "end": 203,
+            "text": "new Response(null, {status:401})",
+            "captures": {
+              "constructor": {
+                "text": "Response",
+                "start": 175,
+                "end": 183
+              },
+              "arguments": {
+                "text": "(null, {status:401})",
+                "start": 183,
+                "end": 203
+              }
+            },
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "84cb30fc879b0710f867de05c2fa588c93b28955d08b540148a30aaec88cd619",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "899279121ad1695212864fc8c73b41ceb26f002673a7951ef135afd7e86e01bb",
+            "kind": "arguments",
+            "start": 183,
+            "end": 203,
+            "text": "(null, {status:401})",
+            "captures": {},
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "440fa6492b9b27e976314ce58be302665b22625f19454ff9f9337dfacedc8abf",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "6d3d7b814c9a8c6d7e583d97f03172f04c9d3d4a62cc37611bf4e124852d99ed",
+            "kind": "object",
+            "start": 190,
+            "end": 202,
+            "text": "{status:401}",
+            "captures": {},
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "899279121ad1695212864fc8c73b41ceb26f002673a7951ef135afd7e86e01bb",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "22e824f24cab841fa591f66db9e9cf2e2d34d209957d8c7280ec225cdeb2d8c1",
+            "kind": "pair",
+            "start": 191,
+            "end": 201,
+            "text": "status:401",
+            "captures": {
+              "value": {
+                "text": "401",
+                "start": 198,
+                "end": 201
+              },
+              "key": {
+                "text": "status",
+                "start": 191,
+                "end": 197
+              }
+            },
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "6d3d7b814c9a8c6d7e583d97f03172f04c9d3d4a62cc37611bf4e124852d99ed",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "9867db5187ce809db92ec48bf3b20eb15c192d273b6647cafba3694959b4a7f8",
+            "kind": "return_statement",
+            "start": 205,
+            "end": 227,
+            "text": "return resolve(event);",
+            "captures": {
+              "argument": {
+                "text": "resolve(event)",
+                "start": 212,
+                "end": 226
+              }
+            },
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "cefc7e71b62de67906275381a26742f0e51c547677efaba229dedebf1160e6c7",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "ee459b03b27b2b8f126b5da646c6325f1ba7a196df7231a4bff20f4354f2bd09",
+            "kind": "call_expression",
+            "start": 212,
+            "end": 226,
+            "text": "resolve(event)",
+            "captures": {
+              "function": {
+                "text": "resolve",
+                "start": 212,
+                "end": 219
+              },
+              "arguments": {
+                "text": "(event)",
+                "start": 219,
+                "end": 226
+              }
+            },
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "9867db5187ce809db92ec48bf3b20eb15c192d273b6647cafba3694959b4a7f8",
+            "unit": "file",
+            "line": 2
+          },
+          {
+            "id": "6fcb6b0c26246593e3e9f3674296496b3e0b0de4eb6f4f1773f39cd0bb18bdfe",
+            "kind": "arguments",
+            "start": 219,
+            "end": 226,
+            "text": "(event)",
+            "captures": {},
+            "owner_function": "d365082af03a1e957ec4eea1d8d9ac410fec89ca51480ad9fc70d039113cd6f4",
+            "parent_id": "ee459b03b27b2b8f126b5da646c6325f1ba7a196df7231a4bff20f4354f2bd09",
+            "unit": "file",
+            "line": 2
+          }
+        ],
+        "gaps": [
+          {
+            "code": "MISSING_NODES_NOT_EXPOSED"
+          }
+        ],
+        "source_sha256": "e23369a73f55fa4bdb4bf81641cb984e4c681ae2346a18e45aa9e0dbfd2941be",
+        "parser_completeness": "PARTIAL"
+      }
+    }
+  ]
+}

@@ -1,0 +1,457 @@
+[
+ {
+  "category": "UX/devices",
+  "item": "Real-device workflows",
+  "check": "Complete ordering, payment and warehouse workflows on real phones, tablets and foldables using touch, rotation, split screen and posture changes.",
+  "how": "manual",
+  "why_forgotten": "Emulation misses hardware behavior."
+ },
+ {
+  "category": "UX/devices",
+  "item": "Keyboard and viewport changes",
+  "check": "Verify virtual keyboards, browser toolbars, safe areas and sticky controls never obscure focused fields, validation messages or checkout actions.",
+  "how": "manual",
+  "why_forgotten": "Static screenshots hide viewport changes."
+ },
+ {
+  "category": "UX/devices",
+  "item": "Interruption and recovery",
+  "check": "Verify forms and carts survive refresh, back navigation, session expiry, app switching and interrupted uploads without duplicate submissions or silent data loss.",
+  "how": "automated",
+  "why_forgotten": "Tests assume uninterrupted sessions."
+ },
+ {
+  "category": "UX/devices",
+  "item": "Business-scale usability",
+  "check": "Review realistic catalogs, long Polish product names, hundreds of order lines, empty states and bulk actions for usable navigation and clear outcomes.",
+  "how": "manual",
+  "why_forgotten": "Fixtures are small and tidy."
+ },
+ {
+  "category": "Accessibility",
+  "item": "Keyboard and focus",
+  "check": "Complete every role's critical workflow using only a keyboard, checking focus order, visible focus, dialogs, menus and focus restoration.",
+  "how": "manual",
+  "why_forgotten": "Axe cannot validate interaction quality."
+ },
+ {
+  "category": "Accessibility",
+  "item": "Screen-reader workflows",
+  "check": "Test critical workflows with representative desktop and mobile screen readers, including table headers, field instructions, errors and dynamic status announcements.",
+  "how": "manual",
+  "why_forgotten": "Semantic validity is mistaken for usability."
+ },
+ {
+  "category": "Accessibility",
+  "item": "Content and interaction accessibility",
+  "check": "Verify errors do not rely on color, drag actions have alternatives, motion can be reduced and timeouts provide accessible warning and extension.",
+  "how": "manual",
+  "why_forgotten": "Automated scans cover only fragments."
+ },
+ {
+  "category": "Performance",
+  "item": "Real-user performance",
+  "check": "Measure route-level loading and interaction latency by device, connection and customer cohort using production telemetry with explicit budgets.",
+  "how": "automated",
+  "why_forgotten": "Laboratory LCP and CLS look healthy."
+ },
+ {
+  "category": "Performance",
+  "item": "Large-data operations",
+  "check": "Benchmark search, filtering, pagination, exports and dashboards against production-scale data while checking query counts, indexes, memory and response sizes.",
+  "how": "automated",
+  "why_forgotten": "Development databases conceal bottlenecks."
+ },
+ {
+  "category": "Performance",
+  "item": "Long-session degradation",
+  "check": "Exercise hours-long admin and warehouse sessions for memory leaks, accumulated subscriptions, stale caches and progressively slower interactions.",
+  "how": "automated",
+  "why_forgotten": "Tests restart browsers frequently."
+ },
+ {
+  "category": "Security",
+  "item": "Tenant and object isolation",
+  "check": "Attempt cross-customer access to orders, prices, invoices, exports and attachments by changing identifiers through every API and download path.",
+  "how": "automated",
+  "why_forgotten": "UI visibility substitutes for authorization."
+ },
+ {
+  "category": "Roles/permissions",
+  "item": "Permission matrix",
+  "check": "Verify an explicit role-by-action-by-resource matrix for admin, accountant, warehouse, sales rep and customer across UI, API, bulk operations and exports.",
+  "how": "automated",
+  "why_forgotten": "Only representative happy paths are tested."
+ },
+ {
+  "category": "Roles/permissions",
+  "item": "Permission changes and impersonation",
+  "check": "Verify revoked roles, disabled users and changed customer assignments take effect in active sessions and that impersonation is restricted and audited.",
+  "how": "automated",
+  "why_forgotten": "Permissions are treated as static."
+ },
+ {
+  "category": "Security",
+  "item": "Authentication lifecycle",
+  "check": "Test invitations, account enumeration, password resets, MFA where required, session rotation, logout, recovery and session invalidation after credential changes.",
+  "how": "automated",
+  "why_forgotten": "Login success receives most attention."
+ },
+ {
+  "category": "Security",
+  "item": "Malicious input and files",
+  "check": "Test injection, stored XSS, CSRF, SSRF and unsafe uploads across APIs, ERP fields, rich text, filenames and document previews.",
+  "how": "automated",
+  "why_forgotten": "Imported business data is trusted."
+ },
+ {
+  "category": "Security",
+  "item": "Secrets and supply chain",
+  "check": "Scan source, built assets, images and dependencies for exposed credentials, vulnerable packages and unapproved artifacts before deployment.",
+  "how": "automated",
+  "why_forgotten": "Generated code expands dependencies quietly."
+ },
+ {
+  "category": "Security",
+  "item": "Public deployment exposure",
+  "check": "Verify production headers, TLS, CORS, storage permissions and debug endpoints, including source maps and signed-link expiration.",
+  "how": "automated",
+  "why_forgotten": "Repository checks miss deployed configuration."
+ },
+ {
+  "category": "Privacy/RODO",
+  "item": "Personal-data inventory",
+  "check": "Map personal data through the app, ExampleERP, Tpay, email, analytics, logs, backups and AI services, documenting purpose, access and retention.",
+  "how": "manual",
+  "why_forgotten": "Data spreads beyond the main database."
+ },
+ {
+  "category": "Privacy/RODO",
+  "item": "Data-subject workflows",
+  "check": "Rehearse access, correction, export, restriction and deletion requests across connected systems while preserving records subject to applicable retention obligations.",
+  "how": "manual",
+  "why_forgotten": "Policies exist without operational procedures."
+ },
+ {
+  "category": "Privacy/RODO",
+  "item": "Data minimization and leakage",
+  "check": "Verify telemetry, session replay, support tools, test environments and model prompts exclude or redact unnecessary personal and confidential commercial data.",
+  "how": "automated",
+  "why_forgotten": "Diagnostics become secondary data stores."
+ },
+ {
+  "category": "Legal/privacy",
+  "item": "Cookies and consent behavior",
+  "check": "Check which cookies and trackers require consent, verify applicable blocking and withdrawal behavior and ensure recorded choices match actual network activity.",
+  "how": "manual",
+  "why_forgotten": "Banner appearance is tested instead of behavior."
+ },
+ {
+  "category": "Legal",
+  "item": "Terms and contracting evidence",
+  "check": "Have the applicable B2B terms, privacy notices, accessibility obligations and checkout disclosures reviewed, and retain versioned acceptance evidence where needed.",
+  "how": "manual",
+  "why_forgotten": "Legal text is treated as static content."
+ },
+ {
+  "category": "Legal/invoicing",
+  "item": "KSeF applicability and lifecycle",
+  "check": "Confirm current KSeF applicability with accounting advisers and test required invoice submission, identifiers, statuses, corrections and supported outage procedures.",
+  "how": "manual",
+  "why_forgotten": "Invoice generation is mistaken for compliance."
+ },
+ {
+  "category": "Locale/i18n",
+  "item": "Polish text fidelity",
+  "check": "Round-trip Polish diacritics through forms, databases, search, ERP, email, XLSX, PDF and filenames without encoding corruption or normalization surprises.",
+  "how": "automated",
+  "why_forgotten": "ASCII fixtures dominate tests."
+ },
+ {
+  "category": "Locale/i18n",
+  "item": "Financial formats and arithmetic",
+  "check": "Test decimal commas, grouped amounts, PLN display, VAT rates, discounts, unit precision and agreed rounding rules consistently across all systems.",
+  "how": "automated",
+  "why_forgotten": "Formatting and accounting rules get conflated."
+ },
+ {
+  "category": "Locale/i18n",
+  "item": "Dates and business time",
+  "check": "Verify Europe/Warsaw daylight-saving transitions, date-only fields, payment deadlines and export timestamps across browsers, servers and integrations.",
+  "how": "automated",
+  "why_forgotten": "UTC-only fixtures avoid boundary cases."
+ },
+ {
+  "category": "Locale/i18n",
+  "item": "Search, sorting and identifiers",
+  "check": "Verify agreed Polish collation, case and diacritic matching, natural product-code sorting and preservation of leading zeros in business identifiers.",
+  "how": "automated",
+  "why_forgotten": "Database defaults define accidental behavior."
+ },
+ {
+  "category": "Email",
+  "item": "Client rendering and accessibility",
+  "check": "Render transactional emails in supported Outlook, Gmail and mobile clients with images blocked, dark mode, long content and a usable plain-text alternative.",
+  "how": "manual",
+  "why_forgotten": "Browser previews are misleading."
+ },
+ {
+  "category": "Email",
+  "item": "Delivery and recipient correctness",
+  "check": "Verify sender authentication, bounce handling, suppression, reply routing and recipient selection without leaking addresses or another customer's attachment.",
+  "how": "automated",
+  "why_forgotten": "Provider acceptance is mistaken for delivery."
+ },
+ {
+  "category": "XLSX/attachments",
+  "item": "Workbook interoperability and safety",
+  "check": "Open exports in supported Excel and LibreOffice versions, checking formulas, formula-injection defenses, types, diacritics, leading zeros and monetary precision.",
+  "how": "automated",
+  "why_forgotten": "A valid ZIP file counts as success."
+ },
+ {
+  "category": "XLSX/attachments",
+  "item": "Export completeness and delivery limits",
+  "check": "Verify exported rows, filters, totals and access scope against source records, including large files, attachment limits, retries and expiring download links.",
+  "how": "automated",
+  "why_forgotten": "Small sample exports hide truncation."
+ },
+ {
+  "category": "Print/PDF",
+  "item": "Printable business documents",
+  "check": "Check A4 pagination, repeated table headers, totals, Polish fonts, barcodes, hidden controls and readable grayscale output for long orders and invoices.",
+  "how": "manual",
+  "why_forgotten": "Screen layouts receive all review."
+ },
+ {
+  "category": "SEO",
+  "item": "Public discoverability and private exclusion",
+  "check": "Verify public-page metadata, canonical URLs, sitemaps and status codes while enforcing authentication for private data and using indexing directives appropriately.",
+  "how": "automated",
+  "why_forgotten": "SEO is dismissed for B2B applications."
+ },
+ {
+  "category": "Analytics",
+  "item": "Event correctness",
+  "check": "Verify documented events fire once with correct amounts, currencies and business identifiers across consent states, retries, redirects and client-side navigation.",
+  "how": "automated",
+  "why_forgotten": "Dashboards can look plausible with bad data."
+ },
+ {
+  "category": "Error monitoring",
+  "item": "Actionable error capture",
+  "check": "Trigger frontend, backend and worker failures to verify release attribution, readable stack traces, correlation IDs, privacy filtering and alert delivery.",
+  "how": "automated",
+  "why_forgotten": "SDK installation is treated as completion."
+ },
+ {
+  "category": "Observability",
+  "item": "Business-process monitoring",
+  "check": "Monitor stuck orders, payment mismatches, ERP synchronization lag, export failures and email backlogs with owners and actionable alert thresholds.",
+  "how": "automated",
+  "why_forgotten": "HTTP uptime misses business failures."
+ },
+ {
+  "category": "Observability",
+  "item": "Traceability and audit evidence",
+  "check": "Trace an order across API, queue, Tpay, ExampleERP and email while recording attributable changes to permissions, prices, bank details and order state.",
+  "how": "automated",
+  "why_forgotten": "Each component logs independently."
+ },
+ {
+  "category": "Backups/restore",
+  "item": "Full restoration rehearsal",
+  "check": "Restore databases, attachments, configuration and required keys into an isolated environment and verify business workflows against stated recovery objectives.",
+  "how": "manual",
+  "why_forgotten": "Successful backup jobs imply recoverability."
+ },
+ {
+  "category": "Backups/restore",
+  "item": "Post-restore reconciliation",
+  "check": "Rehearse recovery without duplicating payments, ERP documents or emails, reconciling restored local state against external systems.",
+  "how": "manual",
+  "why_forgotten": "External side effects cannot be restored."
+ },
+ {
+  "category": "Migrations/rollback",
+  "item": "Production-scale migrations",
+  "check": "Rehearse schema changes and backfills on representative data volumes for lock duration, partial failure, restartability and old/new application compatibility.",
+  "how": "automated",
+  "why_forgotten": "Empty-database migrations always pass."
+ },
+ {
+  "category": "Migrations/rollback",
+  "item": "Release rollback and containment",
+  "check": "Rehearse application rollback, feature disabling and recovery from incompatible data changes, including workers, caches and queued payloads.",
+  "how": "manual",
+  "why_forgotten": "Redeploying an old image seems sufficient."
+ },
+ {
+  "category": "Rate limits",
+  "item": "Inbound abuse and quotas",
+  "check": "Verify per-user and per-tenant limits for login, search, checkout, exports and uploads with predictable errors and protection against expensive requests.",
+  "how": "automated",
+  "why_forgotten": "Only obvious authentication endpoints are limited."
+ },
+ {
+  "category": "Integrations",
+  "item": "Outbound resilience",
+  "check": "Inject ExampleERP, Tpay and email-provider timeouts, throttling and outages to verify bounded retries, backoff, queue limits and recoverable failure states.",
+  "how": "automated",
+  "why_forgotten": "Mocks return immediate success."
+ },
+ {
+  "category": "Browser support",
+  "item": "Explicit compatibility contract",
+  "check": "Run critical workflows on agreed browser and OS versions, including iOS Safari, Android Chrome and Windows browsers with relevant download and popup behavior.",
+  "how": "automated",
+  "why_forgotten": "A device matrix can use one engine."
+ },
+ {
+  "category": "PWA/offline",
+  "item": "Cache isolation and upgrades",
+  "check": "Verify service-worker updates, cache invalidation, logout and account switching cannot expose another user's data or serve incompatible application versions.",
+  "how": "automated",
+  "why_forgotten": "Offline checks focus on connectivity banners."
+ },
+ {
+  "category": "PWA/offline",
+  "item": "Offline write reconciliation",
+  "check": "Verify supported offline actions show pending status and reconcile reconnects, conflicts and repeated submissions without silently overwriting server changes.",
+  "how": "automated",
+  "why_forgotten": "Reconnect is assumed to mean success."
+ },
+ {
+  "category": "Notifications",
+  "item": "Notification lifecycle",
+  "check": "Verify correct recipients, deduplication, ordering, preferences, permission denial and authorized deep links across email, in-app and push channels.",
+  "how": "automated",
+  "why_forgotten": "Sending one notification proves too little."
+ },
+ {
+  "category": "Data integrity",
+  "item": "Business invariants",
+  "check": "Assert valid order transitions and consistent totals, stock reservations, invoices and payment balances across all write paths and integration events.",
+  "how": "automated",
+  "why_forgotten": "Endpoint tests miss system-wide rules."
+ },
+ {
+  "category": "Data integrity",
+  "item": "Concurrent business actions",
+  "check": "Race stock reservations, discount usage, order edits and status changes from multiple roles and tabs to verify atomicity and explicit conflict handling.",
+  "how": "automated",
+  "why_forgotten": "Tests run actions sequentially."
+ },
+ {
+  "category": "Data integrity",
+  "item": "Idempotency and event ordering",
+  "check": "Replay duplicate, delayed and out-of-order requests, callbacks and jobs to verify exactly one intended business effect and safe state transitions.",
+  "how": "automated",
+  "why_forgotten": "Distributed delivery is modeled as reliable."
+ },
+ {
+  "category": "Data integrity",
+  "item": "Historical commercial truth",
+  "check": "Verify existing orders preserve agreed product descriptions, prices, tax treatment and addresses when catalogs or customer records change.",
+  "how": "automated",
+  "why_forgotten": "Live references are convenient during implementation."
+ },
+ {
+  "category": "ERP/ExampleERP",
+  "item": "Mapping and source ownership",
+  "check": "Validate identifiers, units, VAT, warehouses, customer-specific pricing and document statuses against representative ExampleERP data with explicit ownership of each field.",
+  "how": "automated",
+  "why_forgotten": "Technically valid mappings can be commercially wrong."
+ },
+ {
+  "category": "ERP/ExampleERP",
+  "item": "Synchronization reconciliation",
+  "check": "Detect missing, duplicated, rejected and manually changed ERP records and verify operators can reconcile or replay them without duplicate documents.",
+  "how": "automated",
+  "why_forgotten": "Integration success is measured per request."
+ },
+ {
+  "category": "Payments/Tpay",
+  "item": "Authoritative payment confirmation",
+  "check": "Verify callback authenticity, amount, currency and order binding, and ensure browser redirects alone cannot mark orders as paid.",
+  "how": "automated",
+  "why_forgotten": "The return page appears authoritative."
+ },
+ {
+  "category": "Payments/Tpay",
+  "item": "Payment exceptions",
+  "check": "Test abandoned, expired, delayed, duplicate and mismatched payments plus supported partial or full refunds and settlement reconciliation.",
+  "how": "automated",
+  "why_forgotten": "Sandbox testing favors immediate success."
+ },
+ {
+  "category": "Load/concurrency",
+  "item": "Realistic peak workload",
+  "check": "Load-test concurrent customer checkout, warehouse updates, admin reports and exports against latency, error-rate and resource budgets.",
+  "how": "automated",
+  "why_forgotten": "Single-endpoint throughput looks reassuring."
+ },
+ {
+  "category": "Load/concurrency",
+  "item": "Backlog and noisy-neighbor recovery",
+  "check": "Run soak and burst tests to verify queue drainage, worker recovery, connection-pool limits and tenant fairness after downstream outages.",
+  "how": "automated",
+  "why_forgotten": "Short tests end before exhaustion."
+ },
+ {
+  "category": "Operations",
+  "item": "Background-job correctness",
+  "check": "Test scheduled jobs across daylight-saving changes, overlapping runs, worker crashes and deployments, including lock expiry and missed-run recovery.",
+  "how": "automated",
+  "why_forgotten": "Jobs execute outside interactive test flows."
+ },
+ {
+  "category": "Operations",
+  "item": "Infrastructure failure modes",
+  "check": "Exercise database failover, cache loss, storage exhaustion, expired credentials and unavailable dependencies with observable degradation and documented recovery.",
+  "how": "manual",
+  "why_forgotten": "Healthy infrastructure is assumed."
+ },
+ {
+  "category": "Operations",
+  "item": "Support and incident readiness",
+  "check": "Rehearse an incident with named owners, customer communication, safe diagnostic access and procedures to recover stuck orders and integrations.",
+  "how": "manual",
+  "why_forgotten": "Operational responsibility remains implicit."
+ },
+ {
+  "category": "Release quality",
+  "item": "Production smoke and drift detection",
+  "check": "Run safe post-deploy checks for each critical role and integration while detecting configuration, feature-flag and environment differences from staging.",
+  "how": "automated",
+  "why_forgotten": "A green build is treated as a release verdict."
+ },
+ {
+  "category": "AI implementation assurance",
+  "item": "Independent requirements oracle",
+  "check": "Review critical workflows against approved business examples and accounting expectations using evidence independent of the implementation and its generated tests.",
+  "how": "manual",
+  "why_forgotten": "Code and tests can share the same misconception."
+ },
+ {
+  "category": "AI implementation assurance",
+  "item": "Test sensitivity and coverage gaps",
+  "check": "Use targeted fault injection or mutation checks to confirm critical tests fail for incorrect permissions, totals, callback validation and duplicate processing.",
+  "how": "automated",
+  "why_forgotten": "Passing tests do not prove useful assertions."
+ },
+ {
+  "category": "Post-release quality",
+  "item": "Field-feedback coverage",
+  "check": "Regularly turn support tickets, abandoned workflows, production incidents and actual browser usage into prioritized regression cases and updated support assumptions.",
+  "how": "manual",
+  "why_forgotten": "The harness evolves separately from real usage."
+ },
+ {
+  "category": "Business continuity",
+  "item": "Service ownership and expiry",
+  "check": "Assign owners and alerts for domains, certificates, payment and email accounts, ERP licenses, quotas and vendor credentials before they expire or exhaust.",
+  "how": "automated",
+  "why_forgotten": "These failures live outside application code."
+ }
+]

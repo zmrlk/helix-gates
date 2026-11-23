@@ -1,0 +1,4 @@
+GRANT ALL ON items TO PUBLIC;
+CREATE POLICY all_rows ON items USING (true) WITH CHECK (true);
+CREATE FUNCTION change_role() RETURNS void LANGUAGE sql SECURITY DEFINER AS $$ SELECT 1; $$;
+DROP TABLE old_items;

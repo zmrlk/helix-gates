@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "rps": {
+      "type": "number",
+      "minimum": 0.001
+    },
+    "concurrency": {
+      "type": "number",
+      "minimum": 0.001
+    },
+    "data_gb": {
+      "type": "number",
+      "minimum": 0.001
+    },
+    "growth_percent": {
+      "type": "number",
+      "minimum": 0
+    },
+    "peak_multiplier": {
+      "type": "number",
+      "minimum": 0.001
+    },
+    "load_test": {
+      "type": "string"
+    },
+    "owner": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "rps",
+    "concurrency",
+    "data_gb",
+    "growth_percent",
+    "peak_multiplier",
+    "load_test",
+    "owner"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

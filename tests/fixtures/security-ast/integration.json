@@ -1,0 +1,2978 @@
+{
+  "capture": {
+    "coverage": {
+      "files": [
+        {
+          "facts_count": 3,
+          "gaps": [
+            {
+              "code": "MISSING_NODES_NOT_EXPOSED"
+            },
+            {
+              "code": "SVELTE_MARKUP_NOT_ANALYZED"
+            }
+          ],
+          "parser_completeness": "PARTIAL",
+          "path": "src/lib/Widget.svelte",
+          "source_sha256": "4a843408fc39e02e6cd374931832a14e614cf8cf44ac673b4b5bf6ca164b59bb",
+          "status": "PARSED"
+        },
+        {
+          "facts_count": 6,
+          "gaps": [
+            {
+              "code": "MISSING_NODES_NOT_EXPOSED"
+            }
+          ],
+          "parser_completeness": "PARTIAL",
+          "path": "src/lib/example.ts",
+          "source_sha256": "13c39fe2492a79f43106d3df5d8cfe2bfdcdcbeabb1a12ce7810c241f0f8fffd",
+          "status": "PARSED"
+        },
+        {
+          "facts_count": 15,
+          "gaps": [
+            {
+              "code": "MISSING_NODES_NOT_EXPOSED"
+            }
+          ],
+          "parser_completeness": "PARTIAL",
+          "path": "src/routes/cast/+server.ts",
+          "source_sha256": "5c3214284b014dd002cce0d8e34514eb96224a944cffbe33e9b3b335731a8d15",
+          "status": "PARSED"
+        },
+        {
+          "facts_count": 17,
+          "gaps": [
+            {
+              "code": "MISSING_NODES_NOT_EXPOSED"
+            }
+          ],
+          "parser_completeness": "PARTIAL",
+          "path": "src/routes/comment/+server.ts",
+          "source_sha256": "8e614db2e498352433ce9f4f67e958e6da49a5136b0ca78076fc83b48628c9f0",
+          "status": "PARSED"
+        },
+        {
+          "facts_count": 26,
+          "gaps": [
+            {
+              "code": "MISSING_NODES_NOT_EXPOSED"
+            }
+          ],
+          "parser_completeness": "PARTIAL",
+          "path": "src/routes/nested-where/+server.ts",
+          "source_sha256": "cf6f6020a7deff28fdce22614604f5bbc22d5b2bf3b459e4c2abfb70fa1726da",
+          "status": "PARSED"
+        },
+        {
+          "facts_count": 20,
+          "gaps": [
+            {
+              "code": "AST_ERROR_NODE"
+            },
+            {
+              "code": "MISSING_NODES_NOT_EXPOSED"
+            }
+          ],
+          "parser_completeness": "UNKNOWN",
+          "path": "src/routes/partial/+server.ts",
+          "source_sha256": "ab74c2266ecc6b14dcada9c656a17b19a14e7dd2589b2cb0d2bbae4ce0ec3f3a",
+          "status": "PARTIAL"
+        },
+        {
+          "facts_count": 23,
+          "gaps": [
+            {
+              "code": "MISSING_NODES_NOT_EXPOSED"
+            }
+          ],
+          "parser_completeness": "PARTIAL",
+          "path": "src/routes/pin/+server.ts",
+          "source_sha256": "fb5e4b284d3c9e19b9958c458e9c33ced8d2b5227e106c1812c2943269a04fa8",
+          "status": "PARSED"
+        },
+        {
+          "facts_count": 40,
+          "gaps": [
+            {
+              "code": "MISSING_NODES_NOT_EXPOSED"
+            }
+          ],
+          "parser_completeness": "PARTIAL",
+          "path": "src/routes/upload/+server.ts",
+          "source_sha256": "e9f30557e212c1caccbb8c31150ffc7980ea6137989b98bd86cf8517efb020ad",
+          "status": "PARSED"
+        }
+      ],
+      "files_parsed": 7,
+      "files_partial": 1,
+      "files_total": 8,
+      "gaps": [],
+      "status": "INCOMPLETE"
+    },
+    "engine": {
+      "name": "ast-grep",
+      "proof_kind": "subprocess",
+      "receipt_sha256": "3b484529588d1b7dd0aef11c5bc6d21ed7a9112b2ab0f5e136bac6f46fd40c75",
+      "used": true,
+      "version": "0.51.0"
+    },
+    "limitations": [
+      "syntax_and_local_relations_only",
+      "missing_nodes_not_exposed"
+    ],
+    "rules_sha256": "917363a5ab1753993bc5ce66e7023b9a71268f6a1bdc88f0c5787f281fe43654",
+    "schema_version": 1,
+    "source_digest": "eaf3ee1465a7eeabe9b1312f8aec268a56684dcbc7f80a76518bf24ad6b77f0f",
+    "usage": {
+      "calls": 1,
+      "input_bytes": 1038
+    }
+  },
+  "cases": [
+    {
+      "path": "src/routes/cast/+server.ts",
+      "record": {
+        "facts": [
+          {
+            "captures": {
+              "declaration": {
+                "end": 138,
+                "start": 7,
+                "text": "const GET = async ({params}) => { const q = tx as PgTransaction; return await q`SELECT * FROM invoices WHERE id = ${params.id}`; };"
+              }
+            },
+            "end": 138,
+            "id": "0d991f84bb11c716c1937284e4a8d18bb93c19f42831c26cc8ef6b759056930a",
+            "kind": "export_statement",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const GET = async ({params}) => { const q = tx as PgTransaction; return await q`SELECT * FROM invoices WHERE id = ${params.id}`; };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 138,
+            "id": "6b06d879bc161a3c3abdb9ec5a56b4f2fb3e314ca809b1390a7060a4e107302f",
+            "kind": "program",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const GET = async ({params}) => { const q = tx as PgTransaction; return await q`SELECT * FROM invoices WHERE id = ${params.id}`; };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 138,
+            "id": "d890ca5a54222119a21c3e75770a7fb7b62d5fdf469b0b8bb6527ff46e8d76b3",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "0d991f84bb11c716c1937284e4a8d18bb93c19f42831c26cc8ef6b759056930a",
+            "start": 7,
+            "text": "const GET = async ({params}) => { const q = tx as PgTransaction; return await q`SELECT * FROM invoices WHERE id = ${params.id}`; };",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 16,
+                "start": 13,
+                "text": "GET"
+              },
+              "value": {
+                "end": 137,
+                "start": 19,
+                "text": "async ({params}) => { const q = tx as PgTransaction; return await q`SELECT * FROM invoices WHERE id = ${params.id}`; }"
+              }
+            },
+            "end": 137,
+            "id": "e772740acc8a4fa7fedf35f1b2e273feaa5b341e732c17f556bd1c6bbc7fad9c",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "d890ca5a54222119a21c3e75770a7fb7b62d5fdf469b0b8bb6527ff46e8d76b3",
+            "start": 13,
+            "text": "GET = async ({params}) => { const q = tx as PgTransaction; return await q`SELECT * FROM invoices WHERE id = ${params.id}`; }",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "body": {
+                "end": 137,
+                "start": 39,
+                "text": "{ const q = tx as PgTransaction; return await q`SELECT * FROM invoices WHERE id = ${params.id}`; }"
+              },
+              "parameters": {
+                "end": 35,
+                "start": 25,
+                "text": "({params})"
+              }
+            },
+            "end": 137,
+            "id": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "kind": "arrow_function",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "e772740acc8a4fa7fedf35f1b2e273feaa5b341e732c17f556bd1c6bbc7fad9c",
+            "start": 19,
+            "text": "async ({params}) => { const q = tx as PgTransaction; return await q`SELECT * FROM invoices WHERE id = ${params.id}`; }",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 137,
+            "id": "925eab63ba63eba5b088430669ac4f4df83756253dd58b3e8561ff433bdbe6ba",
+            "kind": "statement_block",
+            "line": 1,
+            "owner_function": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "parent_id": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "start": 39,
+            "text": "{ const q = tx as PgTransaction; return await q`SELECT * FROM invoices WHERE id = ${params.id}`; }",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 71,
+            "id": "4096b1882ecef2e904ad38cb1873a8908db9c0e4e20d57ab2fdf26c4b7cf64fe",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "parent_id": "925eab63ba63eba5b088430669ac4f4df83756253dd58b3e8561ff433bdbe6ba",
+            "start": 41,
+            "text": "const q = tx as PgTransaction;",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 48,
+                "start": 47,
+                "text": "q"
+              },
+              "value": {
+                "end": 70,
+                "start": 51,
+                "text": "tx as PgTransaction"
+              }
+            },
+            "end": 70,
+            "id": "b139695d80a0b725a58d1e60e293b5808b5706a1a94e1fb2a0926e3cad8f6777",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "parent_id": "4096b1882ecef2e904ad38cb1873a8908db9c0e4e20d57ab2fdf26c4b7cf64fe",
+            "start": 47,
+            "text": "q = tx as PgTransaction",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 70,
+            "id": "32b6f95ec830af918f24e17ad00f363653caa262c5d7f275841f5fd7103068d1",
+            "kind": "as_expression",
+            "line": 1,
+            "owner_function": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "parent_id": "b139695d80a0b725a58d1e60e293b5808b5706a1a94e1fb2a0926e3cad8f6777",
+            "start": 51,
+            "text": "tx as PgTransaction",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 134,
+                "start": 79,
+                "text": "await q`SELECT * FROM invoices WHERE id = ${params.id}`"
+              }
+            },
+            "end": 135,
+            "id": "f495ca3971482224d036338932115e06ad0d12bc8bff84dde0399fbd39db70b6",
+            "kind": "return_statement",
+            "line": 1,
+            "owner_function": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "parent_id": "925eab63ba63eba5b088430669ac4f4df83756253dd58b3e8561ff433bdbe6ba",
+            "start": 72,
+            "text": "return await q`SELECT * FROM invoices WHERE id = ${params.id}`;",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 134,
+                "start": 85,
+                "text": "q`SELECT * FROM invoices WHERE id = ${params.id}`"
+              }
+            },
+            "end": 134,
+            "id": "f63bebb7073d8b1740254e34cff3544dc122ce8bbf82f1eb2e333051d70fa2d3",
+            "kind": "await_expression",
+            "line": 1,
+            "owner_function": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "parent_id": "f495ca3971482224d036338932115e06ad0d12bc8bff84dde0399fbd39db70b6",
+            "start": 79,
+            "text": "await q`SELECT * FROM invoices WHERE id = ${params.id}`",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 134,
+                "start": 86,
+                "text": "`SELECT * FROM invoices WHERE id = ${params.id}`"
+              },
+              "function": {
+                "end": 86,
+                "start": 85,
+                "text": "q"
+              }
+            },
+            "end": 134,
+            "id": "e84e55c568351c80a31f5079c7d986dff569d9f6696cd2aba89b70025b5c7959",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "parent_id": "f63bebb7073d8b1740254e34cff3544dc122ce8bbf82f1eb2e333051d70fa2d3",
+            "start": 85,
+            "text": "q`SELECT * FROM invoices WHERE id = ${params.id}`",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 134,
+            "id": "82c4884f9ace9e40cbf02ab7c5129c91184519e8201dc8fb1eda03c6c63566c4",
+            "kind": "template_string",
+            "line": 1,
+            "owner_function": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "parent_id": "e84e55c568351c80a31f5079c7d986dff569d9f6696cd2aba89b70025b5c7959",
+            "start": 86,
+            "text": "`SELECT * FROM invoices WHERE id = ${params.id}`",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 133,
+            "id": "160863804b0781018502f95fbf2b0f710f0340a04550b9ab12b81315ffa500cf",
+            "kind": "template_substitution",
+            "line": 1,
+            "owner_function": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "parent_id": "82c4884f9ace9e40cbf02ab7c5129c91184519e8201dc8fb1eda03c6c63566c4",
+            "start": 121,
+            "text": "${params.id}",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 129,
+                "start": 123,
+                "text": "params"
+              },
+              "property": {
+                "end": 132,
+                "start": 130,
+                "text": "id"
+              }
+            },
+            "end": 132,
+            "id": "d600c704b861bac2e1ce23177a3bd433f8404ceb2079fd720df411ad6ecf2bca",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "e78077cea548eed9ae04a66e8a77e42387db6922c1be102f76ea36d9fc8a6340",
+            "parent_id": "160863804b0781018502f95fbf2b0f710f0340a04550b9ab12b81315ffa500cf",
+            "start": 123,
+            "text": "params.id",
+            "unit": "file"
+          }
+        ],
+        "gaps": [
+          {
+            "code": "MISSING_NODES_NOT_EXPOSED"
+          }
+        ],
+        "parser_completeness": "PARTIAL",
+        "source_sha256": "5c3214284b014dd002cce0d8e34514eb96224a944cffbe33e9b3b335731a8d15",
+        "status": "PARSED"
+      },
+      "source": "export const GET = async ({params}) => { const q = tx as PgTransaction; return await q`SELECT * FROM invoices WHERE id = ${params.id}`; };",
+      "source_sha256": "5c3214284b014dd002cce0d8e34514eb96224a944cffbe33e9b3b335731a8d15"
+    },
+    {
+      "path": "src/routes/pin/+server.ts",
+      "record": {
+        "facts": [
+          {
+            "captures": {
+              "declaration": {
+                "end": 148,
+                "start": 7,
+                "text": "const POST = async ({request}) => { const body=await request.json(); if(body.pin === stored.pin) return createSession(); throw error(401); };"
+              }
+            },
+            "end": 148,
+            "id": "6ae965830b267099916b8eb888dced3edd49feb748486b80a9b0bb1d37592dc8",
+            "kind": "export_statement",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const POST = async ({request}) => { const body=await request.json(); if(body.pin === stored.pin) return createSession(); throw error(401); };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 148,
+            "id": "6c229357fadcd28fc3c4698b6a4a239228dfd78949ca521ff1863d40da882603",
+            "kind": "program",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const POST = async ({request}) => { const body=await request.json(); if(body.pin === stored.pin) return createSession(); throw error(401); };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 148,
+            "id": "4f7744019a23cf8842de9a198b1d9e0b4ee50e9a81a94b275a68c3de8059bb54",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "6ae965830b267099916b8eb888dced3edd49feb748486b80a9b0bb1d37592dc8",
+            "start": 7,
+            "text": "const POST = async ({request}) => { const body=await request.json(); if(body.pin === stored.pin) return createSession(); throw error(401); };",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 17,
+                "start": 13,
+                "text": "POST"
+              },
+              "value": {
+                "end": 147,
+                "start": 20,
+                "text": "async ({request}) => { const body=await request.json(); if(body.pin === stored.pin) return createSession(); throw error(401); }"
+              }
+            },
+            "end": 147,
+            "id": "4680ddf7092843216d9467b1272fbf66c70d342306134b8fca3095ee3a6ef16a",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "4f7744019a23cf8842de9a198b1d9e0b4ee50e9a81a94b275a68c3de8059bb54",
+            "start": 13,
+            "text": "POST = async ({request}) => { const body=await request.json(); if(body.pin === stored.pin) return createSession(); throw error(401); }",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "body": {
+                "end": 147,
+                "start": 41,
+                "text": "{ const body=await request.json(); if(body.pin === stored.pin) return createSession(); throw error(401); }"
+              },
+              "parameters": {
+                "end": 37,
+                "start": 26,
+                "text": "({request})"
+              }
+            },
+            "end": 147,
+            "id": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "kind": "arrow_function",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "4680ddf7092843216d9467b1272fbf66c70d342306134b8fca3095ee3a6ef16a",
+            "start": 20,
+            "text": "async ({request}) => { const body=await request.json(); if(body.pin === stored.pin) return createSession(); throw error(401); }",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 147,
+            "id": "c5a8bc509e60594888e77eff47f06b5d8e98d12b18139afe630866a042eb5b89",
+            "kind": "statement_block",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "start": 41,
+            "text": "{ const body=await request.json(); if(body.pin === stored.pin) return createSession(); throw error(401); }",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 75,
+            "id": "e1fe1a7d35958709c6a444fdda8251ad3f8b9838abcce191221c1c91a893e2d2",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "c5a8bc509e60594888e77eff47f06b5d8e98d12b18139afe630866a042eb5b89",
+            "start": 43,
+            "text": "const body=await request.json();",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 53,
+                "start": 49,
+                "text": "body"
+              },
+              "value": {
+                "end": 74,
+                "start": 54,
+                "text": "await request.json()"
+              }
+            },
+            "end": 74,
+            "id": "9a8b9771966ac321b2f2d8187ee42b803bd934b24e7cea44dcd7c4a0526f9f6a",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "e1fe1a7d35958709c6a444fdda8251ad3f8b9838abcce191221c1c91a893e2d2",
+            "start": 49,
+            "text": "body=await request.json()",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 74,
+                "start": 60,
+                "text": "request.json()"
+              }
+            },
+            "end": 74,
+            "id": "cf217129da2306632fcf2f41546eebe3dd5af2d3ce6102191b85ceee1f9b463b",
+            "kind": "await_expression",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "9a8b9771966ac321b2f2d8187ee42b803bd934b24e7cea44dcd7c4a0526f9f6a",
+            "start": 54,
+            "text": "await request.json()",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 67,
+                "start": 60,
+                "text": "request"
+              },
+              "property": {
+                "end": 72,
+                "start": 68,
+                "text": "json"
+              }
+            },
+            "end": 72,
+            "id": "5e3eb0abaf2d768a03447899aef2fe188f4077cb491b822b0bb1f35a93d42f0f",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "b8f93755801ff4a843658801f402af0fb0bd41018667555ecfdf773b2e563f9e",
+            "start": 60,
+            "text": "request.json",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 74,
+                "start": 72,
+                "text": "()"
+              },
+              "function": {
+                "end": 72,
+                "start": 60,
+                "text": "request.json"
+              }
+            },
+            "end": 74,
+            "id": "b8f93755801ff4a843658801f402af0fb0bd41018667555ecfdf773b2e563f9e",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "cf217129da2306632fcf2f41546eebe3dd5af2d3ce6102191b85ceee1f9b463b",
+            "start": 60,
+            "text": "request.json()",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 74,
+            "id": "65b8936c63f7a541e5a0fe12c57ee0fabed3b69f6146f4142cfd47b276accb7c",
+            "kind": "arguments",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "b8f93755801ff4a843658801f402af0fb0bd41018667555ecfdf773b2e563f9e",
+            "start": 72,
+            "text": "()",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "condition": {
+                "end": 103,
+                "start": 78,
+                "text": "(body.pin === stored.pin)"
+              },
+              "consequence": {
+                "end": 127,
+                "start": 104,
+                "text": "return createSession();"
+              }
+            },
+            "end": 127,
+            "id": "2bdf5fc40500da9ac0460a27b54b45e42e57d1b21e196a3ca009f756a52f25cc",
+            "kind": "if_statement",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "c5a8bc509e60594888e77eff47f06b5d8e98d12b18139afe630866a042eb5b89",
+            "start": 76,
+            "text": "if(body.pin === stored.pin) return createSession();",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "expression": {
+                "end": 102,
+                "start": 79,
+                "text": "body.pin === stored.pin"
+              }
+            },
+            "end": 103,
+            "id": "80a06d857973ea866bbf00dea741c8ec72e225d662c3d0ec6529be4e2823c100",
+            "kind": "parenthesized_expression",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "2bdf5fc40500da9ac0460a27b54b45e42e57d1b21e196a3ca009f756a52f25cc",
+            "start": 78,
+            "text": "(body.pin === stored.pin)",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 83,
+                "start": 79,
+                "text": "body"
+              },
+              "property": {
+                "end": 87,
+                "start": 84,
+                "text": "pin"
+              }
+            },
+            "end": 87,
+            "id": "9f73cd772dd283cbe871152d1e72eaa36a35f29e42ea59c01fe6a5eb9a9427a1",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "0612e4e596e0c48cfc8f14643472f84a70bae8f825ade7571a8b5aeb99402ca2",
+            "start": 79,
+            "text": "body.pin",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "left": {
+                "end": 87,
+                "start": 79,
+                "text": "body.pin"
+              },
+              "right": {
+                "end": 102,
+                "start": 92,
+                "text": "stored.pin"
+              }
+            },
+            "end": 102,
+            "id": "0612e4e596e0c48cfc8f14643472f84a70bae8f825ade7571a8b5aeb99402ca2",
+            "kind": "binary_expression",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "80a06d857973ea866bbf00dea741c8ec72e225d662c3d0ec6529be4e2823c100",
+            "start": 79,
+            "text": "body.pin === stored.pin",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 98,
+                "start": 92,
+                "text": "stored"
+              },
+              "property": {
+                "end": 102,
+                "start": 99,
+                "text": "pin"
+              }
+            },
+            "end": 102,
+            "id": "5cdb99cf23ca6f1bbe376b9e514591113df774bd06d02cdc3fef88a67d0664e4",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "0612e4e596e0c48cfc8f14643472f84a70bae8f825ade7571a8b5aeb99402ca2",
+            "start": 92,
+            "text": "stored.pin",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 126,
+                "start": 111,
+                "text": "createSession()"
+              }
+            },
+            "end": 127,
+            "id": "5945ddca2705328345f0848588ba9c306f4a7735b29f0d34f74f49ff9774351f",
+            "kind": "return_statement",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "2bdf5fc40500da9ac0460a27b54b45e42e57d1b21e196a3ca009f756a52f25cc",
+            "start": 104,
+            "text": "return createSession();",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 126,
+                "start": 124,
+                "text": "()"
+              },
+              "function": {
+                "end": 124,
+                "start": 111,
+                "text": "createSession"
+              }
+            },
+            "end": 126,
+            "id": "7c14fa1cc690c9acff56fa43b151f69308a7169fe7f2a48c69c0b62ec9cddb51",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "5945ddca2705328345f0848588ba9c306f4a7735b29f0d34f74f49ff9774351f",
+            "start": 111,
+            "text": "createSession()",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 126,
+            "id": "b5a0babb2a8f4e611a87b7880741adcf69d593ccaa07378a449f91c492321c2b",
+            "kind": "arguments",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "7c14fa1cc690c9acff56fa43b151f69308a7169fe7f2a48c69c0b62ec9cddb51",
+            "start": 124,
+            "text": "()",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 144,
+                "start": 134,
+                "text": "error(401)"
+              }
+            },
+            "end": 145,
+            "id": "5c7711ad239a8de7a11a7982cca1cae7fc54acc8bfe4eadc67dea58b4ea88d5d",
+            "kind": "throw_statement",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "c5a8bc509e60594888e77eff47f06b5d8e98d12b18139afe630866a042eb5b89",
+            "start": 128,
+            "text": "throw error(401);",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 144,
+                "start": 139,
+                "text": "(401)"
+              },
+              "function": {
+                "end": 139,
+                "start": 134,
+                "text": "error"
+              }
+            },
+            "end": 144,
+            "id": "ea498d2c8f366d46c65513e655ee39773590c4a70b25ed643f1e13bc88e57f33",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "5c7711ad239a8de7a11a7982cca1cae7fc54acc8bfe4eadc67dea58b4ea88d5d",
+            "start": 134,
+            "text": "error(401)",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 144,
+            "id": "ad038b06c85860b58ff54f24385ffee930d44db404307e7aaac30a631c091b29",
+            "kind": "arguments",
+            "line": 1,
+            "owner_function": "e0298861924f34ba1d0f0c36cfd86f4380a0472258f547ea8d1c9ba0526a96af",
+            "parent_id": "ea498d2c8f366d46c65513e655ee39773590c4a70b25ed643f1e13bc88e57f33",
+            "start": 139,
+            "text": "(401)",
+            "unit": "file"
+          }
+        ],
+        "gaps": [
+          {
+            "code": "MISSING_NODES_NOT_EXPOSED"
+          }
+        ],
+        "parser_completeness": "PARTIAL",
+        "source_sha256": "fb5e4b284d3c9e19b9958c458e9c33ced8d2b5227e106c1812c2943269a04fa8",
+        "status": "PARSED"
+      },
+      "source": "export const POST = async ({request}) => { const body=await request.json(); if(body.pin === stored.pin) return createSession(); throw error(401); };",
+      "source_sha256": "fb5e4b284d3c9e19b9958c458e9c33ced8d2b5227e106c1812c2943269a04fa8"
+    },
+    {
+      "path": "src/routes/upload/+server.ts",
+      "record": {
+        "facts": [
+          {
+            "captures": {
+              "declaration": {
+                "end": 256,
+                "start": 7,
+                "text": "const POST = async ({request}) => { const form=await request.formData(); const file=form.get('file'); if(!(file instanceof File)) throw error(400); const bytes=Buffer.from(await file.arrayBuffer()); await writeFile('upload.bin',bytes); return {}; };"
+              }
+            },
+            "end": 256,
+            "id": "9a1d37a6a26a8086bf4290bad044a664f5ae3f768e56f2402f69769c3ea066cd",
+            "kind": "export_statement",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const POST = async ({request}) => { const form=await request.formData(); const file=form.get('file'); if(!(file instanceof File)) throw error(400); const bytes=Buffer.from(await file.arrayBuffer()); await writeFile('upload.bin',bytes); return {}; };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 256,
+            "id": "70764e1318480fa4017ed00106412e183344db2886c24693bcf50318b620d2ea",
+            "kind": "program",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const POST = async ({request}) => { const form=await request.formData(); const file=form.get('file'); if(!(file instanceof File)) throw error(400); const bytes=Buffer.from(await file.arrayBuffer()); await writeFile('upload.bin',bytes); return {}; };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 256,
+            "id": "5628be7e5ad4fa91959cb306ef0edc3d804730d648f6aad687310f08e6bd0ee1",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "9a1d37a6a26a8086bf4290bad044a664f5ae3f768e56f2402f69769c3ea066cd",
+            "start": 7,
+            "text": "const POST = async ({request}) => { const form=await request.formData(); const file=form.get('file'); if(!(file instanceof File)) throw error(400); const bytes=Buffer.from(await file.arrayBuffer()); await writeFile('upload.bin',bytes); return {}; };",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 17,
+                "start": 13,
+                "text": "POST"
+              },
+              "value": {
+                "end": 255,
+                "start": 20,
+                "text": "async ({request}) => { const form=await request.formData(); const file=form.get('file'); if(!(file instanceof File)) throw error(400); const bytes=Buffer.from(await file.arrayBuffer()); await writeFile('upload.bin',bytes); return {}; }"
+              }
+            },
+            "end": 255,
+            "id": "7ae6668c2042a20a531ddd62703c3b40f2106f89300357d512082f69a442068a",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "5628be7e5ad4fa91959cb306ef0edc3d804730d648f6aad687310f08e6bd0ee1",
+            "start": 13,
+            "text": "POST = async ({request}) => { const form=await request.formData(); const file=form.get('file'); if(!(file instanceof File)) throw error(400); const bytes=Buffer.from(await file.arrayBuffer()); await writeFile('upload.bin',bytes); return {}; }",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "body": {
+                "end": 255,
+                "start": 41,
+                "text": "{ const form=await request.formData(); const file=form.get('file'); if(!(file instanceof File)) throw error(400); const bytes=Buffer.from(await file.arrayBuffer()); await writeFile('upload.bin',bytes); return {}; }"
+              },
+              "parameters": {
+                "end": 37,
+                "start": 26,
+                "text": "({request})"
+              }
+            },
+            "end": 255,
+            "id": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "kind": "arrow_function",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "7ae6668c2042a20a531ddd62703c3b40f2106f89300357d512082f69a442068a",
+            "start": 20,
+            "text": "async ({request}) => { const form=await request.formData(); const file=form.get('file'); if(!(file instanceof File)) throw error(400); const bytes=Buffer.from(await file.arrayBuffer()); await writeFile('upload.bin',bytes); return {}; }",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 255,
+            "id": "46c0481fda3c6e1a3f35b46de39481dc9bf2ae25fd2ca8c47142293cc7a64844",
+            "kind": "statement_block",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "start": 41,
+            "text": "{ const form=await request.formData(); const file=form.get('file'); if(!(file instanceof File)) throw error(400); const bytes=Buffer.from(await file.arrayBuffer()); await writeFile('upload.bin',bytes); return {}; }",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 79,
+            "id": "519cd2f8f8aee98cd06917456ac236a356e74e6035cd468b7c741c55860ac66d",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "46c0481fda3c6e1a3f35b46de39481dc9bf2ae25fd2ca8c47142293cc7a64844",
+            "start": 43,
+            "text": "const form=await request.formData();",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 53,
+                "start": 49,
+                "text": "form"
+              },
+              "value": {
+                "end": 78,
+                "start": 54,
+                "text": "await request.formData()"
+              }
+            },
+            "end": 78,
+            "id": "dd1a1d35a3fd87bb831a1da7424848f704628e770d02944ba6a38bc18131145e",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "519cd2f8f8aee98cd06917456ac236a356e74e6035cd468b7c741c55860ac66d",
+            "start": 49,
+            "text": "form=await request.formData()",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 78,
+                "start": 60,
+                "text": "request.formData()"
+              }
+            },
+            "end": 78,
+            "id": "f088a6f6fc544b8151689e8a9ee20c577b82240c0c91c638cfefea830dd86098",
+            "kind": "await_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "dd1a1d35a3fd87bb831a1da7424848f704628e770d02944ba6a38bc18131145e",
+            "start": 54,
+            "text": "await request.formData()",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 67,
+                "start": 60,
+                "text": "request"
+              },
+              "property": {
+                "end": 76,
+                "start": 68,
+                "text": "formData"
+              }
+            },
+            "end": 76,
+            "id": "f39c6eccb8fcf51223b98aa69d5d756c60984c75d4e003a1c73d5cdfe2d4878d",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "55c906bcd781772038261163fe73e268cf9a1e80e04cb03e41f15786fbd3329a",
+            "start": 60,
+            "text": "request.formData",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 78,
+                "start": 76,
+                "text": "()"
+              },
+              "function": {
+                "end": 76,
+                "start": 60,
+                "text": "request.formData"
+              }
+            },
+            "end": 78,
+            "id": "55c906bcd781772038261163fe73e268cf9a1e80e04cb03e41f15786fbd3329a",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "f088a6f6fc544b8151689e8a9ee20c577b82240c0c91c638cfefea830dd86098",
+            "start": 60,
+            "text": "request.formData()",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 78,
+            "id": "13e571fd974f48d8515c313024b78f8c69960dbc4bd0e60596bebecfef184d6a",
+            "kind": "arguments",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "55c906bcd781772038261163fe73e268cf9a1e80e04cb03e41f15786fbd3329a",
+            "start": 76,
+            "text": "()",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 108,
+            "id": "99b39477eab161e51dbe1ba108319e25bdc81fc32c91c2dcf258cc1cad88f46c",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "46c0481fda3c6e1a3f35b46de39481dc9bf2ae25fd2ca8c47142293cc7a64844",
+            "start": 80,
+            "text": "const file=form.get('file');",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 90,
+                "start": 86,
+                "text": "file"
+              },
+              "value": {
+                "end": 107,
+                "start": 91,
+                "text": "form.get('file')"
+              }
+            },
+            "end": 107,
+            "id": "b41f6259ac91450bf62c6e943ca0af6cb7ae4935f75a26623d507b174244191c",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "99b39477eab161e51dbe1ba108319e25bdc81fc32c91c2dcf258cc1cad88f46c",
+            "start": 86,
+            "text": "file=form.get('file')",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 95,
+                "start": 91,
+                "text": "form"
+              },
+              "property": {
+                "end": 99,
+                "start": 96,
+                "text": "get"
+              }
+            },
+            "end": 99,
+            "id": "5519e1e19f37700021a911f4598e497867b03e6fdd5a4d3b5a036594679862c1",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "20b34d6e604ce595ebca3db5715fcd2d6f91295de9f2ccba8897d9109a0fcca1",
+            "start": 91,
+            "text": "form.get",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 107,
+                "start": 99,
+                "text": "('file')"
+              },
+              "function": {
+                "end": 99,
+                "start": 91,
+                "text": "form.get"
+              }
+            },
+            "end": 107,
+            "id": "20b34d6e604ce595ebca3db5715fcd2d6f91295de9f2ccba8897d9109a0fcca1",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "b41f6259ac91450bf62c6e943ca0af6cb7ae4935f75a26623d507b174244191c",
+            "start": 91,
+            "text": "form.get('file')",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 107,
+            "id": "3b37df62aa9dd996fcafd8ac139578eb7edc3c3bfab12c08046b58069d48e722",
+            "kind": "arguments",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "20b34d6e604ce595ebca3db5715fcd2d6f91295de9f2ccba8897d9109a0fcca1",
+            "start": 99,
+            "text": "('file')",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "condition": {
+                "end": 136,
+                "start": 111,
+                "text": "(!(file instanceof File))"
+              },
+              "consequence": {
+                "end": 154,
+                "start": 137,
+                "text": "throw error(400);"
+              }
+            },
+            "end": 154,
+            "id": "735956819ccc91d5ab4047865852ada8f4403ffe4ae106f6f160106f7a99ce9b",
+            "kind": "if_statement",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "46c0481fda3c6e1a3f35b46de39481dc9bf2ae25fd2ca8c47142293cc7a64844",
+            "start": 109,
+            "text": "if(!(file instanceof File)) throw error(400);",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "expression": {
+                "end": 135,
+                "start": 112,
+                "text": "!(file instanceof File)"
+              }
+            },
+            "end": 136,
+            "id": "94178cb244187010e24ae72ed900fb4c2d63c1ab4b1d2c112786599e609f3ad6",
+            "kind": "parenthesized_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "735956819ccc91d5ab4047865852ada8f4403ffe4ae106f6f160106f7a99ce9b",
+            "start": 111,
+            "text": "(!(file instanceof File))",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 135,
+                "start": 113,
+                "text": "(file instanceof File)"
+              }
+            },
+            "end": 135,
+            "id": "6603abed20bcf37e81a3989de5f4fec7025dbb2a023fbe39d3f52cdbbe429f3e",
+            "kind": "unary_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "94178cb244187010e24ae72ed900fb4c2d63c1ab4b1d2c112786599e609f3ad6",
+            "start": 112,
+            "text": "!(file instanceof File)",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "expression": {
+                "end": 134,
+                "start": 114,
+                "text": "file instanceof File"
+              }
+            },
+            "end": 135,
+            "id": "6f0310655efa1cfae6897cd9b8e319218eeae229916a224c83b1f3a084173c86",
+            "kind": "parenthesized_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "6603abed20bcf37e81a3989de5f4fec7025dbb2a023fbe39d3f52cdbbe429f3e",
+            "start": 113,
+            "text": "(file instanceof File)",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "left": {
+                "end": 118,
+                "start": 114,
+                "text": "file"
+              },
+              "right": {
+                "end": 134,
+                "start": 130,
+                "text": "File"
+              }
+            },
+            "end": 134,
+            "id": "e6e1b2a5a7d487f1768bc1b4b9597f5cb3636d95342b43e24d0ebe431bb17705",
+            "kind": "binary_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "6f0310655efa1cfae6897cd9b8e319218eeae229916a224c83b1f3a084173c86",
+            "start": 114,
+            "text": "file instanceof File",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 153,
+                "start": 143,
+                "text": "error(400)"
+              }
+            },
+            "end": 154,
+            "id": "617c3d5eefd3e7753a25713765db83369a8ccd11fe6bfe594713b6237e01d6da",
+            "kind": "throw_statement",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "735956819ccc91d5ab4047865852ada8f4403ffe4ae106f6f160106f7a99ce9b",
+            "start": 137,
+            "text": "throw error(400);",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 153,
+                "start": 148,
+                "text": "(400)"
+              },
+              "function": {
+                "end": 148,
+                "start": 143,
+                "text": "error"
+              }
+            },
+            "end": 153,
+            "id": "189a2d77c9a13c11987bfa33a4f115f3c51e78a2ac1287a549ed0ec5bfddae7a",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "617c3d5eefd3e7753a25713765db83369a8ccd11fe6bfe594713b6237e01d6da",
+            "start": 143,
+            "text": "error(400)",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 153,
+            "id": "ca4fdc95293d37047664dda5a06a56428ed9408aca5e7ef6e3f8af97803ac69f",
+            "kind": "arguments",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "189a2d77c9a13c11987bfa33a4f115f3c51e78a2ac1287a549ed0ec5bfddae7a",
+            "start": 148,
+            "text": "(400)",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 205,
+            "id": "f67f0c19dc919bea822fd08619dce77f4d2745e5ccdffae3941553cb4f6958da",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "46c0481fda3c6e1a3f35b46de39481dc9bf2ae25fd2ca8c47142293cc7a64844",
+            "start": 155,
+            "text": "const bytes=Buffer.from(await file.arrayBuffer());",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 166,
+                "start": 161,
+                "text": "bytes"
+              },
+              "value": {
+                "end": 204,
+                "start": 167,
+                "text": "Buffer.from(await file.arrayBuffer())"
+              }
+            },
+            "end": 204,
+            "id": "ea0f7ccbad4e4ab349e6bc5cc21295fd1b60e0f56034ca9b602e7dc7f89e1637",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "f67f0c19dc919bea822fd08619dce77f4d2745e5ccdffae3941553cb4f6958da",
+            "start": 161,
+            "text": "bytes=Buffer.from(await file.arrayBuffer())",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 173,
+                "start": 167,
+                "text": "Buffer"
+              },
+              "property": {
+                "end": 178,
+                "start": 174,
+                "text": "from"
+              }
+            },
+            "end": 178,
+            "id": "bfa072f5d6c20da69ca4ff8fc82ca23e1343b579717c464eb9f70da9062a01f8",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "f0910e4309c48ea91fa4d302b3038c8417d370b70b90d2e4d70136be2430b449",
+            "start": 167,
+            "text": "Buffer.from",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 204,
+                "start": 178,
+                "text": "(await file.arrayBuffer())"
+              },
+              "function": {
+                "end": 178,
+                "start": 167,
+                "text": "Buffer.from"
+              }
+            },
+            "end": 204,
+            "id": "f0910e4309c48ea91fa4d302b3038c8417d370b70b90d2e4d70136be2430b449",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "ea0f7ccbad4e4ab349e6bc5cc21295fd1b60e0f56034ca9b602e7dc7f89e1637",
+            "start": 167,
+            "text": "Buffer.from(await file.arrayBuffer())",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 204,
+            "id": "3176ad77f3c5ac7f49cca26746e9921441eb32618e920ad51472fb5bbad18cea",
+            "kind": "arguments",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "f0910e4309c48ea91fa4d302b3038c8417d370b70b90d2e4d70136be2430b449",
+            "start": 178,
+            "text": "(await file.arrayBuffer())",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 203,
+                "start": 185,
+                "text": "file.arrayBuffer()"
+              }
+            },
+            "end": 203,
+            "id": "873c6ee0882b5522444996ca3fcfcc8bce9b1f62c58c7347c15d5b9a2923aa9e",
+            "kind": "await_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "3176ad77f3c5ac7f49cca26746e9921441eb32618e920ad51472fb5bbad18cea",
+            "start": 179,
+            "text": "await file.arrayBuffer()",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 189,
+                "start": 185,
+                "text": "file"
+              },
+              "property": {
+                "end": 201,
+                "start": 190,
+                "text": "arrayBuffer"
+              }
+            },
+            "end": 201,
+            "id": "1fdb409686e535096a16acb5ea8ea3078c07de2288edc72ee8373f54a52c46a4",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "ab084ed5f3521932a07cad74f2ed2376ef8400f0795e2fbe9ab84e56bf6003c1",
+            "start": 185,
+            "text": "file.arrayBuffer",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 203,
+                "start": 201,
+                "text": "()"
+              },
+              "function": {
+                "end": 201,
+                "start": 185,
+                "text": "file.arrayBuffer"
+              }
+            },
+            "end": 203,
+            "id": "ab084ed5f3521932a07cad74f2ed2376ef8400f0795e2fbe9ab84e56bf6003c1",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "873c6ee0882b5522444996ca3fcfcc8bce9b1f62c58c7347c15d5b9a2923aa9e",
+            "start": 185,
+            "text": "file.arrayBuffer()",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 203,
+            "id": "6d27d56976c2537344c29c4d17d67b049f86ca28bf438d7b385505bdd29701e7",
+            "kind": "arguments",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "ab084ed5f3521932a07cad74f2ed2376ef8400f0795e2fbe9ab84e56bf6003c1",
+            "start": 201,
+            "text": "()",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 241,
+                "start": 212,
+                "text": "writeFile('upload.bin',bytes)"
+              }
+            },
+            "end": 241,
+            "id": "b801a9bc34a81603fbfc2092b1e9f8c779644980744ad07c8fa4bc2cad65434b",
+            "kind": "await_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "97e7c8eb4b432eab36804961d25218cdf0b2712719d010b97c33d158031acb57",
+            "start": 206,
+            "text": "await writeFile('upload.bin',bytes)",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "expression": {
+                "end": 241,
+                "start": 206,
+                "text": "await writeFile('upload.bin',bytes)"
+              }
+            },
+            "end": 242,
+            "id": "97e7c8eb4b432eab36804961d25218cdf0b2712719d010b97c33d158031acb57",
+            "kind": "expression_statement",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "46c0481fda3c6e1a3f35b46de39481dc9bf2ae25fd2ca8c47142293cc7a64844",
+            "start": 206,
+            "text": "await writeFile('upload.bin',bytes);",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 241,
+                "start": 221,
+                "text": "('upload.bin',bytes)"
+              },
+              "function": {
+                "end": 221,
+                "start": 212,
+                "text": "writeFile"
+              }
+            },
+            "end": 241,
+            "id": "00691f3dee87d0df9a63d7f8c45dbe91a449d289ac93e3310e75728ce0fc9ae2",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "b801a9bc34a81603fbfc2092b1e9f8c779644980744ad07c8fa4bc2cad65434b",
+            "start": 212,
+            "text": "writeFile('upload.bin',bytes)",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 241,
+            "id": "75d60754cbeb9174eac52748cb7b939b15cbb1717becb55389193d1036d4e254",
+            "kind": "arguments",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "00691f3dee87d0df9a63d7f8c45dbe91a449d289ac93e3310e75728ce0fc9ae2",
+            "start": 221,
+            "text": "('upload.bin',bytes)",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 252,
+                "start": 250,
+                "text": "{}"
+              }
+            },
+            "end": 253,
+            "id": "dda1ef6e39a48ecf65791448957242db22c7bb05e9a0a45041e9ba04b0a37453",
+            "kind": "return_statement",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "46c0481fda3c6e1a3f35b46de39481dc9bf2ae25fd2ca8c47142293cc7a64844",
+            "start": 243,
+            "text": "return {};",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 252,
+            "id": "427d1a44e7ada2f20d066af357cc15274e3f7f53a8db84d519abacc8d2eb75d7",
+            "kind": "object",
+            "line": 1,
+            "owner_function": "606c3d0bddb711e1a7beeadbe5a5da55b4c540512b841ce7dfc93eb6094822c1",
+            "parent_id": "dda1ef6e39a48ecf65791448957242db22c7bb05e9a0a45041e9ba04b0a37453",
+            "start": 250,
+            "text": "{}",
+            "unit": "file"
+          }
+        ],
+        "gaps": [
+          {
+            "code": "MISSING_NODES_NOT_EXPOSED"
+          }
+        ],
+        "parser_completeness": "PARTIAL",
+        "source_sha256": "e9f30557e212c1caccbb8c31150ffc7980ea6137989b98bd86cf8517efb020ad",
+        "status": "PARSED"
+      },
+      "source": "export const POST = async ({request}) => { const form=await request.formData(); const file=form.get('file'); if(!(file instanceof File)) throw error(400); const bytes=Buffer.from(await file.arrayBuffer()); await writeFile('upload.bin',bytes); return {}; };",
+      "source_sha256": "e9f30557e212c1caccbb8c31150ffc7980ea6137989b98bd86cf8517efb020ad"
+    },
+    {
+      "path": "src/lib/Widget.svelte",
+      "record": {
+        "facts": [
+          {
+            "captures": {},
+            "end": 25,
+            "id": "fc711c416a939e64bd4eb360f2dde1fe2f55983ca0667815396fd314518b1b78",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 8,
+            "text": "const ready=true;",
+            "unit": "instance"
+          },
+          {
+            "captures": {},
+            "end": 25,
+            "id": "e5543aa64c2333ded84e667a11440fe946caecc3e87d394c2cc6011bd8a2ce19",
+            "kind": "program",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 8,
+            "text": "const ready=true;",
+            "unit": "instance"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 19,
+                "start": 14,
+                "text": "ready"
+              },
+              "value": {
+                "end": 24,
+                "start": 20,
+                "text": "true"
+              }
+            },
+            "end": 24,
+            "id": "30a1ad8d25135aaf5cd88c6c9e0febd79052a18f36d678946c230dbd8fc1aaef",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "fc711c416a939e64bd4eb360f2dde1fe2f55983ca0667815396fd314518b1b78",
+            "start": 14,
+            "text": "ready=true",
+            "unit": "instance"
+          }
+        ],
+        "gaps": [
+          {
+            "code": "MISSING_NODES_NOT_EXPOSED"
+          },
+          {
+            "code": "SVELTE_MARKUP_NOT_ANALYZED"
+          }
+        ],
+        "parser_completeness": "PARTIAL",
+        "source_sha256": "4a843408fc39e02e6cd374931832a14e614cf8cf44ac673b4b5bf6ca164b59bb",
+        "status": "PARSED"
+      },
+      "source": "<script>const ready=true;</script>\n<button onclick={() => db.items.update({...data})}>Save</button>",
+      "source_sha256": "4a843408fc39e02e6cd374931832a14e614cf8cf44ac673b4b5bf6ca164b59bb"
+    },
+    {
+      "path": "src/lib/example.ts",
+      "record": {
+        "facts": [
+          {
+            "captures": {},
+            "end": 71,
+            "id": "c94ce9cb9ca8d3622c92f3894d717d6e076e629b3d1dae467e037009499a6b45",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "4349352b376d88eddd58c9fd061c936c573ad133b75d74b43a9e503b0f20772e",
+            "start": 0,
+            "text": "const example = \"app.get('/example', async () => db.users.findMany())\";",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 98,
+            "id": "4349352b376d88eddd58c9fd061c936c573ad133b75d74b43a9e503b0f20772e",
+            "kind": "program",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "const example = \"app.get('/example', async () => db.users.findMany())\"; export const label='docs';",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 13,
+                "start": 6,
+                "text": "example"
+              },
+              "value": {
+                "end": 70,
+                "start": 16,
+                "text": "\"app.get('/example', async () => db.users.findMany())\""
+              }
+            },
+            "end": 70,
+            "id": "03faa17261ea1e78a659512262b5df0db7b2e8ead2648465390fffe3bc3baaac",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "c94ce9cb9ca8d3622c92f3894d717d6e076e629b3d1dae467e037009499a6b45",
+            "start": 6,
+            "text": "example = \"app.get('/example', async () => db.users.findMany())\"",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "declaration": {
+                "end": 98,
+                "start": 79,
+                "text": "const label='docs';"
+              }
+            },
+            "end": 98,
+            "id": "b9be015e07c97bf2b2b788e2ccddb27eab7f087a751e06132a45e873c32e90fe",
+            "kind": "export_statement",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "4349352b376d88eddd58c9fd061c936c573ad133b75d74b43a9e503b0f20772e",
+            "start": 72,
+            "text": "export const label='docs';",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 98,
+            "id": "1280781cee2a5673b3da09ffc18aef717690e472f59cefe0c790ea8626262e5e",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "b9be015e07c97bf2b2b788e2ccddb27eab7f087a751e06132a45e873c32e90fe",
+            "start": 79,
+            "text": "const label='docs';",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 90,
+                "start": 85,
+                "text": "label"
+              },
+              "value": {
+                "end": 97,
+                "start": 91,
+                "text": "'docs'"
+              }
+            },
+            "end": 97,
+            "id": "fc9d16d6da91fad8f57bb8f50214f881a8ceb25634894029988a9befbb7be465",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "1280781cee2a5673b3da09ffc18aef717690e472f59cefe0c790ea8626262e5e",
+            "start": 85,
+            "text": "label='docs'",
+            "unit": "file"
+          }
+        ],
+        "gaps": [
+          {
+            "code": "MISSING_NODES_NOT_EXPOSED"
+          }
+        ],
+        "parser_completeness": "PARTIAL",
+        "source_sha256": "13c39fe2492a79f43106d3df5d8cfe2bfdcdcbeabb1a12ce7810c241f0f8fffd",
+        "status": "PARSED"
+      },
+      "source": "const example = \"app.get('/example', async () => db.users.findMany())\"; export const label='docs';",
+      "source_sha256": "13c39fe2492a79f43106d3df5d8cfe2bfdcdcbeabb1a12ce7810c241f0f8fffd"
+    },
+    {
+      "path": "src/routes/nested-where/+server.ts",
+      "record": {
+        "facts": [
+          {
+            "captures": {
+              "declaration": {
+                "end": 154,
+                "start": 7,
+                "text": "const PATCH = async ({params,locals}) => { return await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}}); };"
+              }
+            },
+            "end": 154,
+            "id": "4c7df6670e176bcfbb3d80062176b30ca2c2f6bcefad238887d91198612dd693",
+            "kind": "export_statement",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const PATCH = async ({params,locals}) => { return await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}}); };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 154,
+            "id": "7b60f8e889882ec95498377f2e7ecae38d234c6934910389598d287b733a9a49",
+            "kind": "program",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const PATCH = async ({params,locals}) => { return await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}}); };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 154,
+            "id": "c1f9565325688b20454a03e5a56ccffbb9c78597ef0e071d1a6d2ffe4ed46951",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "4c7df6670e176bcfbb3d80062176b30ca2c2f6bcefad238887d91198612dd693",
+            "start": 7,
+            "text": "const PATCH = async ({params,locals}) => { return await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}}); };",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 18,
+                "start": 13,
+                "text": "PATCH"
+              },
+              "value": {
+                "end": 153,
+                "start": 21,
+                "text": "async ({params,locals}) => { return await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}}); }"
+              }
+            },
+            "end": 153,
+            "id": "f17e69893b09f6ac0b3a69f3e0bbc80522c063146035a56e4d0bdc94fec0ed94",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "c1f9565325688b20454a03e5a56ccffbb9c78597ef0e071d1a6d2ffe4ed46951",
+            "start": 13,
+            "text": "PATCH = async ({params,locals}) => { return await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}}); }",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "body": {
+                "end": 153,
+                "start": 48,
+                "text": "{ return await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}}); }"
+              },
+              "parameters": {
+                "end": 44,
+                "start": 27,
+                "text": "({params,locals})"
+              }
+            },
+            "end": 153,
+            "id": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "kind": "arrow_function",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "f17e69893b09f6ac0b3a69f3e0bbc80522c063146035a56e4d0bdc94fec0ed94",
+            "start": 21,
+            "text": "async ({params,locals}) => { return await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}}); }",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 153,
+            "id": "d7b3ee10e5834c10dc8f9d8de032522786eaec8921b65a8e575dae8208f9c5bc",
+            "kind": "statement_block",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "start": 48,
+            "text": "{ return await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}}); }",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 150,
+                "start": 57,
+                "text": "await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}})"
+              }
+            },
+            "end": 151,
+            "id": "5d1507b84fca97e37ada6f184f2954f95b147395c8388c8c5e9c6cb3a3346662",
+            "kind": "return_statement",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "d7b3ee10e5834c10dc8f9d8de032522786eaec8921b65a8e575dae8208f9c5bc",
+            "start": 50,
+            "text": "return await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}});",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 150,
+                "start": 63,
+                "text": "db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}})"
+              }
+            },
+            "end": 150,
+            "id": "0270eb9b2a444de0c3bfde27cda3bb275ad9d1368108f0b44f7a04a9bb7d840e",
+            "kind": "await_expression",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "5d1507b84fca97e37ada6f184f2954f95b147395c8388c8c5e9c6cb3a3346662",
+            "start": 57,
+            "text": "await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}})",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 65,
+                "start": 63,
+                "text": "db"
+              },
+              "property": {
+                "end": 73,
+                "start": 66,
+                "text": "invoice"
+              }
+            },
+            "end": 73,
+            "id": "e111569ff37dabf75744ee66e2d10d036e00315e836b8096ae10906743fa5ac3",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "610f343846676a5dad0cfbb572292ea82ce0ba507fb82615bad446846a26151d",
+            "start": 63,
+            "text": "db.invoice",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 73,
+                "start": 63,
+                "text": "db.invoice"
+              },
+              "property": {
+                "end": 80,
+                "start": 74,
+                "text": "update"
+              }
+            },
+            "end": 80,
+            "id": "610f343846676a5dad0cfbb572292ea82ce0ba507fb82615bad446846a26151d",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "662cd01501643b46a23c1643041887cabe7462362cd516b4cc765fc6b195c9d7",
+            "start": 63,
+            "text": "db.invoice.update",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 150,
+                "start": 80,
+                "text": "({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}})"
+              },
+              "function": {
+                "end": 80,
+                "start": 63,
+                "text": "db.invoice.update"
+              }
+            },
+            "end": 150,
+            "id": "662cd01501643b46a23c1643041887cabe7462362cd516b4cc765fc6b195c9d7",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "0270eb9b2a444de0c3bfde27cda3bb275ad9d1368108f0b44f7a04a9bb7d840e",
+            "start": 63,
+            "text": "db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}})",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 150,
+            "id": "67d454c899c3a9f07492f1667879c3555bf31f842ba2c5c04c4fc12e8f83d2f3",
+            "kind": "arguments",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "662cd01501643b46a23c1643041887cabe7462362cd516b4cc765fc6b195c9d7",
+            "start": 80,
+            "text": "({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}})",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 149,
+            "id": "95923da2de7c05180c6e13a4d1a5799f150c5caaf870f75817146b4836cc8f17",
+            "kind": "object",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "67d454c899c3a9f07492f1667879c3555bf31f842ba2c5c04c4fc12e8f83d2f3",
+            "start": 81,
+            "text": "{where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}}",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "key": {
+                "end": 87,
+                "start": 82,
+                "text": "where"
+              },
+              "value": {
+                "end": 102,
+                "start": 88,
+                "text": "{id:params.id}"
+              }
+            },
+            "end": 102,
+            "id": "326b22297ed37917ca48c59a0c22972a4d6277f2bb6ea0224d877611b1489f67",
+            "kind": "pair",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "95923da2de7c05180c6e13a4d1a5799f150c5caaf870f75817146b4836cc8f17",
+            "start": 82,
+            "text": "where:{id:params.id}",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 102,
+            "id": "370c49b26bcbf56d26d867cee48e5b728b9dee956fd0256d814e119a26c55fa5",
+            "kind": "object",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "326b22297ed37917ca48c59a0c22972a4d6277f2bb6ea0224d877611b1489f67",
+            "start": 88,
+            "text": "{id:params.id}",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "key": {
+                "end": 91,
+                "start": 89,
+                "text": "id"
+              },
+              "value": {
+                "end": 101,
+                "start": 92,
+                "text": "params.id"
+              }
+            },
+            "end": 101,
+            "id": "57990bf3fddf8e3d95be3ab17e3c86e798a3b7f790e7ab64a210f6a512317205",
+            "kind": "pair",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "370c49b26bcbf56d26d867cee48e5b728b9dee956fd0256d814e119a26c55fa5",
+            "start": 89,
+            "text": "id:params.id",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 98,
+                "start": 92,
+                "text": "params"
+              },
+              "property": {
+                "end": 101,
+                "start": 99,
+                "text": "id"
+              }
+            },
+            "end": 101,
+            "id": "2db3933d4a000cb157c47bc727bb619c89eb66c05b403ff2b54ba84dcc114f80",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "57990bf3fddf8e3d95be3ab17e3c86e798a3b7f790e7ab64a210f6a512317205",
+            "start": 92,
+            "text": "params.id",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "key": {
+                "end": 107,
+                "start": 103,
+                "text": "data"
+              },
+              "value": {
+                "end": 148,
+                "start": 108,
+                "text": "{audit:{where:{ownerId:locals.user.id}}}"
+              }
+            },
+            "end": 148,
+            "id": "607d64f519e19956a7dc2103f42d22ba2e3b05eb90dd38e8eff7e5a54ce53614",
+            "kind": "pair",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "95923da2de7c05180c6e13a4d1a5799f150c5caaf870f75817146b4836cc8f17",
+            "start": 103,
+            "text": "data:{audit:{where:{ownerId:locals.user.id}}}",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 148,
+            "id": "8fc5ea54f552a9e7b8894f68f01cd49670e851dc57379c70d7536b312124e892",
+            "kind": "object",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "607d64f519e19956a7dc2103f42d22ba2e3b05eb90dd38e8eff7e5a54ce53614",
+            "start": 108,
+            "text": "{audit:{where:{ownerId:locals.user.id}}}",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "key": {
+                "end": 114,
+                "start": 109,
+                "text": "audit"
+              },
+              "value": {
+                "end": 147,
+                "start": 115,
+                "text": "{where:{ownerId:locals.user.id}}"
+              }
+            },
+            "end": 147,
+            "id": "ecd448d76cd5195d956d76b2da7a0bde7da69539e34e2c0b0e7149c4514e4e1e",
+            "kind": "pair",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "8fc5ea54f552a9e7b8894f68f01cd49670e851dc57379c70d7536b312124e892",
+            "start": 109,
+            "text": "audit:{where:{ownerId:locals.user.id}}",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 147,
+            "id": "3341b4deeefc60c662d9b0aa38491f1fc640df6d88098bf9a61f2735411cfff7",
+            "kind": "object",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "ecd448d76cd5195d956d76b2da7a0bde7da69539e34e2c0b0e7149c4514e4e1e",
+            "start": 115,
+            "text": "{where:{ownerId:locals.user.id}}",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "key": {
+                "end": 121,
+                "start": 116,
+                "text": "where"
+              },
+              "value": {
+                "end": 146,
+                "start": 122,
+                "text": "{ownerId:locals.user.id}"
+              }
+            },
+            "end": 146,
+            "id": "183c54215e1f0f395e6b362cc7d18faab257fae29e509588e8da25b6a21ff0ec",
+            "kind": "pair",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "3341b4deeefc60c662d9b0aa38491f1fc640df6d88098bf9a61f2735411cfff7",
+            "start": 116,
+            "text": "where:{ownerId:locals.user.id}",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 146,
+            "id": "0cbc566cd743a098f1543ff75256441c3a4d4fd808144c1f768bfcd15accced4",
+            "kind": "object",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "183c54215e1f0f395e6b362cc7d18faab257fae29e509588e8da25b6a21ff0ec",
+            "start": 122,
+            "text": "{ownerId:locals.user.id}",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "key": {
+                "end": 130,
+                "start": 123,
+                "text": "ownerId"
+              },
+              "value": {
+                "end": 145,
+                "start": 131,
+                "text": "locals.user.id"
+              }
+            },
+            "end": 145,
+            "id": "7cf7b1e1a0796f655a2fe5aaea14029b1073200652e9987c4d1d2d2a25b3f081",
+            "kind": "pair",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "0cbc566cd743a098f1543ff75256441c3a4d4fd808144c1f768bfcd15accced4",
+            "start": 123,
+            "text": "ownerId:locals.user.id",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 137,
+                "start": 131,
+                "text": "locals"
+              },
+              "property": {
+                "end": 142,
+                "start": 138,
+                "text": "user"
+              }
+            },
+            "end": 142,
+            "id": "8c23eaeb285c7af4715f9e5e0e88bf30c0671f44c8619bcaedd30622912cd01b",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "3083b4ff7527f412c1c52cb0943abfe2e67fa05e6da5dc1eea8084a70f8e3540",
+            "start": 131,
+            "text": "locals.user",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 142,
+                "start": 131,
+                "text": "locals.user"
+              },
+              "property": {
+                "end": 145,
+                "start": 143,
+                "text": "id"
+              }
+            },
+            "end": 145,
+            "id": "3083b4ff7527f412c1c52cb0943abfe2e67fa05e6da5dc1eea8084a70f8e3540",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "98d63552c6014bd6e42c3e6e364d3e7ae890acbec1477a0f1b9d095fb177fad6",
+            "parent_id": "7cf7b1e1a0796f655a2fe5aaea14029b1073200652e9987c4d1d2d2a25b3f081",
+            "start": 131,
+            "text": "locals.user.id",
+            "unit": "file"
+          }
+        ],
+        "gaps": [
+          {
+            "code": "MISSING_NODES_NOT_EXPOSED"
+          }
+        ],
+        "parser_completeness": "PARTIAL",
+        "source_sha256": "cf6f6020a7deff28fdce22614604f5bbc22d5b2bf3b459e4c2abfb70fa1726da",
+        "status": "PARSED"
+      },
+      "source": "export const PATCH = async ({params,locals}) => { return await db.invoice.update({where:{id:params.id},data:{audit:{where:{ownerId:locals.user.id}}}}); };",
+      "source_sha256": "cf6f6020a7deff28fdce22614604f5bbc22d5b2bf3b459e4c2abfb70fa1726da"
+    },
+    {
+      "path": "src/routes/partial/+server.ts",
+      "record": {
+        "facts": [
+          {
+            "captures": {
+              "declaration": {
+                "end": 107,
+                "start": 7,
+                "text": "const GET = async ({params}) => { await db.users.delete({where:{id:params.id}}); const broken = ; };"
+              }
+            },
+            "end": 107,
+            "id": "cf569fcfa114d78ded7f0160fa3bde467dbd713d64da62fffe9bb4c35f14624e",
+            "kind": "export_statement",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const GET = async ({params}) => { await db.users.delete({where:{id:params.id}}); const broken = ; };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 107,
+            "id": "1821e83794d9d4e63dfb4e14fc2e074f51c4596f62440925a0e5a18e154ad4fe",
+            "kind": "program",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const GET = async ({params}) => { await db.users.delete({where:{id:params.id}}); const broken = ; };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 107,
+            "id": "5fb40a2e650d82a7ed3b9a26f51880b27c775e3522777e1722b5bc4580ceba0d",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "cf569fcfa114d78ded7f0160fa3bde467dbd713d64da62fffe9bb4c35f14624e",
+            "start": 7,
+            "text": "const GET = async ({params}) => { await db.users.delete({where:{id:params.id}}); const broken = ; };",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 16,
+                "start": 13,
+                "text": "GET"
+              },
+              "value": {
+                "end": 106,
+                "start": 19,
+                "text": "async ({params}) => { await db.users.delete({where:{id:params.id}}); const broken = ; }"
+              }
+            },
+            "end": 106,
+            "id": "39dedfba259a2be0c8dde210286ed7e00d50c3dbf98c7d3e95667324aaa48709",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "5fb40a2e650d82a7ed3b9a26f51880b27c775e3522777e1722b5bc4580ceba0d",
+            "start": 13,
+            "text": "GET = async ({params}) => { await db.users.delete({where:{id:params.id}}); const broken = ; }",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "body": {
+                "end": 106,
+                "start": 39,
+                "text": "{ await db.users.delete({where:{id:params.id}}); const broken = ; }"
+              },
+              "parameters": {
+                "end": 35,
+                "start": 25,
+                "text": "({params})"
+              }
+            },
+            "end": 106,
+            "id": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "kind": "arrow_function",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "39dedfba259a2be0c8dde210286ed7e00d50c3dbf98c7d3e95667324aaa48709",
+            "start": 19,
+            "text": "async ({params}) => { await db.users.delete({where:{id:params.id}}); const broken = ; }",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 106,
+            "id": "4c1f67f68a3ff62256a3d4b6d65c8971435b9601246f409156d29026d17fe18a",
+            "kind": "statement_block",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "start": 39,
+            "text": "{ await db.users.delete({where:{id:params.id}}); const broken = ; }",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 86,
+                "start": 47,
+                "text": "db.users.delete({where:{id:params.id}})"
+              }
+            },
+            "end": 86,
+            "id": "6179d8faed78e6256996b0f4120645c8b6332a476014318f27945f10c74a54eb",
+            "kind": "await_expression",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "33c38ea3a1b87923f2ad5e561af72bf319707c1925d3cc0813f9b46f8834ac31",
+            "start": 41,
+            "text": "await db.users.delete({where:{id:params.id}})",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "expression": {
+                "end": 86,
+                "start": 41,
+                "text": "await db.users.delete({where:{id:params.id}})"
+              }
+            },
+            "end": 87,
+            "id": "33c38ea3a1b87923f2ad5e561af72bf319707c1925d3cc0813f9b46f8834ac31",
+            "kind": "expression_statement",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "4c1f67f68a3ff62256a3d4b6d65c8971435b9601246f409156d29026d17fe18a",
+            "start": 41,
+            "text": "await db.users.delete({where:{id:params.id}});",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 49,
+                "start": 47,
+                "text": "db"
+              },
+              "property": {
+                "end": 55,
+                "start": 50,
+                "text": "users"
+              }
+            },
+            "end": 55,
+            "id": "4f0c10f52a5bb6b1b88320620ad513009542e92fa7d604e8ec3685faa1065b77",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "4de8c2cdcaabaefdb137bab067f34c17cf694c63f09f2a9ca1ede3e093162efa",
+            "start": 47,
+            "text": "db.users",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 55,
+                "start": 47,
+                "text": "db.users"
+              },
+              "property": {
+                "end": 62,
+                "start": 56,
+                "text": "delete"
+              }
+            },
+            "end": 62,
+            "id": "4de8c2cdcaabaefdb137bab067f34c17cf694c63f09f2a9ca1ede3e093162efa",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "258455aea29c7e4fc8161595e93fe2e3f545dfd8b67ea22beae0b52b580fb7d4",
+            "start": 47,
+            "text": "db.users.delete",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 86,
+                "start": 62,
+                "text": "({where:{id:params.id}})"
+              },
+              "function": {
+                "end": 62,
+                "start": 47,
+                "text": "db.users.delete"
+              }
+            },
+            "end": 86,
+            "id": "258455aea29c7e4fc8161595e93fe2e3f545dfd8b67ea22beae0b52b580fb7d4",
+            "kind": "call_expression",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "6179d8faed78e6256996b0f4120645c8b6332a476014318f27945f10c74a54eb",
+            "start": 47,
+            "text": "db.users.delete({where:{id:params.id}})",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 86,
+            "id": "093bcb045bd4c79cfaac19df0d34c7d7a02b7ff50f6b9fd845ae5f26d8c6cd84",
+            "kind": "arguments",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "258455aea29c7e4fc8161595e93fe2e3f545dfd8b67ea22beae0b52b580fb7d4",
+            "start": 62,
+            "text": "({where:{id:params.id}})",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 85,
+            "id": "491400f36d91d06fa7b3a4cc54a964f5b91e73d0bfe5e8095f3a57051996947d",
+            "kind": "object",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "093bcb045bd4c79cfaac19df0d34c7d7a02b7ff50f6b9fd845ae5f26d8c6cd84",
+            "start": 63,
+            "text": "{where:{id:params.id}}",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "key": {
+                "end": 69,
+                "start": 64,
+                "text": "where"
+              },
+              "value": {
+                "end": 84,
+                "start": 70,
+                "text": "{id:params.id}"
+              }
+            },
+            "end": 84,
+            "id": "2390260c5caf404159457bea6094f0afeaf3af903f24cf6f324679948c140250",
+            "kind": "pair",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "491400f36d91d06fa7b3a4cc54a964f5b91e73d0bfe5e8095f3a57051996947d",
+            "start": 64,
+            "text": "where:{id:params.id}",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 84,
+            "id": "1ecd6bc8a4a77a1b5c330b10a86c377693f846a8ca7beed6becac0613c43bf21",
+            "kind": "object",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "2390260c5caf404159457bea6094f0afeaf3af903f24cf6f324679948c140250",
+            "start": 70,
+            "text": "{id:params.id}",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "key": {
+                "end": 73,
+                "start": 71,
+                "text": "id"
+              },
+              "value": {
+                "end": 83,
+                "start": 74,
+                "text": "params.id"
+              }
+            },
+            "end": 83,
+            "id": "bb044e1efdacfe13a0383f3ad5da65c76a2324f94a6a05a807e88264310fc5b7",
+            "kind": "pair",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "1ecd6bc8a4a77a1b5c330b10a86c377693f846a8ca7beed6becac0613c43bf21",
+            "start": 71,
+            "text": "id:params.id",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 80,
+                "start": 74,
+                "text": "params"
+              },
+              "property": {
+                "end": 83,
+                "start": 81,
+                "text": "id"
+              }
+            },
+            "end": 83,
+            "id": "3a760c6d2b8739661af21444726bfaf0f6288290a18eb4bd1aac9f3e19524819",
+            "kind": "member_expression",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "bb044e1efdacfe13a0383f3ad5da65c76a2324f94a6a05a807e88264310fc5b7",
+            "start": 74,
+            "text": "params.id",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 104,
+            "id": "a1b1aa0e57b91bb6847728ab6fa3ca13a3c9c5e729131f195b7b3aea9b330bcc",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "4c1f67f68a3ff62256a3d4b6d65c8971435b9601246f409156d29026d17fe18a",
+            "start": 88,
+            "text": "const broken = ;",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 100,
+                "start": 94,
+                "text": "broken"
+              }
+            },
+            "end": 100,
+            "id": "2590e91e4d6199afc54c012069831d2f5af92fc23fb8265152e553db4c6edb15",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "a1b1aa0e57b91bb6847728ab6fa3ca13a3c9c5e729131f195b7b3aea9b330bcc",
+            "start": 94,
+            "text": "broken",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 102,
+            "id": "f1ec8ac6d19a6ebd5025cc53c182182741d58c2faf2454ec00c25028a0bc833a",
+            "kind": "ERROR",
+            "line": 1,
+            "owner_function": "5b52fd66d73048829adca288a9338e3c4f8794323caaa15ebee97d67dfc431b4",
+            "parent_id": "a1b1aa0e57b91bb6847728ab6fa3ca13a3c9c5e729131f195b7b3aea9b330bcc",
+            "start": 101,
+            "text": "=",
+            "unit": "file"
+          }
+        ],
+        "gaps": [
+          {
+            "code": "AST_ERROR_NODE"
+          },
+          {
+            "code": "MISSING_NODES_NOT_EXPOSED"
+          }
+        ],
+        "parser_completeness": "UNKNOWN",
+        "source_sha256": "ab74c2266ecc6b14dcada9c656a17b19a14e7dd2589b2cb0d2bbae4ce0ec3f3a",
+        "status": "PARTIAL"
+      },
+      "source": "export const GET = async ({params}) => { await db.users.delete({where:{id:params.id}}); const broken = ; };",
+      "source_sha256": "ab74c2266ecc6b14dcada9c656a17b19a14e7dd2589b2cb0d2bbae4ce0ec3f3a"
+    },
+    {
+      "path": "src/routes/comment/+server.ts",
+      "record": {
+        "facts": [
+          {
+            "captures": {
+              "declaration": {
+                "end": 120,
+                "start": 7,
+                "text": "const GET = async ({params}) => { // requireAuth();\n return await db.users.findUnique({where:{id:params.id}}); };"
+              }
+            },
+            "end": 120,
+            "id": "c973c8ec7154eecd61f1d0b35f6338408f8eadee7ec3a037193fb6fcd5f2650d",
+            "kind": "export_statement",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const GET = async ({params}) => { // requireAuth();\n return await db.users.findUnique({where:{id:params.id}}); };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 120,
+            "id": "963cf9d608010333bda09626489d41fdcd0efa99bd3b921670e52be305d1ab2a",
+            "kind": "program",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": null,
+            "start": 0,
+            "text": "export const GET = async ({params}) => { // requireAuth();\n return await db.users.findUnique({where:{id:params.id}}); };",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 120,
+            "id": "ba50446ba912de27a9a92505cf7db21d77e7ae42d586f5cacbd43b79dbb4f388",
+            "kind": "lexical_declaration",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "c973c8ec7154eecd61f1d0b35f6338408f8eadee7ec3a037193fb6fcd5f2650d",
+            "start": 7,
+            "text": "const GET = async ({params}) => { // requireAuth();\n return await db.users.findUnique({where:{id:params.id}}); };",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "name": {
+                "end": 16,
+                "start": 13,
+                "text": "GET"
+              },
+              "value": {
+                "end": 119,
+                "start": 19,
+                "text": "async ({params}) => { // requireAuth();\n return await db.users.findUnique({where:{id:params.id}}); }"
+              }
+            },
+            "end": 119,
+            "id": "a9f14c936901fd6f9c987781c11c735bc64afd5a821cad51f6bfa14b897502da",
+            "kind": "variable_declarator",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "ba50446ba912de27a9a92505cf7db21d77e7ae42d586f5cacbd43b79dbb4f388",
+            "start": 13,
+            "text": "GET = async ({params}) => { // requireAuth();\n return await db.users.findUnique({where:{id:params.id}}); }",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "body": {
+                "end": 119,
+                "start": 39,
+                "text": "{ // requireAuth();\n return await db.users.findUnique({where:{id:params.id}}); }"
+              },
+              "parameters": {
+                "end": 35,
+                "start": 25,
+                "text": "({params})"
+              }
+            },
+            "end": 119,
+            "id": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "kind": "arrow_function",
+            "line": 1,
+            "owner_function": null,
+            "parent_id": "a9f14c936901fd6f9c987781c11c735bc64afd5a821cad51f6bfa14b897502da",
+            "start": 19,
+            "text": "async ({params}) => { // requireAuth();\n return await db.users.findUnique({where:{id:params.id}}); }",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 119,
+            "id": "17a1baaa8dff8dfddcdf8ad6c0385370ff35f4e58728e25c8dba4404da374179",
+            "kind": "statement_block",
+            "line": 1,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "start": 39,
+            "text": "{ // requireAuth();\n return await db.users.findUnique({where:{id:params.id}}); }",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 116,
+                "start": 67,
+                "text": "await db.users.findUnique({where:{id:params.id}})"
+              }
+            },
+            "end": 117,
+            "id": "9ebfd85c1b071a5ffc2e90b5723849382d97163d54f22e912367b855ef0b360a",
+            "kind": "return_statement",
+            "line": 2,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "17a1baaa8dff8dfddcdf8ad6c0385370ff35f4e58728e25c8dba4404da374179",
+            "start": 60,
+            "text": "return await db.users.findUnique({where:{id:params.id}});",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "argument": {
+                "end": 116,
+                "start": 73,
+                "text": "db.users.findUnique({where:{id:params.id}})"
+              }
+            },
+            "end": 116,
+            "id": "551215ac23bd9fe0591cbaaaea3f972a5ea049f6edd61c25a08c2d7a3cba7725",
+            "kind": "await_expression",
+            "line": 2,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "9ebfd85c1b071a5ffc2e90b5723849382d97163d54f22e912367b855ef0b360a",
+            "start": 67,
+            "text": "await db.users.findUnique({where:{id:params.id}})",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 75,
+                "start": 73,
+                "text": "db"
+              },
+              "property": {
+                "end": 81,
+                "start": 76,
+                "text": "users"
+              }
+            },
+            "end": 81,
+            "id": "9c08bf67ca8ce94548e7bef91227ef45787bed96867a54a38546ee8af7836bc5",
+            "kind": "member_expression",
+            "line": 2,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "55fde359543bfa30f6aec4f6a3a9f41dd2c7b8ac1c85c80cf04109af39b00585",
+            "start": 73,
+            "text": "db.users",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 81,
+                "start": 73,
+                "text": "db.users"
+              },
+              "property": {
+                "end": 92,
+                "start": 82,
+                "text": "findUnique"
+              }
+            },
+            "end": 92,
+            "id": "55fde359543bfa30f6aec4f6a3a9f41dd2c7b8ac1c85c80cf04109af39b00585",
+            "kind": "member_expression",
+            "line": 2,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "dd759d907a89e3e2b3638c899c887653e454806e29215b23e87efe72a27aad99",
+            "start": 73,
+            "text": "db.users.findUnique",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "arguments": {
+                "end": 116,
+                "start": 92,
+                "text": "({where:{id:params.id}})"
+              },
+              "function": {
+                "end": 92,
+                "start": 73,
+                "text": "db.users.findUnique"
+              }
+            },
+            "end": 116,
+            "id": "dd759d907a89e3e2b3638c899c887653e454806e29215b23e87efe72a27aad99",
+            "kind": "call_expression",
+            "line": 2,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "551215ac23bd9fe0591cbaaaea3f972a5ea049f6edd61c25a08c2d7a3cba7725",
+            "start": 73,
+            "text": "db.users.findUnique({where:{id:params.id}})",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 116,
+            "id": "31c8a1e009ca07962d497740107bea37b4efa925e442e1766dd839ee70a0922b",
+            "kind": "arguments",
+            "line": 2,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "dd759d907a89e3e2b3638c899c887653e454806e29215b23e87efe72a27aad99",
+            "start": 92,
+            "text": "({where:{id:params.id}})",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 115,
+            "id": "f84378117143ef250d48d4115919b51b0126ee64f289ea31efd1ad80f5538aec",
+            "kind": "object",
+            "line": 2,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "31c8a1e009ca07962d497740107bea37b4efa925e442e1766dd839ee70a0922b",
+            "start": 93,
+            "text": "{where:{id:params.id}}",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "key": {
+                "end": 99,
+                "start": 94,
+                "text": "where"
+              },
+              "value": {
+                "end": 114,
+                "start": 100,
+                "text": "{id:params.id}"
+              }
+            },
+            "end": 114,
+            "id": "bf2feff3dde652210d735e1267f3a9e74dbfc2642f14de9ded2b6fdb3adae26f",
+            "kind": "pair",
+            "line": 2,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "f84378117143ef250d48d4115919b51b0126ee64f289ea31efd1ad80f5538aec",
+            "start": 94,
+            "text": "where:{id:params.id}",
+            "unit": "file"
+          },
+          {
+            "captures": {},
+            "end": 114,
+            "id": "e8c8deaf154f2c4b004f0066a047aa716b6b083e7c96f35c6263b56c9fbe1f1d",
+            "kind": "object",
+            "line": 2,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "bf2feff3dde652210d735e1267f3a9e74dbfc2642f14de9ded2b6fdb3adae26f",
+            "start": 100,
+            "text": "{id:params.id}",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "key": {
+                "end": 103,
+                "start": 101,
+                "text": "id"
+              },
+              "value": {
+                "end": 113,
+                "start": 104,
+                "text": "params.id"
+              }
+            },
+            "end": 113,
+            "id": "258303c50ea2820d7be117cd392d854a87f564cf34b2e7c1f55cb684adf1f774",
+            "kind": "pair",
+            "line": 2,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "e8c8deaf154f2c4b004f0066a047aa716b6b083e7c96f35c6263b56c9fbe1f1d",
+            "start": 101,
+            "text": "id:params.id",
+            "unit": "file"
+          },
+          {
+            "captures": {
+              "object": {
+                "end": 110,
+                "start": 104,
+                "text": "params"
+              },
+              "property": {
+                "end": 113,
+                "start": 111,
+                "text": "id"
+              }
+            },
+            "end": 113,
+            "id": "f71a8c05c9699b93bb464948b3663dbfe13a662f8661568109760c18c7a3456f",
+            "kind": "member_expression",
+            "line": 2,
+            "owner_function": "564da7df1b9a12ddd433c222fc798ec83704c544db2b7bffbb8cb769da35fb18",
+            "parent_id": "258303c50ea2820d7be117cd392d854a87f564cf34b2e7c1f55cb684adf1f774",
+            "start": 104,
+            "text": "params.id",
+            "unit": "file"
+          }
+        ],
+        "gaps": [
+          {
+            "code": "MISSING_NODES_NOT_EXPOSED"
+          }
+        ],
+        "parser_completeness": "PARTIAL",
+        "source_sha256": "8e614db2e498352433ce9f4f67e958e6da49a5136b0ca78076fc83b48628c9f0",
+        "status": "PARSED"
+      },
+      "source": "export const GET = async ({params}) => { // requireAuth();\n return await db.users.findUnique({where:{id:params.id}}); };",
+      "source_sha256": "8e614db2e498352433ce9f4f67e958e6da49a5136b0ca78076fc83b48628c9f0"
+    }
+  ],
+  "schema_version": 1
+}

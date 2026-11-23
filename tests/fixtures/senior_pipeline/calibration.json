@@ -1,0 +1,5 @@
+{
+  "raw": {"levels": [null, null, null], "range": [0, 0]},
+  "medium": {"levels": [2, 2, null], "range": [26, 27]},
+  "mature": {"levels": [4, 5, 4], "range": [86, 87]}
+}

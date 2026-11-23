@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+"""limits - pokazuje oficjalne limity CLI modeli na boxie (agy, codex, grok, claude).
+
+Tylko wbudowane komendy narzedzi, bez zadnego zapytania do modelu (nie zuzywa limitu):
+  agy    : agy -p /usage --output-format json   (udokumentowane w `agy changelog`)
+  codex  : /status w interaktywnym codex (pseudo-TTY)
+  grok   : /usage w interaktywnym grok (pseudo-TTY)
+  claude : claude auth status (po zalogowaniu: /usage)
+Limity sa wspolne z kontem właściciela (Mac itd.) - to stan konta, nie tylko boxa.
+Uzycie: limits [--json] [agy codex grok claude]
+"""
+import datetime as dt, json, os, pty, re, select, shutil, struct, subprocess, sys, time, fcntl, termios
+
+ANSI = re.compile(rb"\x1b\[[0-9;?<>=]*[a-zA-Z~]|\x1b\][^\x07\x1b]*(\x07|\x1b\\)|\x1b[()][A-Z0-9]|\x1b[=>78]")
+
+def local(iso):
+    try: return dt.datetime.fromisoformat(iso.replace("Z", "+00:00")).astimezone().strftime("%a %d.%m %H:%M")
+    except Exception: return iso
+
+def tty(cmd, keys, until, timeout=40):
+    """Run interactive CLI in a pseudo-TTY, type a slash command, return plain text once `until` matches."""
+    pid, fd = pty.fork()
+    if pid == 0:
+        os.environ["TERM"] = "xterm-256color"; os.chdir("/tmp"); os.execvp(cmd[0], cmd)
+    fcntl.ioctl(fd, termios.TIOCSWINSZ, struct.pack("HHHH", 50, 160, 0, 0))
+    out, sent, t0 = b"", False, time.time()
+    try:
+        while time.time() - t0 < timeout:
+            r, _, _ = select.select([fd], [], [], 0.3)
+            if r:
+                try: out += os.read(fd, 65536)
+                except OSError: break
+            if not sent and time.time() - t0 > 6:
+                for ch in keys: os.write(fd, ch.encode()); time.sleep(0.05)
+                time.sleep(0.8); os.write(fd, b"\r"); sent, mark = True, len(out)
+            if sent:
+                txt = ANSI.sub(b"", out[mark:]).decode("utf8", "replace")
+                if re.search(until, txt): time.sleep(1.5); break
+    finally:
+        try: os.kill(pid, 9); os.waitpid(pid, 0)
+        except Exception: pass
+    return ANSI.sub(b"", out).decode("utf8", "replace")
+
+def agy():
+    p = subprocess.run(["agy", "-p", "/usage", "--output-format", "json"], cwd="/tmp", capture_output=True, text=True, timeout=60)
+    j = json.loads(p.stdout); rows = []
+    for g in j["command"]["data"]["groups"]:
+        for b in g["buckets"]:
+            rows.append({"tool": "agy", "limit": f"{g['name']} / {b.get('window')}", "remaining_pct": round(b["remaining_fraction"] * 100),
+                         "resets": local(b.get("reset_time", "")), "note": b.get("description", "")})
+    return rows
+
+def codex():
+    t = tty(["codex"], "/status", r"Weekly limit|5h limit|Credits", 45)
+    rows = []
+    for name, pct, rst in re.findall(r"((?:Weekly|5h|Hourly)[\w ]*limit):\s*\[[^\]]*\]\s*(\d+)%\s*left\s*\(resets ([^)]*)\)", t):
+        rows.append({"tool": "codex", "limit": name, "remaining_pct": int(pct), "resets": rst, "note": ""})
+    m = re.search(r"Credits:\s*([\d.,]+)\s*credits", t)
+    if m: rows.append({"tool": "codex", "limit": "Credits", "remaining_pct": None, "resets": "", "note": f"{m.group(1)} credits"})
+    return rows or [{"tool": "codex", "limit": "?", "remaining_pct": None, "resets": "", "note": "nie odczytano /status"}]
+
+def grok():
+    t = tty(["grok"], "/usage", r"Resets:[^\n]*\d{2}:\d{2}", 45)
+    t2 = re.sub(r"[│┌┐└┘─\s]+", " ", t)
+    m = re.search(r"(Weekly limit[^█░]*?)\s*[█░▏▎▍▌▋▊▉ ]*?(\d+)%\s*Resets:\s*(\w+ \d+, \d{2}:\d{2})", t2)
+    if not m: return [{"tool": "grok", "limit": "?", "remaining_pct": None, "resets": "", "note": "nie odczytano /usage"}]
+    return [{"tool": "grok", "limit": m.group(1).strip(), "remaining_pct": 100 - int(m.group(2)), "resets": m.group(3), "note": f"zuzyte {m.group(2)}%"}]
+
+def claude():
+    p = subprocess.run(["claude", "auth", "status"], capture_output=True, text=True, timeout=20)
+    try: ok = json.loads(p.stdout).get("loggedIn")
+    except Exception: ok = False
+    return [{"tool": "claude", "limit": "-", "remaining_pct": None, "resets": "", "note": "zalogowany: uruchom /usage w claude" if ok else "niezalogowany"}]
+
+TOOLS = {"agy": agy, "codex": codex, "grok": grok, "claude": claude}
+
+def main():
+    args = [a for a in sys.argv[1:] if not a.startswith("-")]; as_json = "--json" in sys.argv
+    rows = []
+    for name in args or TOOLS:
+        if not shutil.which(name): rows.append({"tool": name, "limit": "-", "remaining_pct": None, "resets": "", "note": "brak CLI"}); continue
+        try: rows += TOOLS[name]()
+        except Exception as ex: rows.append({"tool": name, "limit": "?", "remaining_pct": None, "resets": "", "note": f"blad: {ex}"[:120]})
+    if as_json: print(json.dumps({"at": dt.datetime.now().astimezone().isoformat(timespec="seconds"), "rows": rows}, ensure_ascii=False, indent=2)); return
+    print(f"Limity ({dt.datetime.now():%d.%m %H:%M}, czas lokalny; wspolne z Macem)")
+    for r in rows:
+        p = r["remaining_pct"]; warn = "  !! " if p is not None and p <= 10 else "  ! " if p is not None and p <= 30 else "    "
+        pct = f"{p:3d}% zostalo" if p is not None else " " * 12
+        print(f"{warn}{r['tool']:6} {r['limit'][:38]:38} {pct}  reset {r['resets'] or '-':16} {r['note'] if r['tool'] != 'agy' else ''}")
+
+if __name__ == "__main__":
+    main()

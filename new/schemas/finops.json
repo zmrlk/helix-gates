@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "currency": {
+      "type": "string"
+    },
+    "monthly_budget": {
+      "type": "number",
+      "minimum": 0.001
+    },
+    "cost_per_tenant": {
+      "type": "number",
+      "minimum": 0.001
+    },
+    "measurement": {
+      "type": "string"
+    },
+    "owner": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "currency",
+    "monthly_budget",
+    "cost_per_tenant",
+    "measurement",
+    "owner"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

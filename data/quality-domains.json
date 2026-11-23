@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "checks": [
+    {
+      "id": "test-pyramid",
+      "area": "tests",
+      "requires": [],
+      "signal": "unit|integration|e2e",
+      "criterion": "Porównaj liczby i proporcje unit/integration/e2e z ryzykiem produktu."
+    },
+    {
+      "id": "test-contract",
+      "area": "tests",
+      "requires": [],
+      "signal": "openapi|pact|json.schema|protobuf",
+      "criterion": "Uruchom testy producenta i konsumenta dla kontraktów API/schematów."
+    },
+    {
+      "id": "test-mutation",
+      "area": "tests",
+      "requires": [],
+      "signal": "stryker|mutmut",
+      "criterion": "Uruchom mutacje na kopii runtime z budżetem; oceń zabite i ocalałe mutacje."
+    },
+    {
+      "id": "test-flaky",
+      "area": "tests",
+      "requires": [],
+      "signal": "retries|retry\\(|time\\.sleep|waitForTimeout|flaky",
+      "criterion": "Sprawdź stałe oczekiwania/retry i historię niestabilnych wyników; retry nie dowodzi flaky."
+    },
+    {
+      "id": "eu-eaa",
+      "area": "compliance",
+      "requires": [
+        "ecommerce"
+      ],
+      "signal": "axe|wcag|accessibility",
+      "criterion": "Zweryfikuj zastosowanie EAA i dostępność całej ścieżki zakupowej."
+    },
+    {
+      "id": "eu-consumer",
+      "area": "compliance",
+      "requires": [
+        "ecommerce"
+      ],
+      "signal": "withdrawal|odstąp|reklamac|terms",
+      "criterion": "Zweryfikuj prawa konsumenta, regulamin i odstąpienie."
+    },
+    {
+      "id": "eu-omnibus",
+      "area": "compliance",
+      "requires": [
+        "promotions"
+      ],
+      "signal": "lowest.price|najniższa.cena|price.history",
+      "criterion": "Sprawdź promocje względem historii najniższej ceny z 30 dni."
+    },
+    {
+      "id": "eu-consent",
+      "area": "compliance",
+      "requires": [
+        "tracking"
+      ],
+      "signal": "consent|cookie",
+      "criterion": "Sprawdź, że trackery i analityka nie ładują się przed zgodą."
+    },
+    {
+      "id": "eu-gdpr",
+      "area": "compliance",
+      "requires": [
+        "personal_data"
+      ],
+      "signal": "retention|retencj|privacy|rodo|gdpr",
+      "criterion": "Sprawdź podstawę przetwarzania, prawa osób i przepływy PII; reuse audytu wycieku."
+    },
+    {
+      "id": "eu-license",
+      "area": "compliance",
+      "requires": [],
+      "signal": "license|licencj|spdx",
+      "criterion": "Porównaj licencje zależności i ich zgodność; scancode/licensee są dowodami pomocniczymi."
+    },
+    {
+      "id": "pl-ksef",
+      "area": "compliance",
+      "requires": [
+        "invoicing"
+      ],
+      "signal": "ksef|invoice|faktur|\\bNIP\\b",
+      "criterion": "Sprawdź zastosowanie KSeF, integrację, błędy i tryb awaryjny faktur."
+    },
+    {
+      "id": "eu-ai",
+      "area": "compliance",
+      "requires": [
+        "ai"
+      ],
+      "signal": "artificial.intelligence|\\bAI\\b|generated|wygenerowan",
+      "criterion": "Sprawdź zastosowanie wymogów przejrzystości AI i oznaczenie interakcji/treści."
+    },
+    {
+      "id": "obs-otel",
+      "area": "observability",
+      "requires": [],
+      "signal": "opentelemetry|otel|trace.id",
+      "criterion": "Sprawdź korelację logów, metryk i trace oraz propagację kontekstu."
+    },
+    {
+      "id": "obs-logs",
+      "area": "observability",
+      "requires": [],
+      "signal": "structured|json.logger|structlog|pino",
+      "criterion": "Sprawdź logi strukturalne bez PII; wykorzystaj wyniki istniejącego audytu wycieku."
+    },
+    {
+      "id": "cost-unit",
+      "area": "finops",
+      "requires": [],
+      "signal": "cost.per|koszt.na|unit.cost",
+      "criterion": "Udokumentuj koszt na użytkownika/żądanie i model skalowania."
+    },
+    {
+      "id": "cost-budget",
+      "area": "finops",
+      "requires": [],
+      "signal": "budget|billing.alert|cost.alert",
+      "criterion": "Zweryfikuj budżety i alerty kosztowe w IaC."
+    },
+    {
+      "id": "data-quality",
+      "area": "data",
+      "requires": [
+        "data"
+      ],
+      "signal": "data.quality|constraint|validate",
+      "criterion": "Sprawdź walidację, unikalność, kompletność i kwarantannę wadliwych danych."
+    },
+    {
+      "id": "data-retention",
+      "area": "data",
+      "requires": [
+        "personal_data"
+      ],
+      "signal": "retention|retencj|ttl",
+      "criterion": "Sprawdź okres retencji, usuwanie i kopie zapasowe."
+    },
+    {
+      "id": "data-migration",
+      "area": "data",
+      "requires": [
+        "database"
+      ],
+      "signal": "expand|contract|migration|ALTER.TABLE",
+      "criterion": "Sprawdź expand/contract, zgodność wersji i blokady; użyj adaptera squawk."
+    },
+    {
+      "id": "seo-meta",
+      "area": "seo",
+      "requires": [
+        "public_web"
+      ],
+      "signal": "<meta|metadata|<title",
+      "criterion": "Sprawdź meta, canonical i indeksowalność publicznych stron."
+    },
+    {
+      "id": "seo-discovery",
+      "area": "seo",
+      "requires": [
+        "public_web"
+      ],
+      "signal": "sitemap|robots|application/ld\\+json",
+      "criterion": "Sprawdź sitemap, robots i dane strukturalne."
+    },
+    {
+      "id": "seo-analytics",
+      "area": "seo",
+      "requires": [
+        "tracking"
+      ],
+      "signal": "analytics|gtag|matomo",
+      "criterion": "Sprawdź zdarzenia analityczne i egzekwowanie zgody."
+    }
+  ]
+}

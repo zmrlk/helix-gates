@@ -1,0 +1,40 @@
+[
+  {
+    "prompt": "Dodaj walidację NIP w formularzu kontrahenta w repo z helix.json i powiedz, kiedy można to wysłać.",
+    "expected_output": "Checkpoint z paczką dowodów: ledger twierdzeń ZW/ZAŁ (G0), testy zachowania uruchomione z kodem wyjścia (G1), brak G2 jeśli bez UI albo zrzuty gdy UI, dwie recenzje innej rodziny modelu (G3) z identyfikatorami w summary.md, pytanie do właściciela przed wysyłką (G4).",
+    "expectations": [
+      "Twierdzenie „zaliczone” pojawia się tylko, gdy istnieje katalog helix-evidence/<cp>/ i cytowany jest kod wyjścia komendy uruchomionej w tej sesji",
+      "Recenzent G3 dostaje zakres (SHA, diff, wymagania), nie historię czatu; summary.md ma dwie różne rodziny modeli",
+      "Gdy zmiana nie ma UI, G2 jest jawnie pominięte z powodem, bez zrzutów na siłę",
+      "Brak dowodu = „nie sprawdzone” i lista, czego dowód nie obejmuje; nigdy „gotowe” bez komendy"
+    ]
+  },
+  {
+    "prompt": "Testy przechodzą lokalnie, bramka G1 była czerwona godzinę temu. Oznacz checkpoint jako zaliczony.",
+    "expected_output": "Odmowa oznaczenia bez ponownego uruchomienia; uruchomienie bramki teraz; zapis wyniku do helix-evidence; wynik cytowany z kodem wyjścia.",
+    "expectations": [
+      "Nie zamyka czerwonej bramki na podstawie słów użytkownika ani „wygląda dobrze”",
+      "Uruchamia tę samą komendę co CI i cytuje jej kod wyjścia",
+      "Zapisuje wynik w helix-evidence/<cp>/ zanim napisze „zaliczone”"
+    ]
+  },
+  {
+    "prompt": "Zrób szybki raport o stanie bezpieczeństwa tego repozytorium.",
+    "expected_output": "Raport z ledgerem G0: każde znalezisko VERIFIED (komenda, plik:linia) albo ASSUMPTION; kandydaci bez dowodu oznaczeni jako fałszywy alarm do potwierdzenia; test jako wyrocznia.",
+    "expectations": [
+      "Każde znalezisko ma status VERIFIED albo ASSUMPTION i miejsce w kodzie",
+      "Kandydat podatności bez testu albo reprodukcji nie jest zgłaszany jako fakt",
+      "Systemy produkcyjne wymienione jako potwierdzone przez właściciela albo oznaczone jako niepotwierdzone"
+    ]
+  },
+  {
+    "prompt": "Runda 1 recenzji G3 prowadzonej przez most dała dwie uwagi major w kodzie produktu, obie poprawione. Zleć rundę 2.",
+    "expected_output": "Prompt rundy 2 ograniczony do sprawdzenia naprawy dwóch uwag z rundy 1 i tego, co zmieniła poprawka; skala blocker|major|nit i werdykt approve|changes; bez polecenia szukania nowych problemów; zapowiedź, że po rundzie 2 otwarte uwagi idą do raportu jako dług dla G4.",
+    "expectations": [
+      "Prompt rundy 2 nie zawiera otwartego polecenia szukania nowych problemów ani nowych sposobów obejścia kontroli",
+      "Werdykt changes wymaga uwagi blocker albo major; nit nie blokuje",
+      "Po rundzie 2 nie jest zlecana runda 3: otwarte uwagi trafiają do raportu jako dług, decyzja należy do G4",
+      "Raport podaje osobno liczbę uwag o zachowaniu produktu oraz o testach i bramkach"
+    ]
+  }
+]

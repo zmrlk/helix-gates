@@ -1,0 +1,401 @@
+[
+ {
+  "category": "UX/Devices",
+  "item": "Foldable posture transition",
+  "check": "Verify that switching between folded cover screen and unfolded inner screen preserves form state, scroll position, and recalculates split-pane layouts without reload.",
+  "how": "automated",
+  "why_forgotten": "Standard viewport resize tests rarely simulate mid-interaction aspect-ratio jumps on stateful B2B order forms."
+ },
+ {
+  "category": "UX/Devices",
+  "item": "Warehouse scanner HID input",
+  "check": "Verify that hardware barcode scanners emitting rapid keystrokes plus Enter/Tab in warehouse views append/increment items without triggering premature form submission or losing input focus.",
+  "how": "manual",
+  "why_forgotten": "Developers test with physical keyboards and mice rather than rugged Zebra/Honeywell terminals."
+ },
+ {
+  "category": "UX/Devices",
+  "item": "Virtual keyboard viewport occlusion",
+  "check": "Verify that opening the on-screen numeric keypad on tablets and phones does not hide sticky 'Submit Order' bars or active quantity inputs inside scrollable tables.",
+  "how": "automated",
+  "why_forgotten": "Headless desktop browser emulation does not trigger mobile OS `visualViewport` shrinkage from soft keyboards."
+ },
+ {
+  "category": "UX/Devices",
+  "item": "Glove and coarse-pointer ergonomics",
+  "check": "Verify that warehouse packing actions avoid hover-only menus, drag-and-drop without tap alternatives, or tightly packed destructive buttons under `@media (pointer: coarse)`.",
+  "how": "automated",
+  "why_forgotten": "AI agents default to desktop-first UI component patterns that rely on precise cursor interaction."
+ },
+ {
+  "category": "Accessibility",
+  "item": "Dynamic grid focus management",
+  "check": "Verify that inline editing of quantities in a 200-row B2B quick-order table preserves logical Tab/Arrow key navigation and does not reset focus to `document.body` after async price recalculation.",
+  "how": "automated",
+  "why_forgotten": "Axe static scans pass even when React/Vue state re-renders destroy active DOM nodes and drop keyboard focus."
+ },
+ {
+  "category": "Accessibility",
+  "item": "Async live-region announcements",
+  "check": "Verify that background stock warnings, credit-limit alerts, and toast notifications use appropriate `aria-live` polite/assertive regions and are announced by screen readers.",
+  "how": "manual",
+  "why_forgotten": "Visual diff and static DOM checks only inspect mounted states, missing ephemeral toast lifecycle semantics."
+ },
+ {
+  "category": "Accessibility",
+  "item": "Modal and drawer keyboard traps",
+  "check": "Verify that multi-step filter drawers, Tpay payment modals, and confirmation dialogs trap Tab focus inside and restore focus to the trigger element on Escape.",
+  "how": "automated",
+  "why_forgotten": "Custom or nested portals created by coding agents frequently break focus-trap layering."
+ },
+ {
+  "category": "Performance",
+  "item": "Large B2B cart rendering",
+  "check": "Verify that an order containing 500+ distinct SKU lines remains responsive (<100ms INP) during quantity edits via row virtualization or memoized state updates.",
+  "how": "automated",
+  "why_forgotten": "Synthetic tests use 2-3 sample cart items, whereas B2B wholesale buyers order hundreds of SKUs at once."
+ },
+ {
+  "category": "Performance",
+  "item": "Per-customer pricing N+1 queries",
+  "check": "Verify that catalog listings with customer-specific price tiers, discounts, and multi-warehouse stock levels execute in bounded SQL queries rather than per-SKU lookups.",
+  "how": "automated",
+  "why_forgotten": "ORM lazy-loading works fast on tiny seed databases in CI but collapses under production catalog sizes."
+ },
+ {
+  "category": "Performance",
+  "item": "Long-lived SPA memory leaks",
+  "check": "Verify that warehouse and sales rep dashboards kept open for an 8-hour shift do not leak heap memory through detached DOM nodes, polling intervals, or WebSocket listeners.",
+  "how": "automated",
+  "why_forgotten": "E2E tests open a page for seconds, never simulating an all-day work shift."
+ },
+ {
+  "category": "Security",
+  "item": "Cross-tenant and branch IDOR",
+  "check": "Verify that manipulating order IDs, invoice IDs, or delivery address IDs in API payloads cannot read or mutate records belonging to another B2B customer or unassigned sales region.",
+  "how": "automated",
+  "why_forgotten": "AI agents often check `isAuthenticated` and role names while forgetting row-level ownership predicates in queries."
+ },
+ {
+  "category": "Security",
+  "item": "XLSX/CSV formula injection",
+  "check": "Verify that user-supplied fields (company name, delivery notes, SKU comments) starting with `=`, `+`, `-`, or `@` are neutralized before generating XLSX exports for accountants or ERP import.",
+  "how": "automated",
+  "why_forgotten": "Teams treat XLSX generation as safe binary output, forgetting Excel executes formulas when accountants open the file."
+ },
+ {
+  "category": "Security",
+  "item": "Tpay webhook authenticity and replay",
+  "check": "Verify that payment callback endpoints validate Tpay JWS/MD5 signatures against trusted certificates, enforce IP allowlists if applicable, and reject replayed transaction notifications.",
+  "how": "automated",
+  "why_forgotten": "Sandbox payment testing focuses on the happy-path redirect rather than adversarial webhook spoofing."
+ },
+ {
+  "category": "Security",
+  "item": "Field-level API over-exposure",
+  "check": "Verify that customer and warehouse API responses strip sensitive fields like wholesale purchase cost, merchant margin, customer credit score, and internal sales rep notes.",
+  "how": "model",
+  "why_forgotten": "Backend endpoints frequently serialize entire ORM entities and rely on the frontend UI to hide restricted columns."
+ },
+ {
+  "category": "Security",
+  "item": "Mass assignment on order mutation",
+  "check": "Verify that a customer patching their cart or profile cannot overwrite protected attributes such as `discountPercent`, `creditLimit`, `paymentTermsDays`, or `assignedSalesRepId`.",
+  "how": "automated",
+  "why_forgotten": "Auto-generated DTOs or permissive schema validators often bind all model fields by default."
+ },
+ {
+  "category": "Privacy/RODO",
+  "item": "Tax retention vs right to erasure",
+  "check": "Verify that GDPR account deletion anonymizes personal contact data while preserving immutable invoice, NIP, and order ledger records required for 5+ years by Polish tax law.",
+  "how": "model",
+  "why_forgotten": "Naive `ON DELETE CASCADE` or full-row wiping violates Polish accounting regulations (Ustawa o rachunkowości)."
+ },
+ {
+  "category": "Privacy/RODO",
+  "item": "Sales rep impersonation audit log",
+  "check": "Verify that when an admin or sales rep places or edits an order on behalf of a customer, an immutable audit log records both the actor identity and the target customer account.",
+  "how": "automated",
+  "why_forgotten": "Impersonation is often implemented by swapping session tokens without preserving the original `actor_id`."
+ },
+ {
+  "category": "Privacy/RODO",
+  "item": "PII leakage in logs and telemetry",
+  "check": "Verify that application logs, Sentry breadcrumbs, and error payloads scrub NIP, PESEL, customer emails, passwords, street addresses, and session tokens before ingestion.",
+  "how": "automated",
+  "why_forgotten": "Full request body logging is turned on for debugging ERP/payment issues and left active in production."
+ },
+ {
+  "category": "Privacy/RODO",
+  "item": "Staging database anonymization",
+  "check": "Verify that production database snapshots restored to staging or preview environments scrub real customer emails and phone numbers so test runs cannot email real B2B clients.",
+  "how": "automated",
+  "why_forgotten": "Developers copy production data to debug Example ERP sync edge cases without sanitizing notification targets."
+ },
+ {
+  "category": "i18n/Locale (PL)",
+  "item": "Polish alphabetical collation",
+  "check": "Verify that sorting customer names, cities, and products uses `Intl.Collator('pl')` or PostgreSQL `pl_PL.utf8` collation so `Łódź` sorts after `Lublin` rather than at the end of Z.",
+  "how": "automated",
+  "why_forgotten": "Default ASCII/UTF-8 code-point sorting places Polish characters (`ą, ć, ę, ł, ń, ó, ś, ź, ż`) after `z`."
+ },
+ {
+  "category": "i18n/Locale (PL)",
+  "item": "Diacritic-insensitive search and NFC/NFD",
+  "check": "Verify that searching `ladowarka` or `zolty` matches `Ładowarka` and `Żółty`, and Unicode normalization (NFC vs macOS NFD) does not break SKU or customer lookups.",
+  "how": "automated",
+  "why_forgotten": "Standard SQL `ILIKE` is accent-sensitive unless `unaccent` or normalized search tokens are configured."
+ },
+ {
+  "category": "i18n/Locale (PL)",
+  "item": "Polish numeric and currency input parsing",
+  "check": "Verify that price and decimal quantity inputs accept both comma (`12,50`) and dot (`12.50`), format currency as `1 234,56 zł` with non-breaking spaces, and never truncate after a comma.",
+  "how": "automated",
+  "why_forgotten": "`parseFloat('12,50')` silently returns `12` in JavaScript if comma normalization is omitted."
+ },
+ {
+  "category": "i18n/Locale (PL)",
+  "item": "Polish pluralization grammar",
+  "check": "Verify that UI counters use all three Polish plural forms (1 sztuka, 2-4 sztuki, 5-21 sztuk, 22 sztuki) rather than English singular/plural logic.",
+  "how": "model",
+  "why_forgotten": "AI agents trained primarily on English codebases often hardcode `count === 1 ? 'produkt' : 'produkty'`."
+ },
+ {
+  "category": "i18n/Locale (PL)",
+  "item": "Europe/Warsaw DST boundary cutoff",
+  "check": "Verify that daily order cutoffs, invoice issue dates, and ERP sync windows around the March/October CET-to-CEST transition do not shift by an hour or duplicate daily reports.",
+  "how": "automated",
+  "why_forgotten": "Naive UTC midnight arithmetic (`+ 86400s`) breaks twice a year in local Polish business time."
+ },
+ {
+  "category": "Email & XLSX",
+  "item": "Excel Polish locale and encoding",
+  "check": "Verify that generated XLSX files use explicit numeric/currency cell types (not strings) and any CSV fallbacks include UTF-8 BOM and semicolon (`;`) delimiters so Polish Excel opens diacritics and columns cleanly.",
+  "how": "automated",
+  "why_forgotten": "Default UTF-8 CSVs with comma delimiters open as garbled single-column text in Polish Windows Excel."
+ },
+ {
+  "category": "Email & XLSX",
+  "item": "Outlook desktop HTML email rendering",
+  "check": "Verify that transactional order emails with large SKU tables render cleanly in classic Windows Outlook (Word rendering engine) without broken flexbox/grid layouts or clipped totals.",
+  "how": "manual",
+  "why_forgotten": "Modern browser previews render CSS Grid/Flexbox fine, whereas corporate B2B clients use desktop Outlook."
+ },
+ {
+  "category": "Email & XLSX",
+  "item": "Large attachment limit and bounce fallback",
+  "check": "Verify that when an order XLSX exceeds corporate SMTP/Exchange limits (e.g., >10MB), the system falls back to a time-limited authenticated download link and alerts on hard bounces.",
+  "how": "automated",
+  "why_forgotten": "Test orders have tiny attachments that never trigger SMTP size rejection or recipient mailbox quotas."
+ },
+ {
+  "category": "Email & XLSX",
+  "item": "Deliverability and sender authentication",
+  "check": "Verify that outbound emails pass SPF, DKIM, and DMARC alignment, include proper `List-Unsubscribe` headers where appropriate, and process bounce/complaint webhooks.",
+  "how": "manual",
+  "why_forgotten": "Application tests only check that the SMTP client returned `250 OK`, not whether messages land in spam."
+ },
+ {
+  "category": "Print/PDF",
+  "item": "Multi-page print stylesheet and page breaks",
+  "check": "Verify that printing warehouse pick-lists or proforma invoices via `@media print` repeats `<thead>` on every page, prevents splitting table rows or summary blocks, and hides navigation chrome.",
+  "how": "manual",
+  "why_forgotten": "UX device matrices test screen viewports but skip browser print preview and physical pagination."
+ },
+ {
+  "category": "Print/PDF",
+  "item": "PDF Polish font embedding and barcodes",
+  "check": "Verify that server-generated PDFs embed full Latin-Extended glyphs for `ąęćłńóśźż` and render high-contrast vector barcodes/QR codes readable by laser scanners after grayscale printing.",
+  "how": "automated",
+  "why_forgotten": "Default PDF fonts (Helvetica/Times) in headless generators drop Polish glyphs or render blurry raster barcodes."
+ },
+ {
+  "category": "SEO & Public Surface",
+  "item": "Staging and auth-wall indexing hygiene",
+  "check": "Verify that non-production environments emit `X-Robots-Tag: noindex`, private B2B endpoints return 401/403 instead of soft-200 login pages, and public catalog pages have valid canonical/sitemap tags.",
+  "how": "automated",
+  "why_forgotten": "SPAs often return HTTP 200 for all routes, causing search engines to index empty shell pages or staging hosts."
+ },
+ {
+  "category": "Analytics",
+  "item": "Impersonation and internal traffic exclusion",
+  "check": "Verify that orders placed or browsed by sales reps/admins in customer-impersonation mode are tagged separately and do not skew customer conversion funnels or GA4/PostHog metrics.",
+  "how": "automated",
+  "why_forgotten": "Client-side analytics snippets fire indiscriminately on every pageview regardless of actor session type."
+ },
+ {
+  "category": "Analytics",
+  "item": "Adblocker resilience for business events",
+  "check": "Verify that critical B2B funnel telemetry (order submission, payment initiation, ERP export failure) is recorded server-side or via first-party proxy so corporate adblockers do not blind ops.",
+  "how": "automated",
+  "why_forgotten": "QA browsers run clean profiles without uBlock Origin or strict corporate DNS filters."
+ },
+ {
+  "category": "Error Monitoring",
+  "item": "ChunkLoadError recovery on deploy",
+  "check": "Verify that when a new release invalidates lazy-loaded JS/CSS hashes while a user has the app open, the client catches `ChunkLoadError` and gracefully reloads or prompts without a blank screen.",
+  "how": "automated",
+  "why_forgotten": "Single-version test runs never simulate mid-session asset eviction during continuous deployment."
+ },
+ {
+  "category": "Error Monitoring",
+  "item": "Dead-letter queue and silent async failure alerts",
+  "check": "Verify that failed background jobs (Example ERP sync, XLSX email dispatch, Tpay status reconciliation) trigger high-priority alerts and surface a visible retry state in the admin panel.",
+  "how": "automated",
+  "why_forgotten": "Unhandled promise rejections are caught in Sentry, while exhausted BullMQ/Sidekiq retries fail silently in Redis."
+ },
+ {
+  "category": "Backups & DR",
+  "item": "Automated restore and RPO/RTO drill",
+  "check": "Verify on a schedule that encrypted database and object-storage backups can be restored into an isolated instance and pass an integrity query check within the target RTO.",
+  "how": "automated",
+  "why_forgotten": "Teams verify that the backup cron job exits 0, but never test if `pg_restore` succeeds or if attachments are included."
+ },
+ {
+  "category": "Migrations & Rollback",
+  "item": "Zero-downtime expand/contract compatibility",
+  "check": "Verify that database migrations do not rename/drop columns or acquire long `ACCESS EXCLUSIVE` locks while the previous application version and background workers are still running.",
+  "how": "model",
+  "why_forgotten": "In CI, migrations run before starting a single server instance, masking rolling-deploy version skew."
+ },
+ {
+  "category": "Migrations & Rollback",
+  "item": "In-flight job payload version skew",
+  "check": "Verify that queued Redis/worker payloads enqueued before a deploy can still be deserialized and processed by new worker code (or rolled-back worker code).",
+  "how": "model",
+  "why_forgotten": "Developers change job payload schemas alongside producer code, forgetting already-queued jobs in production."
+ },
+ {
+  "category": "Rate Limits & Abuse",
+  "item": "Resource-heavy export and search throttling",
+  "check": "Verify that XLSX generation, PDF invoice rendering, and complex catalog filtering enforce per-user and per-tenant concurrency/rate limits to prevent accidental DoS.",
+  "how": "automated",
+  "why_forgotten": "Rate limiting is usually applied only to `/login`, leaving expensive authenticated B2B endpoints unprotected."
+ },
+ {
+  "category": "Rate Limits & Abuse",
+  "item": "Credential stuffing and OTP brute-force protection",
+  "check": "Verify that login, password reset, and NIP lookup endpoints enforce progressive backoff or per-account lockouts without allowing an attacker to lock out legitimate B2B admins globally.",
+  "how": "automated",
+  "why_forgotten": "IP-only rate limits either fail behind shared corporate NATs or get bypassed by distributed botnets."
+ },
+ {
+  "category": "Browser Support",
+  "item": "Outdated Android WebView on warehouse devices",
+  "check": "Verify that JS bundles and CSS features (e.g., `:has()`, container queries, modern array methods) transpile or degrade gracefully on older Chromium WebViews locked on industrial Android scanners.",
+  "how": "automated",
+  "why_forgotten": "Playwright runs the latest evergreen Chromium, whereas warehouse hardware often runs 3-year-old Android OS builds."
+ },
+ {
+  "category": "Browser Support",
+  "item": "Safari ITP and strict cookie partitioning",
+  "check": "Verify that authentication, Tpay return redirects, and embedded previews work on iOS/macOS Safari without relying on blocked third-party cookies or fragile `SameSite=None` flows.",
+  "how": "manual",
+  "why_forgotten": "Developers on Linux/Windows test WebKit via Playwright on Linux, which lacks full Apple ITP behavior."
+ },
+ {
+  "category": "PWA/Offline",
+  "item": "Stale service worker price/stock cache",
+  "check": "Verify that service workers never serve cached catalog prices, stock availability, or customer credit limits via `CacheFirst` strategies, and immediately activate updates on financial routes.",
+  "how": "automated",
+  "why_forgotten": "PWA boilerplates aggressively cache API responses to pass offline audits, causing customers to order at outdated prices."
+ },
+ {
+  "category": "PWA/Offline",
+  "item": "Offline draft order conflict resolution",
+  "check": "Verify that when a sales rep builds an order offline and reconnects after prices or stock changed on the server, the app highlights diffs for confirmation instead of silently submitting or discarding the draft.",
+  "how": "automated",
+  "why_forgotten": "Offline checks usually only test whether an offline banner appears, not the state reconciliation upon reconnect."
+ },
+ {
+  "category": "Notifications",
+  "item": "Notification idempotency on worker retry",
+  "check": "Verify that retrying a partially failed order workflow does not send duplicate order-confirmation XLSX emails to the customer or duplicate pick requests to the warehouse.",
+  "how": "automated",
+  "why_forgotten": "Email dispatch is often placed inside the same non-idempotent job step as ERP synchronization."
+ },
+ {
+  "category": "Legal & Compliance (PL)",
+  "item": "KSeF schema, token renewal, and offline24 mode",
+  "check": "Verify that structured e-invoices validate against the current Ministry of Finance `FA(2)`/`FA(3)` XSD, handle KSeF session/token expiration, and support the mandatory offline/contingency issuance flow during KSeF maintenance.",
+  "how": "automated",
+  "why_forgotten": "Teams only test happy-path XML generation against the KSeF demo API, ignoring KSeF downtime laws and schema edge cases."
+ },
+ {
+  "category": "Legal & Compliance (PL)",
+  "item": "NIP checksum, GUS/VIES, and Biała Lista VAT",
+  "check": "Verify that B2B onboarding and invoicing validate the modulo-11 NIP checksum, handle prefixed EU VAT numbers, and verify active VAT status / bank accounts against the MF White List API.",
+  "how": "automated",
+  "why_forgotten": "AI agents often validate NIP as a mere 10-digit regex `/^\\d{10}$/` without checksum or ministry registry checks."
+ },
+ {
+  "category": "Legal & Compliance (PL)",
+  "item": "Versioned Regulamin acceptance and Cookie Consent",
+  "check": "Verify that B2B terms of service (`Regulamin`) updates require explicit re-acceptance with timestamped audit proof, and non-essential analytics cookies do not fire prior to consent.",
+  "how": "automated",
+  "why_forgotten": "A simple boolean `terms_accepted = true` column loses track of which legal version the customer agreed to."
+ },
+ {
+  "category": "Observability",
+  "item": "End-to-end correlation ID propagation",
+  "check": "Verify that a single `trace_id`/`correlation_id` flows from the browser request through API logs, async queue jobs, Example ERP sync calls, and Tpay webhooks.",
+  "how": "automated",
+  "why_forgotten": "Async boundaries (message queues and incoming webhooks) drop HTTP context headers unless explicitly propagated."
+ },
+ {
+  "category": "Observability",
+  "item": "Business-logic anomaly heartbeats",
+  "check": "Verify that monitoring alerts trigger when business metrics flatline during Polish working hours (e.g., 0 orders placed, 0 ExampleERP syncs completed, or >15% Tpay abandonment spike in 1 hour).",
+  "how": "automated",
+  "why_forgotten": "Infrastructure alerts only watch CPU/5xx errors, missing silent logical deadlocks that return HTTP 200."
+ },
+ {
+  "category": "Data Integrity",
+  "item": "Line-level vs header-level VAT rounding parity",
+  "check": "Verify that net-to-gross and VAT (23%, 8%, 5%, 0%, zw.) calculations use exact decimal arithmetic (`grosze` integers or `Decimal`) and match Example ERP's exact rounding method to the grosz.",
+  "how": "automated",
+  "why_forgotten": "JavaScript floating-point math or mismatched per-line vs per-rate VAT summation causes 0,01 zł discrepancies rejected by ExampleERP/KSeF."
+ },
+ {
+  "category": "Data Integrity",
+  "item": "Idempotent order submission and payment initiation",
+  "check": "Verify that double-clicking 'Order and Pay' or retrying on a flaky mobile connection with an `Idempotency-Key` creates exactly one order, one stock reservation, and one Tpay transaction.",
+  "how": "automated",
+  "why_forgotten": "Frontend button disabling (`disabled={loading}`) is bypassed by network retries or rapid touch events."
+ },
+ {
+  "category": "Data Integrity",
+  "item": "Credit limit and stock reservation race conditions",
+  "check": "Verify that concurrent orders from the same customer account cannot exceed their B2B credit limit or oversell the last warehouse unit due to missing `SELECT ... FOR UPDATE` or atomic locks.",
+  "how": "automated",
+  "why_forgotten": "Sequential integration tests never execute simultaneous checkout transactions in parallel."
+ },
+ {
+  "category": "Role/Permission Matrix",
+  "item": "Cross-role state transition enforcement",
+  "check": "Verify across the full matrix (Admin, Accountant, Warehouse, Sales Rep, Customer) that each role can only trigger permitted order status transitions (e.g., Warehouse cannot mark an unpaid non-credit order as settled).",
+  "how": "automated",
+  "why_forgotten": "Permission checks guard route access (`canEditOrder`) rather than validating the specific state machine transition per role."
+ },
+ {
+  "category": "Role/Permission Matrix",
+  "item": "Immediate revocation on role change or block",
+  "check": "Verify that deactivating a sales rep or blocking a delinquent B2B customer immediately invalidates active JWTs/sessions and rejects in-flight API mutations without waiting for token expiry.",
+  "how": "automated",
+  "why_forgotten": "Stateless JWT authentication continues to grant access until expiration unless a revocation check is enforced."
+ },
+ {
+  "category": "Load/Concurrency",
+  "item": "Concurrent order editing collision",
+  "check": "Verify that if a sales rep adjusts discounts on an order while the customer simultaneously edits quantities, optimistic locking (`version` / `ETag`) prevents silent lost updates.",
+  "how": "automated",
+  "why_forgotten": "Single-user E2E flows never simulate two different roles editing the same order entity at the same time."
+ },
+ {
+  "category": "ERP Integration (ExampleERP)",
+  "item": "Example ERP lock and partial-sync recovery",
+  "check": "Verify that when Example ERP's SQL database or API is locked by an accountant running month-end closing, the integration queues orders with exponential backoff, avoids duplicate contractors/documents on retry, and surfaces sync lag in the UI.",
+  "how": "automated",
+  "why_forgotten": "Mocked ERP tests in CI return instant 200 responses, ignoring real-world ExampleERP database locks and non-atomic batch imports."
+ }
+]

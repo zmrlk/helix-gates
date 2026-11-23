@@ -1,0 +1,162 @@
+{
+  "test_cmd": null,
+  "architecture_doc": null,
+  "mode": "supervised",
+  "providers": {
+    "planner": "codex",
+    "implementer": "codex",
+    "reviewers": [
+      {
+        "name": "A-architecture",
+        "provider": "codex",
+        "prompt": "review_architecture"
+      },
+      {
+        "name": "B-tests-security",
+        "provider": "gemini",
+        "prompt": "review_tests"
+      },
+      {
+        "name": "C-architecture",
+        "provider": "claude-via-agy",
+        "prompt": "review_architecture",
+        "enabled": true
+      },
+      {
+        "name": "D-grok-cli",
+        "provider": "grok-cli",
+        "prompt": "review_tests",
+        "enabled": true
+      },
+      {
+        "name": "E-grok-orchestrator",
+        "provider": "grok",
+        "prompt": "review_architecture",
+        "enabled": false
+      },
+      {
+        "name": "F-interface",
+        "provider": "codex",
+        "prompt": "review_ui",
+        "enabled": false
+      }
+    ],
+    "visual_judge": "gemini",
+    "fallback": "codex"
+  },
+  "visual": {
+    "enabled": false,
+    "start_cmd": "npm run dev -- --port 4173",
+    "url": "http://127.0.0.1:4173/",
+    "reference_url": null,
+    "reference_image": "design/reference.png",
+    "viewport": [
+      1280,
+      800
+    ],
+    "actions": [
+      {
+        "click": "#open-cart"
+      },
+      {
+        "waitFor": ".cart"
+      }
+    ],
+    "ready_timeout_s": 90
+  },
+  "truth": {
+    "required": true,
+    "checker": "gemini"
+  },
+  "limits": {
+    "max_attempts": 3,
+    "max_review_rounds": 2,
+    "checkpoint_timeout_s": 1800,
+    "provider_timeout_s": 600,
+    "grok_wait_s": 0
+  },
+  "models": {
+    "gemini": [
+      "gemini-4-argon-high",
+      "gemini-3.8-flash-high"
+    ],
+    "claude-via-agy": [
+      "claude-opus-5-5-high",
+      "claude-sonnet-5-5-high"
+    ],
+    "grok-cli": [
+      "grok-4.7",
+      "grok-4.6"
+    ]
+  },
+  "packs": {
+    "base_ref": "origin/main",
+    "trusted_base": true,
+    "security": {
+      "mode": "blocking",
+      "fail_on": [
+        "critical",
+        "high"
+      ],
+      "tools": [
+        "gitleaks",
+        "semgrep",
+        "trivy"
+      ],
+      "configs": [
+        "p/default"
+      ],
+      "timeouts": {
+        "gitleaks": 300,
+        "semgrep": 300,
+        "trivy": 300
+      },
+      "deep_required": false
+    },
+    "perf": {
+      "mode": "advisory",
+      "base_url": "http://localhost:4173",
+      "pages": [
+        {
+          "name": "home",
+          "path": "/"
+        }
+      ],
+      "runs": 3,
+      "budgets": {
+        "lcp": 2500,
+        "cls": 0.1,
+        "tbt": 200,
+        "total-byte-weight": 1600000,
+        "performance": 0.8,
+        "bundle_kb_gzip": 350
+      },
+      "k6": []
+    },
+    "integrity": {
+      "mode": "blocking",
+      "fail_on": [
+        "critical",
+        "high"
+      ],
+      "test_globs": [
+        "tests/**",
+        "**/test_*.py",
+        "**/*_test.py",
+        "**/*.test.*",
+        "**/*.spec.*",
+        "**/__tests__/**"
+      ]
+    }
+  },
+  "precheck": {
+    "commands": []
+  },
+  "worker": {
+    "allow_hosts": []
+  },
+  "helix_version": "0.9.3-beta",
+  "design_decision": {
+    "required": true
+  }
+}

@@ -1,0 +1,9 @@
+{"type":"object","additionalProperties":false,"required":["valid","scores","issues","summary"],
+ "properties":{"valid":{"type":"boolean"},"summary":{"type":"string"},
+  "scores":{"type":"object","additionalProperties":false,"required":["layout","consistency","readability","usability"],
+   "properties":{"layout":{"type":"integer"},"consistency":{"type":"integer"},"readability":{"type":"integer"},"usability":{"type":"integer"}}},
+  "issues":{"type":"array","items":{"type":"object","additionalProperties":false,
+   "required":["page","severity","category","location","description","code_fixable"],
+   "properties":{"page":{"type":"string"},"severity":{"type":"string","enum":["high","medium","low"]},
+    "category":{"type":"string","enum":["layout","consistency","readability","usability","copy","accessibility"]},
+    "location":{"type":"string"},"description":{"type":"string"},"code_fixable":{"type":"boolean"}}}}}}

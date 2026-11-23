@@ -1,0 +1,20 @@
+{
+  "shellcheck": "[{\"file\": \"sample.sh\", \"line\": 2, \"code\": 2086, \"level\": \"info\"}]",
+  "hadolint": "[{\"file\": \"sample.sh\", \"line\": 2, \"code\": \"DL3006\", \"level\": \"warning\"}]",
+  "bandit": "{\"results\": [{\"filename\": \"sample.sh\", \"line_number\": 2, \"test_id\": \"B602\", \"issue_severity\": \"HIGH\"}]}",
+  "actionlint": "[{\"filepath\": \"sample.sh\", \"line\": 2, \"kind\": \"syntax-check\"}]",
+  "checkov": "{\"results\": {\"failed_checks\": [{\"file_path\": \"/sample.sh\", \"file_line_range\": [2, 3], \"check_id\": \"CKV_AWS_18\"}]}}",
+  "semgrep": "{\"results\": [{\"path\": \"sample.sh\", \"start\": {\"line\": 2}, \"check_id\": \"helix-eval\", \"extra\": {\"severity\": \"ERROR\"}}]}",
+  "gitleaks": "[{\"File\": \"sample.sh\", \"StartLine\": 2, \"RuleID\": \"synthetic-marker\", \"Secret\": \"REDACTED\"}]",
+  "codespell": "sample.sh:2: teh ==> the\n",
+  "gosec": "{\"Issues\": [{\"file\": \"sample.sh\", \"line\": \"2-3\", \"rule_id\": \"G101\", \"severity\": \"HIGH\"}]}",
+  "njsscan": "{\"nodejs\": {\"eval\": {\"metadata\": {\"severity\": \"ERROR\"}, \"files\": [{\"file_path\": \"sample.sh\", \"match_lines\": [2, 3]}]}}}",
+  "sqlfluff": "[{\"filepath\": \"sample.sh\", \"violations\": [{\"start_line_no\": 2, \"code\": \"LT01\"}]}]",
+  "squawk": "[{\"file\": \"sample.sh\", \"line\": 1, \"rule_name\": \"ban-drop-table\"}]",
+  "radon": "{\"sample.sh\": [{\"lineno\": 2, \"rank\": \"C\", \"complexity\": 11}]}",
+  "jscpd": "{\"duplicates\": [{\"firstFile\": {\"name\": \"sample.sh\", \"startLoc\": {\"line\": 2}}}]}",
+  "stylelint": "[{\"source\": \"sample.sh\", \"warnings\": [{\"line\": 2, \"rule\": \"block-no-empty\", \"severity\": \"warning\"}]}]",
+  "zizmor": "[{\"ident\": \"unpinned-uses\", \"determinations\": {\"severity\": \"High\"}, \"locations\": [{\"symbolic\": {\"key\": {\"Local\": {\"verbatim_path\": \"sample.sh\"}}}, \"concrete\": {\"location\": {\"start_point\": {\"row\": 1}}}}]}]",
+  "typos": "{\"path\": \"sample.sh\", \"line_num\": 2, \"type\": \"typo\"}\n",
+  "trufflehog": "{\"DetectorName\": \"synthetic\", \"SourceMetadata\": {\"Data\": {\"Filesystem\": {\"file\": \"sample.sh\", \"line\": 2}}}}\n"
+}

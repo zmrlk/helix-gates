@@ -1,0 +1,9 @@
+{
+  "axes": {
+    "theme": ["light", "dark"],
+    "radius": [0, 12],
+    "shape": ["rectangular", "rounded"],
+    "density": ["compact", "comfortable"]
+  },
+  "cases": []
+}

@@ -1,0 +1,4 @@
+# YAML contracts and UX flow files
+PyYAML>=6.0,<7
+# Optional screenshot reports
+Pillow>=10

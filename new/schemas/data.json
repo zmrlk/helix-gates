@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "classification": {
+            "type": "string"
+          },
+          "retention": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "scope",
+          "classification",
+          "retention"
+        ]
+      },
+      "minItems": 1
+    },
+    "migration": {
+      "type": "string"
+    },
+    "rollback": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "entities",
+    "migration",
+    "rollback"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

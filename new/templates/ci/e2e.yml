@@ -1,0 +1,47 @@
+name: Sharded browser gate
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  shards:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Configure webServer in playwright.config.ts; blob reports support merging.
+      - run: npx playwright test --project=chromium --shard=${{ matrix.shard }}/4 --reporter=blob
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blob-report-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: blob-report/
+          retention-days: 14
+  merge:
+    if: always()
+    needs: shards
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      # Rerun failed jobs in GitHub Actions preserves successful shard artifacts.
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: blob-report-*
+          path: all-blob-reports
+          merge-multiple: true
+      - run: npx playwright merge-reports --reporter=html ./all-blob-reports
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: merged-playwright-report-${{ github.run_attempt }}
+          path: playwright-report/

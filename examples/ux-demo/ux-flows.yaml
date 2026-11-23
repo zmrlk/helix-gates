@@ -1,0 +1,42 @@
+# Scenariusze użytkownika dla Hurtowni Demo (persony: novice, power-user, accountant, warehouse, mobile – opisy w helix_ux.PERSONAS)
+personas:
+  mobile: "Klient w biegu na telefonie, jedna ręka, słaby zasięg; chce szybko złożyć zamówienie i dostać fakturę."
+flows:
+  - id: zamowienie-i-faktura
+    persona: mobile
+    goal: "Zaloguj się, złóż zamówienie, pobierz fakturę"
+    max_interactions: 8
+    steps:
+      - goto: /
+      - fill: "#email"
+        value: "demo@example.test"
+      - fill: "#password"
+        value: "demo-haslo"
+      - tap: "#login-btn"
+      - expect: { text: "Twoje zamówienia" }
+      - click: "text=Nowe zamówienie"
+      - select: "#product"
+        value: "Papier A4 80g (karton 5 ryz)"
+      - fill: "#qty"
+        value: "5"
+      - tap: "#submit"
+      - expect: { text: "przyjęte" }
+      - download: "#invoice"
+        expect_filename: "faktura.*\\.pdf"
+  - id: lista-offline
+    persona: warehouse
+    goal: "Lista zamówień przy zerwanym połączeniu"
+    steps:
+      - goto: /zamowienia.html
+      - expect: { text: "ZAM/2026/0041" }
+      - offline: true
+      - click: "header >> text=Nowe zamówienie"
+      # oczekujemy czytelnego komunikatu offline zamiast strony błędu przeglądarki
+      - expect: { text_re: "offline|brak połączenia|spróbuj ponownie", timeout: 5000 }
+explore:
+  - id: nowicjusz-zamawia
+    persona: novice
+    goal: "Masz konto demo@example.test / demo-haslo. Zamów 5 kartonów papieru A4 i pobierz fakturę."
+    start: /
+    success_text: "przyjęte"
+    max_steps: 12

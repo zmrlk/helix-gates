@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "roles": {
+    "security": {
+      "checklist": [
+        "Auth/authz i izolacja obiektów",
+        "RBAC, SQL/RLS, taint, PIN/OTP i upload",
+        "Raporty a kod; offline audyty"
+      ],
+      "adversarial": [
+        "Sprawdź guard w sąsiednim handlerze, alias inputu i nadpisanie aliasu.",
+        "Sprawdź obcy owner/tenant, fail-open oraz niezależne limity typu i rozmiaru uploadu.",
+        "Brak wzorca w kodzie nie potwierdza deklarowanej naprawy."
+      ],
+      "tools": [
+        "semgrep",
+        "gitleaks",
+        "trivy"
+      ]
+    },
+    "senior_developer": {
+      "checklist": [
+        "Obsługa błędów i edge cases",
+        "Martwy kod i złożoność"
+      ],
+      "adversarial": [
+        "Komentarz nie jest wykonywanym catch ani martwą gałęzią.",
+        "Powielony blok może być zamierzony; identyczność nie dowodzi wspólnej semantyki."
+      ],
+      "tools": [
+        "radon",
+        "jscpd"
+      ]
+    },
+    "architect": {
+      "checklist": [
+        "Granice modułów",
+        "Coupling i zależności cykliczne"
+      ],
+      "adversarial": [
+        "Rozwiązuj wyłącznie lokalne importy do istniejących plików.",
+        "Cykl typów lub leniwe ładowanie może być nieszkodliwe; limit grafu nie dowodzi braku cyklu."
+      ],
+      "tools": [
+        "madge",
+        "dependency-cruiser"
+      ]
+    },
+    "qa": {
+      "checklist": [
+        "Ścieżki krytyczne i testy negatywne",
+        "Wzorce flaky"
+      ],
+      "adversarial": [
+        "Stały timeout może testować timeout produktu; potrzebny kontekst.",
+        "Brak lokalnych testów nie wyklucza zewnętrznej suity; obecność testów nie dowodzi pokrycia."
+      ],
+      "tools": [
+        "mutmut"
+      ]
+    },
+    "product_manager": {
+      "checklist": [
+        "TODO/FIXME i niedokończone funkcje",
+        "Deklaracje a implementacja"
+      ],
+      "adversarial": [
+        "TODO może dokumentować świadomie odłożony zakres.",
+        "Deklaracja zakończenia w docs nie jest dowodem implementacji."
+      ],
+      "tools": [
+        "typos"
+      ]
+    },
+    "ops_data": {
+      "checklist": [
+        "Bezpieczeństwo migracji",
+        "Observability i odtwarzanie danych"
+      ],
+      "adversarial": [
+        "DROP może dotyczyć danych tymczasowych; sprawdź rollback i odtworzenie.",
+        "Brak wrażliwego logu nie dowodzi obserwowalności ani bezpieczeństwa backupu."
+      ],
+      "tools": [
+        "squawk",
+        "sqlfluff"
+      ]
+    },
+    "tech_writer": {
+      "checklist": [
+        "Aktualność dokumentacji",
+        "Lokalne odnośniki i dowody"
+      ],
+      "adversarial": [
+        "Odnośniki zewnętrzne nie są pobierane; istnienie pliku nie dowodzi aktualności.",
+        "Nie odczytuj celu odnośnika poza katalogiem repo."
+      ],
+      "tools": [
+        "vale",
+        "typos"
+      ]
+    },
+    "ux_designer": {
+      "checklist": [
+        "Etykiety pól i alternatywy obrazów",
+        "Klawiatura, role i focus",
+        "Stany loading/error/empty przy danych",
+        "Potwierdzenie lub cofnięcie usunięcia",
+        "Copy i spójność języka",
+        "Adversarial pass: dynamiczne atrybuty, delegowane stany i ukryte etykiety"
+      ],
+      "adversarial": [
+        "Adversarial pass: dynamiczne atrybuty, delegowane stany i ukryte etykiety"
+      ],
+      "tools": [
+        "axe"
+      ]
+    },
+    "ui_designer": {
+      "checklist": [
+        "Tokeny CSS, Tailwind, theme i komponenty bazowe",
+        "Kolory/spacing/radius/font-size per komponent",
+        "Powielone kontrolki",
+        "Kontrast jawnych par fg/bg",
+        "Odchylenia od lokalnych tokenów",
+        "Adversarial pass: kaskada, motywy, aliasy i nieznane tło"
+      ],
+      "adversarial": [
+        "Adversarial pass: kaskada, motywy, aliasy i nieznane tło"
+      ],
+      "tools": [
+        "stylelint"
+      ]
+    }
+  },
+  "controls": [
+    {
+      "id": "definition",
+      "pattern": "(?:README|docs/|requirements/|architecture)",
+      "level": 2,
+      "why": "Dokument określa intencję; egzekwowanie niepotwierdzone."
+    },
+    {
+      "id": "verification",
+      "pattern": "(?:^|/)(?:tests?|__tests__)/|[._](?:test|spec)\\.",
+      "level": 2,
+      "why": "Znaleziono testy, ich wykonanie pozostaje not-run."
+    },
+    {
+      "id": "enforcement",
+      "pattern": "(?:^|/)(?:Makefile|justfile)$|(?:^|/)ci[^/]*/|\\.github/workflows/",
+      "level": 2,
+      "why": "Konfiguracja procesu jest częściowym dowodem, brak logu wykonania."
+    }
+  ]
+}

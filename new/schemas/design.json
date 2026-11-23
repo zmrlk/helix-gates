@@ -1,0 +1,81 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "enum": [
+        1
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "approved"
+      ]
+    },
+    "accepted_by": {
+      "type": "string"
+    },
+    "areas": {
+      "type": "object"
+    },
+    "chrome": {
+      "type": "object"
+    },
+    "tokens": {
+      "type": "object",
+      "properties": {
+        "colors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "fonts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "colors",
+        "fonts"
+      ]
+    },
+    "components": {
+      "type": "object"
+    },
+    "patterns": {
+      "type": "object"
+    },
+    "copy": {
+      "type": "object"
+    },
+    "tolerances": {
+      "type": "object"
+    },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "version",
+    "status",
+    "accepted_by",
+    "areas",
+    "chrome",
+    "tokens",
+    "components",
+    "patterns",
+    "copy",
+    "tolerances",
+    "exceptions"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

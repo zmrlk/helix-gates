@@ -1,0 +1,12 @@
+{
+ "helix_version": "0.9.3-beta",
+ "test_cmd": "true",
+ "consistency": {
+  "base_url": "http://127.0.0.1:PORT/",
+  "pages": [
+   {"name": "sklep", "area": "shop", "path": "/shop.html"},
+   {"name": "panel-firmy", "area": "company", "path": "/company.html", "probe_details": true},
+   {"name": "admin", "area": "admin", "path": "/admin.html", "probe_details": true}
+  ],
+  "static": {"paths": ["src"]}
+ }}

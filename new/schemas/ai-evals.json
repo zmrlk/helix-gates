@@ -1,0 +1,68 @@
+{
+  "type": "object",
+  "properties": {
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "category": {
+            "enum": [
+              "injection",
+              "refusal",
+              "quality-pl",
+              "extraction"
+            ]
+          },
+          "input": {
+            "type": "string"
+          },
+          "expected": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "category",
+          "input",
+          "expected"
+        ]
+      },
+      "minItems": 1
+    },
+    "expected": {
+      "type": "string"
+    },
+    "escalation": {
+      "type": "string"
+    },
+    "max_tokens": {
+      "type": "number",
+      "minimum": 0.001
+    },
+    "max_retries": {
+      "type": "number",
+      "minimum": 0
+    },
+    "fallback_budget": {
+      "type": "number",
+      "minimum": 0.001
+    },
+    "owner": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "cases",
+    "expected",
+    "escalation",
+    "max_tokens",
+    "max_retries",
+    "fallback_budget",
+    "owner"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

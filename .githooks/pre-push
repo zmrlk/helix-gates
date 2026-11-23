@@ -1,0 +1,17 @@
+#!/bin/sh
+# Enable explicitly as described in docs/runtime.md.
+repo=$(git rev-parse --show-toplevel) || exit 1
+if [ ! -f "$repo/scripts/check_release_version.py" ]; then
+    echo 'Brak scripts/check_release_version.py: rebase na origin/master' >&2
+    exit 1
+fi
+python3 "$repo/scripts/check_release_version.py" --repo "$repo" --pre-push || exit $?
+# Optional controller from the release stream: use only an advertised command.
+if [ -f "$repo/bin/helix_release.py" ]; then
+    help=$(python3 "$repo/bin/helix_release.py" --help 2>/dev/null) || help=''
+    if printf '%s\n' "$help" | grep -Eq '(^|[ {,])check([ },]|$)'; then
+        python3 "$repo/bin/helix_release.py" check || exit $?
+    fi
+fi
+cd "$repo" || exit 1
+exec python3 scripts/check_fast.py

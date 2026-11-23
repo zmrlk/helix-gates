@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "critical_paths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sli": {
+            "type": "string"
+          },
+          "target": {
+            "type": "number",
+            "minimum": 0.001
+          },
+          "measurement": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "sli",
+          "target",
+          "measurement",
+          "owner"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "critical_paths"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

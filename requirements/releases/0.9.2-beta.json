@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "helix_version": "0.9.2-beta",
+  "version": "0.9.2-beta",
+  "source_sha": "aeff7295b09b1aec76b273b737b1c2ef6aff1052",
+  "claim": {
+    "task_id": "release",
+    "agent": "codex-merge-01",
+    "created_at": "2026-10-25T19:06:03.535411+00:00",
+    "expires_at": "2026-10-25T20:06:03.535511+00:00",
+    "status": "active",
+    "lease_id": "81a29e06b4e54b13b8f019e3bb0e5ab5"
+  }
+}

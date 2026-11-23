@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "engine_version": "0.51.0",
+  "languages": {
+    "js": "JavaScript",
+    "ts": "TypeScript",
+    "tsx": "Tsx"
+  },
+  "nodes": {
+    "program": [],
+    "ERROR": [],
+    "function_declaration": [
+      "name",
+      "parameters",
+      "body"
+    ],
+    "function_expression": [
+      "name",
+      "parameters",
+      "body"
+    ],
+    "generator_function_declaration": [
+      "name",
+      "parameters",
+      "body"
+    ],
+    "generator_function": [
+      "name",
+      "parameters",
+      "body"
+    ],
+    "arrow_function": [
+      "parameters",
+      "parameter",
+      "body"
+    ],
+    "method_definition": [
+      "name",
+      "parameters",
+      "body"
+    ],
+    "call_expression": [
+      "function",
+      "arguments"
+    ],
+    "new_expression": [
+      "constructor",
+      "arguments"
+    ],
+    "variable_declarator": [
+      "name",
+      "value"
+    ],
+    "if_statement": [
+      "condition",
+      "consequence",
+      "alternative"
+    ],
+    "else_clause": [],
+    "statement_block": [],
+    "return_statement": [
+      "@argument"
+    ],
+    "throw_statement": [
+      "@argument"
+    ],
+    "await_expression": [
+      "@argument"
+    ],
+    "expression_statement": [
+      "@expression"
+    ],
+    "binary_expression": [
+      "left",
+      "right"
+    ],
+    "assignment_expression": [
+      "left",
+      "right"
+    ],
+    "augmented_assignment_expression": [
+      "left",
+      "right"
+    ],
+    "unary_expression": [
+      "argument"
+    ],
+    "update_expression": [
+      "argument"
+    ],
+    "member_expression": [
+      "object",
+      "property"
+    ],
+    "subscript_expression": [
+      "object",
+      "index"
+    ],
+    "pair": [
+      "key",
+      "value"
+    ],
+    "object": [],
+    "array": [],
+    "arguments": [],
+    "spread_element": [
+      "@argument"
+    ],
+    "parenthesized_expression": [
+      "@expression"
+    ],
+    "lexical_declaration": [],
+    "variable_declaration": [],
+    "export_statement": [
+      "declaration",
+      "value"
+    ],
+    "try_statement": [
+      "body",
+      "handler",
+      "finalizer"
+    ],
+    "catch_clause": [
+      "parameter",
+      "body"
+    ],
+    "finally_clause": [],
+    "for_statement": [
+      "initializer",
+      "condition",
+      "increment",
+      "body"
+    ],
+    "for_in_statement": [
+      "left",
+      "right",
+      "body"
+    ],
+    "while_statement": [
+      "condition",
+      "body"
+    ],
+    "do_statement": [
+      "condition",
+      "body"
+    ],
+    "switch_statement": [
+      "value",
+      "body"
+    ],
+    "switch_case": [
+      "value"
+    ],
+    "switch_default": [],
+    "template_string": [],
+    "template_substitution": [],
+    "import_statement": [],
+    "ternary_expression": [
+      "condition",
+      "consequence",
+      "alternative"
+    ]
+  },
+  "typescript_nodes": {
+    "as_expression": [],
+    "type_assertion": [],
+    "non_null_expression": []
+  }
+}

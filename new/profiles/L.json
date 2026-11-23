@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "profile": "L",
+  "artifacts": {
+    "PROJECT.md": "markdown",
+    "PRD.md": "markdown",
+    "domain.md": "markdown",
+    "domain-map.json": "domain-map",
+    "adr/ADR-001.md": "markdown",
+    "architecture.yaml": "architecture",
+    "data-model.yaml": "data",
+    "threat-model.md": "markdown",
+    "brand.yaml": "brand",
+    "DESIGN.md": "markdown",
+    "design-contract.yaml": "design",
+    "slo.yaml": "slo",
+    "finops.yaml": "finops",
+    "program.md": "markdown",
+    "SKILL.md": "markdown",
+    "AGENTS.md": "markdown",
+    "helix.json": "config",
+    "HANDOFF.md": "markdown",
+    "adr/tenancy.yaml": "isolation",
+    "partitioning.yaml": "partitioning",
+    "regions-dr.yaml": "regions",
+    "capacity.yaml": "capacity"
+  }
+}

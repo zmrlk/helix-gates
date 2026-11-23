@@ -1,0 +1,100 @@
+[
+  {
+    "name": "next matcher",
+    "files": {
+      "middleware.ts": "function auth(req) { if (!req.user) throw error(403); } export function middleware(req) { auth(req); } export const config = {matcher: ['/staff/:path*']};",
+      "app/staff/route.ts": "export function GET() {}",
+      "app/public/route.ts": "export function GET() {}"
+    },
+    "expected": {
+      "/staff": true,
+      "/public": false
+    }
+  },
+  {
+    "name": "svelte sequence route group",
+    "files": {
+      "src/auth.ts": "export function auth(event) { if (!event.locals.user) throw error(401); }",
+      "src/hooks.server.ts": "export const handle = sequence(async (event) => { if (event.route.id?.includes(\"(staff)\")) auth(event); return resolve(event); }, log);",
+      "src/routes/(staff)/items/+server.ts": "export function GET() {}",
+      "src/routes/public/+server.ts": "export function GET() {}"
+    },
+    "expected": {
+      "/items": true,
+      "/public": false
+    }
+  },
+  {
+    "name": "nuxt isolated application",
+    "files": {
+      "packages/api/server/middleware/auth.ts": "export default defineEventHandler(event => { if (!event.locals.user) throw error(401); });",
+      "packages/api/server/api/items.ts": "export default defineEventHandler(event => db.findMany());",
+      "packages/site/server/api/public.ts": "export default defineEventHandler(event => db.findMany());"
+    },
+    "expected": {
+      "/api/items": true,
+      "/api/public": false
+    }
+  },
+  {
+    "name": "express prefix and order",
+    "files": {
+      "routes.ts": "function auth(req) { if (!req.user) throw error(401); }\nrouter.get('/before', () => {});\nrouter.use('/staff', auth);\nrouter.patch('/staff/:id', () => {});\nrouter.get('/staffing', () => {});"
+    },
+    "expected": {
+      "/before": false,
+      "/staff/:id": true,
+      "/staffing": false
+    }
+  },
+  {
+    "name": "fastify prehandler",
+    "files": {
+      "routes.ts": "function auth(req) { if (!req.user) throw error(401); }\nfastify.route({method: 'PATCH', url: '/items/:id', preHandler: auth, handler: async () => db.update({})\n});"
+    },
+    "expected": {
+      "/items/:id": true
+    }
+  },
+  {
+    "name": "hono registration",
+    "files": {
+      "routes.ts": "const web = new Hono(); function auth(req) { if (!req.user) throw error(401); }\nweb.use('/staff', auth);\nweb.get('/staff', () => {});\nweb.get('/public', () => {});"
+    },
+    "expected": {
+      "/staff": true,
+      "/public": false
+    }
+  },
+  {
+    "name": "nest method guard",
+    "files": {
+      "controller.ts": "class Items {\n@UseGuards(ScopeGuard)\n@Patch('/items/:id')\nupdate() { return db.update({}); }\n@Get('/public')\nlist() { return []; }\n}"
+    },
+    "expected": {
+      "/items/:id": true,
+      "/public": false
+    }
+  },
+  {
+    "name": "django view decorators",
+    "files": {
+      "api/urls.py": "path('items/<int:id>', views.edit),\npath('public', views.listing)",
+      "api/views.py": "@login_required\ndef edit(request):\n    return update(request)\n\ndef listing(request):\n    return []\n"
+    },
+    "expected": {
+      "/items/<int:id>": true,
+      "/public": false
+    }
+  },
+  {
+    "name": "laravel group",
+    "files": {
+      "routes.php": "Route::middleware('auth')->group(function () {\nRoute::patch('/items/{id}', function () { return update(); });\n});\nRoute::get('/public', function () { return []; });"
+    },
+    "expected": {
+      "/items/{id}": true,
+      "/public": false
+    }
+  }
+]

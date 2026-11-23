@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Helix static UX/UI deep report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "findings",
+    "lenses",
+    "design_system",
+    "components",
+    "scanned_files",
+    "limitations",
+    "adversarial",
+    "visual_audit",
+    "helix_version",
+    "source_coverage",
+    "summary",
+    "provenance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "provenance": {
+      "type": "object",
+      "required": ["helix_version", "target_head", "target_dirty", "models", "tools", "generated_at"]
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    },
+    "lenses": {
+      "type": "object",
+      "required": [
+        "ux_designer",
+        "ui_designer"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ux_designer": {
+          "$ref": "#/$defs/lens"
+        },
+        "ui_designer": {
+          "$ref": "#/$defs/lens"
+        }
+      }
+    },
+    "design_system": {
+      "type": "object",
+      "required": [
+        "css_tokens",
+        "tailwind",
+        "themes",
+        "base_components"
+      ],
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "examples",
+          "count"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "examples": {
+            "type": "array",
+            "maxItems": 3,
+            "items": {
+              "type": "string"
+            }
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "components": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "hardcoded",
+          "controls"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "controls": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "hardcoded": {
+            "type": "object",
+            "required": [
+              "color",
+              "spacing",
+              "radius",
+              "font_size"
+            ],
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "scanned_files": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "adversarial": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "visual_audit": {
+      "type": "object"
+    },
+    "helix_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_coverage": {
+      "type": "object"
+    },
+    "summary": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lens",
+        "id",
+        "title",
+        "severity",
+        "confidence",
+        "file",
+        "line",
+        "why",
+        "fix",
+        "evidence",
+        "source_area"
+      ],
+      "properties": {
+        "lens": {
+          "enum": [
+            "ux_designer",
+            "ui_designer"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low",
+            "info"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "confirmed",
+            "likely",
+            "possible"
+          ]
+        },
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "why": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fix": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_area": {
+          "enum": [
+            "active",
+            "docs",
+            "legacy",
+            "tests/examples",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "lens": {
+      "type": "object",
+      "required": [
+        "checklist",
+        "findings",
+        "score",
+        "adversarial_pass",
+        "summary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "checklist": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/finding"
+          }
+        },
+        "score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "adversarial_pass": {
+          "type": "object",
+          "required": [
+            "status",
+            "checks",
+            "observations",
+            "limitations"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "const": "static_only"
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "observations": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "summary": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

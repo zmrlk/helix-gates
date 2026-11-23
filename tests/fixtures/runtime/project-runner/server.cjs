@@ -1,0 +1,1 @@
+require('node:http').createServer((req,res)=>{res.setHeader('Content-Type','text/html');res.end('<html lang="en"><title>Runtime</title><main><h1>Ready</h1></main></html>')}).listen(Number(process.env.PORT),'127.0.0.1');

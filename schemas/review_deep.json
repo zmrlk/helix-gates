@@ -1,0 +1,585 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Helix static multi-lens deep review",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "findings",
+    "lenses",
+    "scanned_files",
+    "limitations",
+    "ui",
+    "offline_audits",
+    "endpoints",
+    "rbac",
+    "reported_findings",
+    "coverage",
+    "visual_audit",
+    "performance_weight",
+    "screenshot_review",
+    "summary",
+    "repo_hygiene",
+    "quality",
+    "source_coverage",
+    "helix_version",
+    "senior_pipeline",
+    "data_leak_audit",
+    "provenance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "provenance": {
+      "type": "object",
+      "required": [
+        "helix_version",
+        "target_head",
+        "target_dirty",
+        "models",
+        "tools",
+        "generated_at"
+      ]
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    },
+    "lenses": {
+      "type": "object",
+      "required": [
+        "security",
+        "senior_developer",
+        "architect",
+        "qa",
+        "product_manager",
+        "ops_data",
+        "tech_writer",
+        "ux_designer",
+        "ui_designer",
+        "repo_hygiene"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "security": {
+          "$ref": "#/$defs/lens"
+        },
+        "senior_developer": {
+          "$ref": "#/$defs/lens"
+        },
+        "architect": {
+          "$ref": "#/$defs/lens"
+        },
+        "qa": {
+          "$ref": "#/$defs/lens"
+        },
+        "product_manager": {
+          "$ref": "#/$defs/lens"
+        },
+        "ops_data": {
+          "$ref": "#/$defs/lens"
+        },
+        "tech_writer": {
+          "$ref": "#/$defs/lens"
+        },
+        "ux_designer": {
+          "$ref": "#/$defs/lens"
+        },
+        "ui_designer": {
+          "$ref": "#/$defs/lens"
+        },
+        "repo_hygiene": {
+          "$ref": "#/$defs/lens"
+        }
+      }
+    },
+    "scanned_files": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ui": {
+      "type": "object"
+    },
+    "offline_audits": {
+      "type": "object"
+    },
+    "endpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "file",
+          "line",
+          "handler",
+          "auth",
+          "required_role"
+        ]
+      }
+    },
+    "rbac": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "file",
+          "line",
+          "kind",
+          "evidence"
+        ]
+      }
+    },
+    "reported_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "severity",
+          "declared_status",
+          "status",
+          "evidence"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "open",
+              "likely-fixed",
+              "unknown"
+            ]
+          }
+        }
+      }
+    },
+    "coverage": {
+      "type": "object"
+    },
+    "visual_audit": {
+      "type": "object"
+    },
+    "performance_weight": {
+      "type": "object"
+    },
+    "screenshot_review": {
+      "type": "object"
+    },
+    "authz": {
+      "type": "object"
+    },
+    "verification": {
+      "type": "object"
+    },
+    "owner_findings": {
+      "type": "array"
+    },
+    "decisions": {
+      "type": "array"
+    },
+    "summary": {
+      "type": "object"
+    },
+    "repo_hygiene": {
+      "type": "object"
+    },
+    "quality": {
+      "type": "object"
+    },
+    "source_coverage": {
+      "type": "object"
+    },
+    "helix_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "senior_pipeline": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "parts",
+        "levels",
+        "limitations"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "part",
+              "files",
+              "roles"
+            ],
+            "properties": {
+              "part": {
+                "type": "string"
+              },
+              "files": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "roles": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "levels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "data_leak_audit": {
+      "type": "object",
+      "required": [
+        "findings",
+        "flows",
+        "audit_trail",
+        "dpia"
+      ],
+      "properties": {
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "flows": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "audit_trail": {
+          "type": "object"
+        },
+        "dpia": {
+          "type": "object"
+        }
+      }
+    },
+    "static_engine": {
+      "type": "object",
+      "required": [
+        "engine",
+        "coverage",
+        "usage",
+        "rules",
+        "local_candidates"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "engine": {
+          "type": "object"
+        },
+        "rules_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "coverage": {
+          "type": "object"
+        },
+        "usage": {
+          "type": "object"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "local_candidates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "file",
+              "line",
+              "rule",
+              "reason",
+              "status"
+            ],
+            "properties": {
+              "file": {
+                "type": "string"
+              },
+              "line": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "rule": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              },
+              "status": {
+                "const": "local_candidate"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lens",
+        "id",
+        "title",
+        "severity",
+        "confidence",
+        "file",
+        "line",
+        "why",
+        "fix",
+        "evidence",
+        "source_area"
+      ],
+      "properties": {
+        "lens": {
+          "enum": [
+            "security",
+            "senior_developer",
+            "architect",
+            "qa",
+            "product_manager",
+            "ops_data",
+            "tech_writer",
+            "ux_designer",
+            "ui_designer",
+            "repo_hygiene"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low",
+            "info"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "confirmed",
+            "likely",
+            "possible"
+          ]
+        },
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "why": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fix": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "string"
+          }
+        },
+        "finding_id": {
+          "type": "string"
+        },
+        "verification_status": {
+          "type": "string"
+        },
+        "verification_reason": {
+          "type": "string"
+        },
+        "original_severity": {
+          "type": "string"
+        },
+        "detector_degraded": {
+          "type": "boolean"
+        },
+        "precondition": {
+          "type": "string"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "examples": {
+          "type": "array"
+        },
+        "detector_suspect": {
+          "type": "boolean"
+        },
+        "deterministic_evidence": {
+          "type": "string"
+        },
+        "source_hash": {
+          "type": "string"
+        },
+        "source_area": {
+          "enum": [
+            "active",
+            "docs",
+            "legacy",
+            "tests/examples",
+            "unknown"
+          ]
+        },
+        "execution_credit": {
+          "type": "integer"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "locations": {
+          "type": "array"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "claim": {
+          "enum": [
+            "ASSUMPTION",
+            "VERIFIED"
+          ]
+        },
+        "source_offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "evidence_kind": {
+          "type": "string"
+        },
+        "evidence_kinds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "lens": {
+      "type": "object",
+      "required": [
+        "checklist",
+        "findings",
+        "score",
+        "adversarial_pass",
+        "summary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "checklist": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/finding"
+          }
+        },
+        "score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "adversarial_pass": {
+          "type": "object",
+          "required": [
+            "status",
+            "checks",
+            "observations",
+            "limitations"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "const": "static_only"
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "observations": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "summary": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}
