@@ -12,10 +12,12 @@ with tempfile.TemporaryDirectory(dir='/private/tmp') as base:
     policy = {key: [] for key in isolation.KEYS}; policy.update(scope='measurement', writable_roots=[str(work)], readonly_roots=readonly)
     backend = isolation.SeatbeltBackend(control)
     measurement = root / 'measurement.sb'; measurement.write_text(backend._compile(backend._normalize(policy)))
-    for label, prepare in (('A fresh HOME', None), ('A2 fresh HOME with Library/Application Support', 'Library/Application Support'),
-                           ('A3 fresh HOME with Library/Preferences', 'Library/Preferences')):
+    import pwd
+    real = Path(pwd.getpwuid(os.getuid()).pw_dir) / 'Library/Application Support/Google'
+    print('## real default parent exists before:', real.exists(), (real / 'Chrome').exists())
+    for label, prepare in (('A fresh HOME', None), ('P1 real Google pre-created', real), ('P2 real Google/Chrome pre-created', real / 'Chrome')):
         home = work / ('home-' + label.split()[0]); home.mkdir()
-        if prepare: (home / prepare).mkdir(parents=True)
+        if prepare: prepare.mkdir(parents=True, exist_ok=True)
         env = {'HOME': str(home), 'TMPDIR': str(work), 'MAC_CHROMIUM_TMPDIR': str(work), 'PATH': '/usr/bin:/bin'}
         argv = [isolation.SANDBOX_EXEC, '-f', str(measurement), CHROME, '--headless=new', '--no-sandbox', '--disable-gpu', '--no-first-run',
                 '--user-data-dir=' + str(work / ('profile-' + label.split()[0])), '--dump-dom', 'about:blank']
@@ -27,3 +29,4 @@ with tempfile.TemporaryDirectory(dir='/private/tmp') as base:
         log = subprocess.run(['/usr/bin/log', 'show', '--start', start, '--end', end, '--style', 'compact', '--predicate', 'sender == "Sandbox"'], capture_output=True, text=True)
         lines = sorted({line.split('deny(1) ', 1)[1][:200] for line in log.stdout.splitlines() if 'Chrome' in line and 'deny(1) ' in line})
         print('## denials', label, len(lines)); print('\n'.join(lines[:120]))
+        print('## real default dir after', label, sorted(str(x.relative_to(real)) for x in real.rglob('*')) if real.exists() else 'absent')
