@@ -45,7 +45,7 @@
     ],
     "reason": "Jawny wyjątek historyczny sprzed helix release: powtórzony numer w równoległych strumieniach; nie zezwala na kolejne commity."
   },
-  "_enforcement_base": "1ba754827732bb3ba7e038208b9f93eef720bbad",
+  "_enforcement_base": "9a2da2a51b59b459d344173e05925020fa3b428c",
   "0.8.3-beta": {
     "commits": [
       "f3e2482d7642f246991196b0e98c76ca930cbdc0",

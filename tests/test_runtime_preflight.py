@@ -453,8 +453,11 @@ class ProfileBoundary(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir='/private/tmp') as base:
             root = Path(base).resolve(); work = root / 'work'; work.mkdir(); control = root / 'control'; control.mkdir(mode=0o700)
             readonly = [str(Path(p).resolve()) for p in ('/usr', '/bin', '/System', '/Library', '/private/etc', '/dev', '/Applications/Google Chrome.app')]
+            # Only the scope where Chrome must start: launching it where it must fail crashed Chrome on every
+            # run and macOS showed a crash dialog to whoever ran the suite. The project scope lacking Chrome's
+            # rules is asserted on the compiled profile (test_measurement_scope_adds_only_the_browser_rules_and_other_scopes_get_none).
             results = {}; errors = {}
-            for scope in ('project', 'measurement'):
+            for scope in ('measurement',):
                 policy = {key: [] for key in isolation.KEYS}; policy.update(scope=scope, writable_roots=[str(work)], readonly_roots=readonly)
                 backend = isolation.SeatbeltBackend(control); profile = root / (scope + '.sb'); profile.write_text(backend._compile(backend._normalize(policy)))
                 try:
@@ -467,7 +470,6 @@ class ProfileBoundary(unittest.TestCase):
                     errors[scope] = (output.decode(errors='replace') if isinstance(output, bytes) else output)[-3000:]
             # Chrome's own stderr names the denied service or path when the measurement scope is too narrow.
             self.assertEqual(results['measurement'], (0, True), errors.get('measurement'))
-            self.assertNotEqual(results['project'][0], 0); self.assertFalse(results['project'][1])
 
     @unittest.skipUnless(sys.platform == 'darwin' and Path(isolation.SANDBOX_EXEC).exists(), 'wymaga macOS z sandbox-exec')
     def test_real_sandbox_denies_posix_ipc_outside_write_and_network_in_both_scopes(self):

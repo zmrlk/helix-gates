@@ -2,7 +2,7 @@
 
 Kontrole jakości oparte na dowodach i praca w checkpointach dla repozytoriów oraz agentów AI.
 
-`Python 3.11+` · `Node.js 20+` · `status: beta` · `0.9.3-beta`
+`Python 3.11+` · `Node.js 20+` · `status: beta` · `0.9.4-beta`
 
 [English](README.md) · [Instrukcje agentów](SKILL.md) · [Historia zmian](CHANGELOG.md)
 
@@ -288,7 +288,7 @@ sekcji `## Co zmieniono i dlaczego` albo `## What changed and why` z wyjaśnieni
 Audyt brownfield zapisuje `system-map.json`: komponenty z dowodami i statyczne
 wskazówki importów jako ASSUMPTION, bez twierdzeń o topologii produkcji.
 
-Polecenia projektu wymagają `helix_version: "0.9.3-beta"` w `helix.json` przed
+Polecenia projektu wymagają `helix_version: "0.9.4-beta"` w `helix.json` przed
 wykonaniem. `new init` zapisuje pin; po świadomej zmianie wersji powtórz oba
 pomiary porównania. Bramka zaakceptowanych wariantów projektu jest domyślnie
 wymagana także w istniejących projektach. Helix New wymaga `domain-map.json`:
@@ -456,7 +456,7 @@ Istniejący runtime po uruchomieniu aplikacji zbiera sweep/DOM na wykrytych tras
 i wagę po buildzie; skróty z odnośnikami trafiają przez `--runtime-report` do raportu
 `helix new audit`. Runtime nie inicjalizuje bazy ani zgody recenzenta automatycznie.
 
-Testy: `python3 -m unittest discover -s tests` oraz `node --test tests/node/*.test.mjs`.
+Testy: `python3 scripts/run_tests_parallel.py --serial` (`unittest discover -s tests` z blokadą CLI modeli) oraz `node --test tests/node/*.test.mjs`.
 Brak Playwright/Chromium lub zakaz procesów potomnych daje skip z powodem;
 skip nie dowodzi działania przeglądarki. Wrapper uruchamia testy z rzeczywistym Chromium.
 

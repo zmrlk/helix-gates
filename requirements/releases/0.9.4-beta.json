@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "helix_version": "0.9.4-beta",
+  "version": "0.9.4-beta",
+  "source_sha": "e21c4f67c4e0e6c0ad5de4c9f1272a1cce766516",
+  "claim": {
+    "task_id": "release",
+    "agent": "claude-helix-gates",
+    "created_at": "2026-11-23T15:54:03.479439+00:00",
+    "expires_at": "2026-11-23T19:54:03.479635+00:00",
+    "status": "active",
+    "lease_id": "cbd734a6f142467984e8a51b998816cb"
+  }
+}

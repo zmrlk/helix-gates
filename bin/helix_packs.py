@@ -22,8 +22,8 @@ def git(repo, *args, required=False):
     from helix_git_readonly import git as read_git, read_ref, filter_drivers, without_filters, REASONS
     if args and args[0] == 'diff':
         # A worktree diff can execute clean filters even with --name-only.
-        # Refuse unknown normalization and never invoke external diff/textconv;
-        # known drivers are emptied here too, so an attribute assigned after read_ref runs nothing.
+        # Refuse unknown normalization and never invoke external diff or textconv. Known drivers
+        # are emptied here too, so an attribute assigned after read_ref runs nothing.
         ref = read_ref(repo)
         drivers = filter_drivers(repo) if ref['dirty'] is not None else None
         if drivers is None:

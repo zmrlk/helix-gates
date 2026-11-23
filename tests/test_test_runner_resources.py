@@ -3,7 +3,9 @@ import importlib.util
 import contextlib
 import io
 import json
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import threading
@@ -90,6 +92,114 @@ class TestRunnerResources(unittest.TestCase):
         self.assertEqual(report['failed'], ['case.Case.test_a (+3)', 'case.Crash.test_d (+3)'])
         self.assertIn('FAIL case.Case.test_b, case.Case.test_c, batch case.Crash.test_d (+3) without a unittest failure header', out.getvalue())
         self.assertNotIn('test_a', out.getvalue())
+
+    def guarded_run(self, source, *argv, real_discovery=False):
+        """Real workers on a temporary test module; only the release check and discovery are replaced."""
+        temp = tempfile.mkdtemp(); self.addCleanup(__import__('shutil').rmtree, temp)
+        Path(temp, 'guard_case.py').write_text(source)
+        report = Path(temp) / 'report'
+        sys.path.insert(0, temp); self.addCleanup(sys.path.remove, temp)
+        sys.modules.pop('guard_case', None); __import__('importlib').invalidate_caches()   # each scenario is a fresh module
+        self.addCleanup(sys.modules.pop, 'guard_case', None)
+        env = dict(runner.ENV, PYTHONPATH=temp); real_run = subprocess.run
+        keys = ('PATH', 'HELIX_TEST_MODEL_CLI_LOG', 'HELIX_TEST_GUARD_BATCH'); before = {key: os.environ.get(key) for key in keys}
+        # Real discovery imports the module inside the runner, like unittest discover -s tests does.
+        load = ((lambda *a, **k: unittest.TestLoader().discover(temp, pattern='guard_*.py', top_level_dir=temp)) if real_discovery
+                else (lambda *a, **k: unittest.defaultTestLoader.loadTestsFromName('guard_case')))
+        with patch.object(runner, 'ENV', env), patch.object(sys, 'argv', ['run_tests_parallel.py', '-j', '1', '--resource-report', str(report), *argv]), \
+             patch.object(runner.subprocess, 'run', side_effect=lambda *a, **k: SimpleNamespace(returncode=0) if 'check_release_version' in str(a[0]) else real_run(*a, **k)), \
+             patch.object(unittest.defaultTestLoader, 'discover', side_effect=load), contextlib.redirect_stdout(io.StringIO()) as out, contextlib.redirect_stderr(io.StringIO()) as err:
+            code = runner.main()
+        # The guard is undone afterwards (also when this suite itself runs under the guarded runner).
+        self.assertEqual({key: os.environ.get(key) for key in keys}, before)
+        summary = report / 'test-summary.json'
+        return code, json.loads(summary.read_text()) if summary.exists() else None, out.getvalue() + err.getvalue()
+
+    CALL = 'import subprocess, unittest\nCLI = lambda: subprocess.run(["agy", "-p", "synthetic"], capture_output=True)\n'
+
+    def test_a_passing_test_that_starts_a_model_cli_fails_the_run(self):
+        # On CI the model CLIs are absent, so such a test passes there; the runner's guard catches it,
+        # names the test that ran it (not the first of its batch) and wins over an all-skipped verdict.
+        code, summary, output = self.guarded_run(self.CALL + (
+            'class Case(unittest.TestCase):\n'
+            '    def test_a_quiet(self): pass\n'
+            '    def test_b_calls_cli(self): CLI()\n'))
+        self.assertEqual(code, 1)
+        self.assertEqual(summary['status'], 'FAIL')
+        self.assertEqual(summary['failed_tests'], [])
+        self.assertEqual(summary['model_cli_calls'], ['agy [guard_case.Case.test_b_calls_cli]'])
+        self.assertIn('real model CLI started by tests: agy', output)
+        code, summary, _ = self.guarded_run(self.CALL + (
+            'class Case(unittest.TestCase):\n'
+            '    def test_calls_then_skips(self): CLI(); self.skipTest("synthetic")\n'))
+        self.assertEqual((code, summary['status']), (1, 'FAIL'))
+        # A caller that keeps only PATH (several Helix modules sanitize the environment) is still recorded.
+        code, summary, _ = self.guarded_run(
+            'import os, subprocess, unittest\n'
+            'class Case(unittest.TestCase):\n'
+            '    def test_sanitized_callers(self):\n'
+            '        for name in ("agy", "codex", "grok", "claude", "gemini"):\n'
+            '            subprocess.run([name, "--version"], env={"PATH": os.environ["PATH"]}, capture_output=True)\n')
+        self.assertEqual((code, summary['status']), (1, 'FAIL'))
+        self.assertEqual(sorted(call.split()[0] for call in summary['model_cli_calls']), ['agy', 'claude', 'codex', 'gemini', 'grok'])
+
+    def test_a_call_during_discovery_fails_the_run_even_as_an_import_error(self):
+        quiet = 'class Case(unittest.TestCase):\n    def test_quiet(self): pass\n'
+        for call in ('CLI()\n', 'subprocess.run(["agy"], check=True)\n'):
+            with self.subTest(call=call):
+                code, summary, _ = self.guarded_run(self.CALL + call + quiet, real_discovery=True)
+                # The module-level call runs in discovery and again when a worker imports the module.
+                self.assertEqual((code, summary['status']), (1, 'FAIL'))
+                self.assertIn('agy [discovery]', summary['model_cli_calls'])
+
+    def test_a_call_with_an_unrun_batch_is_still_a_failure(self):
+        seen = []
+        def execute(batches, jobs, governor):
+            seen.extend(batches); first, second = batches
+            with open(os.environ['HELIX_TEST_MODEL_CLI_LOG'], 'a') as log: log.write('agy [' + first[0] + ']\n')
+            return dict(results=[(first[0], 0, 1, 0, 'Ran 1 test in 0.01s\n\nOK\n')], not_run=[second],
+                        paused=decision(0, 'critical'), resource_decisions=[decision(0, 'critical')])
+        suite = unittest.TestSuite([self.__class__('test_high_limits_admission_but_runs_every_batch_once'), self.__class__('test_requested_jobs_remains_upper_bound_with_changing_pressure')])
+        with tempfile.TemporaryDirectory() as temp:
+            with patch.object(sys, 'argv', ['run_tests_parallel.py', '--resource-report', temp]), patch.object(runner.subprocess, 'run', return_value=SimpleNamespace(returncode=0)), \
+                 patch.object(unittest.defaultTestLoader, 'discover', return_value=suite), patch.object(runner, 'execute_batches', side_effect=execute), \
+                 patch.dict(os.environ, {'HELIX_TEST_BATCH': '1'}), contextlib.redirect_stdout(io.StringIO()):
+                code = runner.main()
+            report = json.loads((Path(temp) / 'test-summary.json').read_text())
+        self.assertEqual(len(seen), 2)
+        self.assertEqual((code, report['status'], report['model_cli_calls'], report['not_run']), (1, 'FAIL', ['agy [' + seen[0][0] + ']'], [seen[1]]))
+
+    def test_serial_mode_is_the_test_command_and_its_real_worker_is_guarded(self):
+        self.assertEqual(json.loads((ROOT / 'helix.json').read_text())['test_cmd'], 'python3 scripts/run_tests_parallel.py --serial')
+        with tempfile.TemporaryDirectory() as temp:
+            tree = Path(temp) / 'tree'; (tree / 'tests/fixtures').mkdir(parents=True)
+            (tree / 'tests/fixtures/model-cli-guard.sh').write_bytes((ROOT / 'tests/fixtures/model-cli-guard.sh').read_bytes())
+            (tree / 'tests/fixtures/model-cli-guard.sh').chmod(0o755)
+            real_run = subprocess.run; outputs = []; release_checks = []; env = dict(runner.ENV); env_before = dict(env)
+            keys = ('PATH', 'HELIX_TEST_MODEL_CLI_LOG', 'HELIX_TEST_GUARD_BATCH'); process_before = {key: os.environ.get(key) for key in keys}
+            def worker(*args, **kwargs):
+                if 'check_release_version' in str(args[0]): release_checks.append(args); return SimpleNamespace(returncode=0)
+                done = real_run(*args, **kwargs); outputs.append(done.stderr); return done
+            # A CLI call fails, a quiet test passes, an all-skipped suite is no evidence; each run writes its own summary.
+            for index, (body, expected, status) in enumerate((('CLI()', 1, 'FAIL'), ('pass', 0, 'PASS'), ('self.skipTest("synthetic")', 2, 'INCOMPLETE'))):
+                report = Path(temp) / ('report-' + str(index))
+                (tree / 'tests/test_guard_serial.py').write_text(self.CALL + 'class Case(unittest.TestCase):\n    def test_serial(self): ' + body + '\n')
+                with patch.object(runner, 'ROOT', str(tree)), patch.object(runner, 'ENV', env), patch.object(runner.subprocess, 'run', side_effect=worker), \
+                     patch.object(sys, 'argv', ['run_tests_parallel.py', '--serial', '--resource-report', str(report)]), contextlib.redirect_stderr(io.StringIO()) as err:
+                    self.assertEqual(runner.main(), expected, err.getvalue())
+                self.assertRegex(outputs[-1], r'(?m)^Ran 1 test in')
+                self.assertEqual(env, env_before)
+                self.assertEqual({key: os.environ.get(key) for key in keys}, process_before)
+                self.assertEqual(json.loads((report / 'test-summary.json').read_text())['status'], status)
+                self.assertEqual(len(list(report.glob('model-cli-guard-*'))), 1)
+                if expected == 1: self.assertIn('real model CLI started by tests: agy [test_guard_serial.Case.test_serial]', err.getvalue())
+            # A report directory is single-use: a later run cannot leave an earlier summary in place.
+            with patch.object(sys, 'argv', ['run_tests_parallel.py', '--serial', '--resource-report', str(Path(temp) / 'report-1')]), \
+                 contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as refused:
+                runner.main()
+            self.assertEqual(refused.exception.code, 2)
+            # The behaviour gate does not depend on release history; CI checks that in its own step.
+            self.assertEqual(release_checks, [])
 
     def test_every_test_skipped_does_not_claim_a_complete_gate(self):
         with tempfile.TemporaryDirectory() as temp:

@@ -2,7 +2,7 @@
 name: helix
 description: Bramki jakości dla każdej nietrywialnej zmiany kodu i dla każdego raportu o repozytorium: G0 prawda i kontekst (ledger twierdzeń VERIFIED/ASSUMPTION, systemy potwierdzone przez właściciela), checkpointy, G1 testy zachowania, G2 porównanie wizualne, G3 dwie niezależne recenzje innej rodziny modelu, G4 człowiek. Użyj, gdy piszesz lub zmieniasz kod w repo z helix.json, gdy ktoś mówi „helix”, „bramki”, „przejdź przez G0–G4”, „zrecenzuj niezależnie”, albo zanim zgłosisz znaleziska o repo. Nie do stylu kodu ani pojedynczych edycji dokumentacji. Modelowane na Helixie Shopify Engineering. DRAFT beta.
 metadata:
-  version: "0.9.3-beta"
+  version: "0.9.4-beta"
   split: "2026-11-02 rdzeń + references/"
 ---
 

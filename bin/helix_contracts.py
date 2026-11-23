@@ -4,7 +4,7 @@ import json
 from datetime import date, datetime, timezone
 from pathlib import Path
 
-VERSION = '0.9.3-beta'
+VERSION = '0.9.4-beta'
 
 
 def artifact(root, value):
