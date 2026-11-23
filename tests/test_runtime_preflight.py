@@ -453,7 +453,7 @@ class ProfileBoundary(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir='/private/tmp') as base:
             root = Path(base).resolve(); work = root / 'work'; work.mkdir(); control = root / 'control'; control.mkdir(mode=0o700)
             readonly = [str(Path(p).resolve()) for p in ('/usr', '/bin', '/System', '/Library', '/private/etc', '/dev', '/Applications/Google Chrome.app')]
-            results = {}
+            results = {}; errors = {}
             for scope in ('project', 'measurement'):
                 policy = {key: [] for key in isolation.KEYS}; policy.update(scope=scope, writable_roots=[str(work)], readonly_roots=readonly)
                 backend = isolation.SeatbeltBackend(control); profile = root / (scope + '.sb'); profile.write_text(backend._compile(backend._normalize(policy)))
@@ -461,10 +461,12 @@ class ProfileBoundary(unittest.TestCase):
                     done = subprocess.run([isolation.SANDBOX_EXEC, '-f', str(profile), chrome, '--headless=new', '--no-sandbox', '--disable-gpu', '--no-first-run',
                                            '--user-data-dir=' + str(work / ('profile-' + scope)), '--dump-dom', 'about:blank'],
                                           capture_output=True, text=True, timeout=60, cwd=str(work), env={'HOME': str(work), 'TMPDIR': str(work), 'MAC_CHROMIUM_TMPDIR': str(work), 'PATH': '/usr/bin:/bin'})
-                    results[scope] = (done.returncode, '<html' in done.stdout)
-                except subprocess.TimeoutExpired:
-                    results[scope] = ('timeout', False)
-            self.assertEqual(results['measurement'], (0, True))
+                    results[scope] = (done.returncode, '<html' in done.stdout); errors[scope] = done.stderr[-3000:]
+                except subprocess.TimeoutExpired as timeout:
+                    results[scope] = ('timeout', False); output = timeout.stderr or ''
+                    errors[scope] = (output.decode(errors='replace') if isinstance(output, bytes) else output)[-3000:]
+            # Chrome's own stderr names the denied service or path when the measurement scope is too narrow.
+            self.assertEqual(results['measurement'], (0, True), errors.get('measurement'))
             self.assertNotEqual(results['project'][0], 0); self.assertFalse(results['project'][1])
 
     @unittest.skipUnless(sys.platform == 'darwin' and Path(isolation.SANDBOX_EXEC).exists(), 'wymaga macOS z sandbox-exec')

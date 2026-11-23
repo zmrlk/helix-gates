@@ -2,9 +2,12 @@
 import contextlib
 import io
 import json
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
+import time
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
@@ -56,6 +59,41 @@ class ModelCallAdmission(unittest.TestCase):
                     with self.subTest(policy=bool(policy), provider=provider):
                         self.H.CALLERS[provider](self.ctx, 'synthetic-model', 'PRIVATE_SOURCE_CANARY', None, None, False, self.out, 1)
                 self.assertEqual(process.call_count, len(routing.JSON_PROVIDERS))
+    def test_every_model_cli_runs_with_the_browser_login_blocker(self):
+        # A CLI without a login (agy) opened a browser OAuth tab on every probe refresh.
+        blocker = str(Path(__file__).resolve().parents[1] / 'bin/no-browser')
+        envs = {}
+        def answer(argv, cwd, **kwargs):
+            envs[argv[0]] = kwargs.get('env') or {}
+            if argv[0] == 'codex': Path(argv[argv.index('-o') + 1]).write_text('{"ok": true}'); return 0, '', ''
+            if argv[0] == 'agy': return 0, json.dumps({'status': 'SUCCESS', 'structured_output': {'ok': True}}), ''
+            if argv[0] == 'grok': return 0, json.dumps({'structuredOutput': {'ok': True}}), ''
+            return 0, '{"ok": true}', ''
+        self.ctx.cfg.pop('data_egress', None)
+        with patch.object(self.H, 'sh', side_effect=answer):
+            for provider, caller in self.H.CALLERS.items():
+                if provider == 'grok': continue   # manual handoff file, no process
+                with self.subTest(provider=provider):
+                    caller(self.ctx, 'synthetic-model', 'prompt', None, None, False, self.out, 1)
+        self.assertEqual(set(envs), {'codex', 'agy', 'grok', 'claude'})
+        for program, env in envs.items():
+            self.assertEqual(env.get('PATH', '').split(os.pathsep)[0], blocker, program)
+
+    def test_browser_login_attempt_is_refused_without_signalling_any_process(self):
+        cli = self.root / 'fake-cli'
+        # The CLI decides what a refused browser means; the blocker only refuses and signals nobody,
+        # even when a CLI replaces itself with `exec open` and the caller becomes its parent.
+        cli.write_text('#!/bin/sh\nopen "https://login.example.invalid/oauth" || { echo "login unavailable" >&2; exit 3; }\n')
+        cli.chmod(0o755)
+        done = subprocess.run([str(cli)], capture_output=True, text=True, timeout=20, env=self.H.model_cli_env())
+        self.assertEqual(done.returncode, 3)
+        self.assertIn('open blocked', done.stderr)
+        replaced = self.root / 'exec-cli'
+        replaced.write_text('#!/bin/sh\nexec xdg-open "https://login.example.invalid/oauth"\n'); replaced.chmod(0o755)
+        done = subprocess.run([str(replaced)], capture_output=True, text=True, timeout=20, env=self.H.model_cli_env())
+        self.assertEqual(done.returncode, 1)
+        self.assertIn('xdg-open blocked', done.stderr)
+
     def test_read_only_grok_runs_outside_the_checked_project(self):
         # Haki sesji (memsearch) piszą w katalogu roboczym: Grok w projekcie B zmienił źródła przeglądu.
         seen = []

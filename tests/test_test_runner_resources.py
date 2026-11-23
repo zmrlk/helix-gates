@@ -73,6 +73,24 @@ class TestRunnerResources(unittest.TestCase):
             self.assertTrue(report['discovery_empty'])
             self.assertEqual(report['tests'], 0)
 
+    def test_failure_names_the_failing_tests_not_the_batch_label(self):
+        stderr = ("FAIL: test_b (case.Case.test_b) (report='x.json')\nERROR: test_c (case.Case.test_c)\n"
+                  "Ran 4 tests in 0.01s\n\nFAILED (failures=1, errors=1)\n")
+        with tempfile.TemporaryDirectory() as temp:
+            suite = unittest.TestSuite([self.__class__('test_high_limits_admission_but_runs_every_batch_once')])
+            execution = dict(results=[('case.Case.test_a (+3)', 1, 4, 0, stderr), ('case.Crash.test_d (+3)', 1, 0, 0, 'Segmentation fault\n')],
+                             not_run=[], paused=None, resource_decisions=[])
+            out = io.StringIO()
+            with patch.object(sys, 'argv', ['run_tests_parallel.py', '--resource-report', temp]), patch.object(runner.subprocess, 'run', return_value=SimpleNamespace(returncode=0)), patch.object(unittest.defaultTestLoader, 'discover', return_value=suite), patch.object(runner, 'execute_batches', return_value=execution), contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
+                code = runner.main()
+            self.assertEqual(code, 1)
+            report = json.loads((Path(temp) / 'test-summary.json').read_text())
+        # A worker that died without unittest headers names no test: it stays a batch in `failed`.
+        self.assertEqual(report['failed_tests'], ['case.Case.test_b', 'case.Case.test_c'])
+        self.assertEqual(report['failed'], ['case.Case.test_a (+3)', 'case.Crash.test_d (+3)'])
+        self.assertIn('FAIL case.Case.test_b, case.Case.test_c, batch case.Crash.test_d (+3) without a unittest failure header', out.getvalue())
+        self.assertNotIn('test_a', out.getvalue())
+
     def test_every_test_skipped_does_not_claim_a_complete_gate(self):
         with tempfile.TemporaryDirectory() as temp:
             suite = unittest.TestSuite([self.__class__('test_high_limits_admission_but_runs_every_batch_once')])

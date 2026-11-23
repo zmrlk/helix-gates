@@ -80,6 +80,26 @@ console.log(JSON.stringify({{checks:f.map(x=>x.check+':'+x.severity),worst:u.wor
             self.assertIn(c, j["checks"])
         self.assertEqual(j["worst"], "fail"); self.assertTrue(j["local"]); self.assertFalse(j["prod"]); self.assertTrue(j["allow"])
 
+    @unittest.skipUnless(shutil.which("node"), "Node unavailable")
+    def test_rules_load_without_playwright_but_browser_use_and_cli_fail(self):
+        with tempfile.TemporaryDirectory() as d:
+            # Preload: the dependency resolver reports Playwright missing, as on a clean machine.
+            stub = Path(d) / "missing-playwright.cjs"
+            stub.write_text("const M = require('module'), real = M._load;\n"
+                            "M._load = function (name) { if (name === './dependencies.cjs') return () => { throw new Error('Missing playwright: synthetic'); };"
+                            " return real.apply(this, arguments); };\n")
+            js = (f"const u = require({json.dumps(str(HOME / 'bin/ux.cjs'))});"
+                  "let browser = 'no error'; try { u.resolveTarget({pw_device: 'iPhone 13'}); } catch (e) { browser = e.message; }"
+                  "u.executionTools({}).then((tools) => {"
+                  "console.log(JSON.stringify({worst: u.worst([{severity: 'warn'}]), local: u.hostAllowed('127.0.0.1', []),"
+                  " checks: u.findingsFor({mobile: true, layout: {meta_viewport: null, overflow_px: 0, clipped: [], overlaps: [], covered: [], small_targets: [],"
+                  " tiny_targets: [], small_text: [], fixed: [], broken_images: [], text_chars: 100}}, {}, 'base').map(f => f.check), browser,"
+                  " tools: tools.map(t => t.tool)})); });")
+            p = sh(["node", "-r", str(stub), "-e", js], d); self.assertEqual(p.returncode, 0, p.stderr)
+            self.assertEqual(json.loads(p.stdout), {"worst": "warn", "local": True, "checks": ["meta-viewport"], "browser": "Missing playwright: synthetic", "tools": ["node"]})
+            p = sh(["node", "-r", str(stub), str(HOME / "bin/ux.cjs"), "engines"], d)
+            self.assertNotEqual(p.returncode, 0); self.assertIn("Missing playwright: synthetic", p.stderr); self.assertEqual(p.stdout, "")
+
 class Coverage(unittest.TestCase):
     def test_template_parses_with_unique_ids_and_valid_columns(self):
         items = U.parse_checklist((HOME / "templates/coverage-checklist.md").read_text())

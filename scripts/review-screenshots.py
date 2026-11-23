@@ -27,8 +27,10 @@ def main():
                    ' (subpath "/private/tmp") (subpath "/private/var/folders") (subpath "/dev"))')
         argv = ['sandbox-exec', '-p', profile] + argv
     try:
+        # Same headless rule as bin/helix model_cli_env: a browser login is refused (no window).
+        no_browser = str(Path(__file__).resolve().parents[1] / 'bin/no-browser')
         run = subprocess.run(argv, cwd=Path(sys.argv[1]).resolve(), text=True, stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE, timeout=610)
+                             stderr=subprocess.PIPE, timeout=610, env=dict(os.environ, PATH=no_browser + os.pathsep + os.environ.get('PATH', '')))
         output = run.stdout
         try:
             data = json.loads(output)

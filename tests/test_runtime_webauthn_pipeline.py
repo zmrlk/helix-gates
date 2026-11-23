@@ -18,6 +18,9 @@ import helix_config
 import helix_pro
 import helix_project_proposal as proposal
 import helix_runtime as runtime
+# Loaded before the no-IO block: inventory() imports it lazily, and the first import of
+# zoneinfo reads an OS file on macOS framework Pythons (sysconfig), which is not inventory IO.
+import helix_runtime_adapters  # noqa: F401
 import helix_runtime_integrations as integrations
 import helix_runtime_transport as transport
 import helix_runtime_webauthn as webauthn

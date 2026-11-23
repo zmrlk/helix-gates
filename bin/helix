@@ -70,6 +70,10 @@ def sh(cmd, cwd, timeout=None, input=None, env=None):
                        timeout=timeout, input=input, env=env)
     return p.returncode, p.stdout, p.stderr
 
+def model_cli_env():
+    """Model CLIs run headless: `open`/`xdg-open` resolve to bin/no-browser, which refuses a browser login (no window)."""
+    return dict(os.environ, PATH=str(Path(__file__).resolve().parent / "no-browser") + os.pathsep + os.environ.get("PATH", ""))
+
 def extract_json(text):
     text = (text or "").strip()
     try: return json.loads(text)
@@ -221,7 +225,7 @@ def call_codex(ctx, model, prompt, images, schema, write, out_dir, timeout):
     if schema: cmd += ["--output-schema", str(schema)]
     for i in images or []: cmd += ["-i", str(i)]
     cmd += ["-"]
-    rc, o, e = sh(cmd, ctx.repo, timeout=timeout, input=prompt)
+    rc, o, e = sh(cmd, ctx.repo, timeout=timeout, input=prompt, env=model_cli_env())
     text = out.read_text() if out.exists() else ""
     if out.exists(): out.unlink()
     if rc != 0 or not text: raise ProviderError(f"codex rc={rc}: {(e or o)[-400:]}")
@@ -250,7 +254,7 @@ def call_agy(ctx, model, prompt, images, schema, write, out_dir, timeout, *, pro
     if schema: cmd += ["--json-schema", str(schema)]
     deadline = getattr(ctx, '_deep_deadline', None)
     wall_timeout = min(timeout + 30, max(0.001, deadline - time.monotonic())) if deadline else timeout + 30
-    rc, o, e = sh(cmd, ctx.repo, timeout=wall_timeout)
+    rc, o, e = sh(cmd, ctx.repo, timeout=wall_timeout, env=model_cli_env())
     j = extract_json(o) or {}
     (Path(out_dir) / f"agy-raw-{model}-{int(time.time())}.json").write_text(o + ("\n--stderr--\n" + e if e else ""))
     if j.get("status") != "SUCCESS": raise ProviderError(f"agy {model}: status={j.get('status')} {(o + e)[-400:]}")
@@ -282,7 +286,7 @@ def call_grok_cli(ctx, model, prompt, images, schema, write, out_dir, timeout):
     # (projekt B: 9 z ok. 190 i 14 z 80 weryfikacji). 8 tur daje mu miejsce na odpowiedź po nieudanych odczytach.
     else: cmd += ["--permission-mode", "dontAsk", "--max-turns", "8"]
     if schema: cmd += ["--json-schema", Path(schema).read_text()]
-    try: rc, o, e = sh(cmd, cwd, timeout=timeout)
+    try: rc, o, e = sh(cmd, cwd, timeout=timeout, env=model_cli_env())
     finally: pf.unlink(missing_ok=True)
     (Path(out_dir) / f"grok-cli-raw-{model}-{int(time.time())}.json").write_text(o + ("\n--stderr--\n" + e if e else ""))
     j = extract_json(o) or {}
@@ -299,7 +303,7 @@ def call_claude(ctx, model, prompt, images, schema, write, out_dir, timeout):
            "--permission-mode", "acceptEdits" if write else "plan"]
     if model: cmd += ["--model", model]
     # Katalog roboczy poza projektem: wtyczki i haki Claude Code zapisują do bieżącego katalogu (np. .memsearch/), a projekt jest tylko do odczytu.
-    rc, o, e = sh(cmd, Path(out_dir), timeout=timeout)
+    rc, o, e = sh(cmd, Path(out_dir), timeout=timeout, env=model_cli_env())
     if rc != 0: raise ProviderError(f"claude rc={rc}: {(e or o)[-300:]}")
     return o
 

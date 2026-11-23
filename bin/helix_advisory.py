@@ -6,7 +6,7 @@ import re
 import subprocess
 import tempfile
 
-from helix_git_readonly import git
+from helix_git_readonly import git, filter_drivers, without_filters
 from helix_tools_manager import resolve_installed
 
 
@@ -16,7 +16,10 @@ def changed_files(repo, since):
     ref = git(repo, 'rev-parse', '--verify', '--end-of-options', since + '^{commit}', local_objects_only=True)
     if ref.returncode or not re.fullmatch(r'[a-f0-9]{40,64}', ref.stdout.strip()):
         raise ValueError('nieznany ref --since')
-    diff = git(repo, 'diff', '--name-only', '--diff-filter=ACMR', '-z', ref.stdout.strip(), '--', local_objects_only=True)
+    # A worktree diff would run the repository's clean filters; with drivers emptied it compares raw content.
+    drivers = filter_drivers(repo, local_objects_only=True)
+    if drivers is None: raise ValueError('niepełny odczyt różnicy Git')
+    diff = git(repo, *without_filters(drivers), 'diff', '--name-only', '--diff-filter=ACMR', '-z', ref.stdout.strip(), '--', local_objects_only=True)
     new = git(repo, 'ls-files', '--others', '--exclude-standard', '-z', local_objects_only=True)
     if diff.returncode or new.returncode: raise ValueError('niepełny odczyt różnicy Git')
     names = set((diff.stdout + new.stdout).split('\0')) - {''}

@@ -23,6 +23,11 @@ def ids(suite):
         else:
             yield t.id()
 
+def failing_tests(stderr):
+    """Test ids from unittest FAIL/ERROR headers, including subtest and import failures."""
+    return sorted(set(re.findall(r'(?m)^(?:FAIL|ERROR): \S+ \(([^()\s]+)\)', stderr)))
+
+
 def run(batch):
     t = time.time()
     p = subprocess.run([sys.executable, "-m", "unittest", *batch], cwd=ROOT, env=ENV,
@@ -125,7 +130,7 @@ def main():
         else:
             pending.extend(class_ids)
     mods.extend(pending[i:i + ap_b] for i in range(0, len(pending), ap_b))
-    t0 = time.time(); total = 0; skipped = 0; failed = []
+    t0 = time.time(); total = 0; skipped = 0; failed = []; failed_tests = []; unexplained = []
     execution = execute_batches(mods, a.j, governor)
     for mod, rc, n, dt, err in sorted(execution['results'], key=lambda r: -r[3]):
         total += n
@@ -134,17 +139,23 @@ def main():
         if skip_match: skipped += int(skip_match.group(1))
         if os.environ.get("HELIX_TEST_TIMES"): print(f"{dt:6.1f}s {n:4d} {mod}")
         if rc:
-            failed.append(mod); sys.stderr.write(f"--- FAIL {mod}\n{err[-4000:]}\n")
+            # Name the failing tests, not the batch: its label is only the first test id, and the
+            # tail below can cut the unittest headers off.
+            # A worker that died without headers stays a batch: its label names no failing test.
+            names = failing_tests(err)
+            failed.append(mod); failed_tests.extend(names)
+            if not names: unexplained.append(f'batch {mod} without a unittest failure header')
+            sys.stderr.write(f"--- FAIL {', '.join(names) or unexplained[-1]} [batch {mod}]\n{err[-4000:]}\n")
     status = 'INCOMPLETE' if execution['not_run'] or not all_ids or total and skipped == total else 'FAIL' if failed else 'PASS'
     summary = dict(status=status, tests=total, skipped=skipped, batches_completed=len(execution['results']),
                    batches_total=len(mods), requested_jobs=a.j, seconds=round(time.time()-t0, 3),
-                   failed=failed, not_run=execution['not_run'], discovery_empty=not all_ids, resource_paused=execution['paused'],
+                   failed=failed, failed_tests=failed_tests, not_run=execution['not_run'], discovery_empty=not all_ids, resource_paused=execution['paused'],
                    resource_decisions=execution['resource_decisions'])
     if not all_ids: summary['reason'] = 'No test IDs discovered; an empty suite does not prove a passing gate'
     elif total and skipped == total: summary['reason'] = 'All selected tests were skipped; no execution evidence'
     with (report_dir / 'test-summary.json').open('x') as stream:
         json.dump(summary, stream, indent=2); stream.write('\n')
-    print(f"Ran {total} tests in {len(execution['results'])}/{len(mods)} batches, {time.time()-t0:.1f}s, -j {a.j}: " + ('OK' if status == 'PASS' else status + ' ' + ','.join(failed)))
+    print(f"Ran {total} tests in {len(execution['results'])}/{len(mods)} batches, {time.time()-t0:.1f}s, -j {a.j}: " + ('OK' if status == 'PASS' else status + ' ' + ', '.join(failed_tests + unexplained)))
     if skipped: print(f'Skipped tests: {skipped}; these do not provide execution evidence')
     print('Resource report: ' + str(report_dir / 'test-summary.json'))
     return 2 if status == 'INCOMPLETE' else 1 if failed else 0

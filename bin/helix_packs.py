@@ -19,15 +19,17 @@ def write_json(path, value):
 
 
 def git(repo, *args, required=False):
-    from helix_git_readonly import git as read_git, read_ref
+    from helix_git_readonly import git as read_git, read_ref, filter_drivers, without_filters, REASONS
     if args and args[0] == 'diff':
         # A worktree diff can execute clean filters even with --name-only.
-        # Refuse unknown normalization and never invoke external diff/textconv.
+        # Refuse unknown normalization and never invoke external diff/textconv;
+        # known drivers are emptied here too, so an attribute assigned after read_ref runs nothing.
         ref = read_ref(repo)
-        if ref['dirty'] is None:
-            if required: raise ValueError('Nie można bezpiecznie odczytać diff: ' + ref['reason'])
+        drivers = filter_drivers(repo) if ref['dirty'] is not None else None
+        if drivers is None:
+            if required: raise ValueError('Nie można bezpiecznie odczytać diff: ' + (ref['reason'] if ref['dirty'] is None else REASONS['git_filter_configuration_unknown']))
             return None
-        args = ('diff', '--no-ext-diff', '--no-textconv', *args[1:])
+        args = (*without_filters(drivers), 'diff', '--no-ext-diff', '--no-textconv', *args[1:])
     p = read_git(repo, *args)
     if required and p.returncode: raise ValueError('git: ' + p.stderr.strip())
     return p.stdout if not p.returncode else None

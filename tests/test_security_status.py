@@ -189,6 +189,10 @@ class SecurityStatusTests(unittest.TestCase):
         code = self.base / 'filter.py'
         code.write_text('from pathlib import Path\nPath(' + repr(str(marker)) + ').write_text("executed")\n')
         global_config = self.base / 'global.gitconfig'
+        # Git runs a driver only for paths whose `filter` attribute names it; an unused
+        # global driver is inert (test_git_readonly covers that case).
+        (self.repo / '.git/info').mkdir(exist_ok=True)
+        (self.repo / '.git/info/attributes').write_text('app.txt filter=synthetic\n')
         for field in ('clean', 'smudge', 'process', 'required'):
             with self.subTest(field=field):
                 value = 'true' if field == 'required' else shlex.join([sys.executable, str(code)])

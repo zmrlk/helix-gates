@@ -41,6 +41,20 @@ def git(repo, *args, text=True, timeout=10, input_data=None, local_objects_only=
     return subprocess.run([*prefix,*args],**options)
 
 
+def filter_drivers(repo, **options):
+    """Configured filter driver names (never their commands); None if unreadable or not passable to `-c`."""
+    found = git(repo, 'config', '--null', '--name-only', '--get-regexp', FILTER_KEYS, **options)
+    if found.returncode not in (0, 1): return None
+    drivers = {key.split('.', 1)[1].rsplit('.', 1)[0] for key in found.stdout.split('\0') if key}
+    return None if any('=' in name for name in drivers) else drivers
+
+
+def without_filters(drivers):
+    """`-c` pairs that empty the given drivers: a worktree read compares raw content and runs no command."""
+    return [arg for name in sorted(drivers) for setting in ('clean=', 'smudge=', 'process=', 'required=false')
+            for arg in ('-c', f'filter.{name}.{setting}')]
+
+
 def read_ref(repo, *, require_root=False):
     """Return containing Git identity; optionally require its exact worktree root."""
     result = dict(head=None, dirty=None, status='unknown', dirty_reason='not_checked',
@@ -57,21 +71,44 @@ def read_ref(repo, *, require_root=False):
         result.update(head=head.stdout.strip(), status='partial', dirty_reason='git_status_unavailable')
         # git status can launch clean/process filters from local or inherited
         # configuration. Names suffice to fail closed; never read command values.
-        filters = git(repo, 'config', '--null', '--name-only', '--get-regexp', FILTER_KEYS)
-        if filters.returncode == 0 and filters.stdout:
-            result['dirty_reason'] = 'git_filters_not_executed'
-        elif filters.returncode == 1 or filters.returncode == 0 and not filters.stdout:
-            index = git(repo, 'ls-files', '--stage', '-z')
+        drivers = filter_drivers(repo)
+        if drivers is None:
+            result['dirty_reason'] = 'git_filter_configuration_unknown'
+        else:
+            # Bytes: text mode would turn CRLF inside a path name into LF before check-attr.
+            index = git(repo, 'ls-files', '--stage', '-z', text=False)
+            rows = [row for row in index.stdout.split(b'\0') if row] if not index.returncode else []
+            paths = [row.split(b'\t', 1)[1] for row in rows if not row.startswith(b'160000 ')]
+            def assigned():
+                """Known drivers named by the `filter` attribute of tracked paths (status hashes no
+                untracked content); None if unreadable. --all omits unspecified attributes, so no
+                driver name can match a placeholder. A global driver nothing names (git-lfs) is inert."""
+                if not (drivers and paths): return set()
+                found = git(repo, 'check-attr', '--stdin', '-z', '--all', text=False, input_data=b''.join(path + b'\0' for path in paths))
+                if found.returncode: return None
+                fields = found.stdout.split(b'\0')
+                return drivers & {value.decode('utf-8', 'surrogateescape') for name, value in zip(fields[1::3], fields[2::3]) if name == b'filter'}
+            named = assigned() if not index.returncode else set()
             if index.returncode:
                 result['dirty_reason'] = 'git_index_unavailable'
-            elif any(row.startswith('160000 ') for row in index.stdout.split('\0')):
+            elif named is None:
+                result['dirty_reason'] = 'git_filter_configuration_unknown'
+            elif named:
+                result['dirty_reason'] = 'git_filters_not_executed'
+            elif len(paths) != len(rows):
                 result['dirty_reason'] = 'git_submodules_not_inspected'
             else:
-                dirty = git(repo, 'status', '--porcelain=v1', '-z', '--untracked-files=normal')
-                if not dirty.returncode:
+                # Attributes may change after the check: status gets every known driver emptied,
+                # so it runs no command, and a driver assigned meanwhile makes the raw result unknown.
+                # ponytail: a driver configured after the config read is not covered (as before).
+                dirty = git(repo, *without_filters(drivers), 'status', '--porcelain=v1', '-z', '--untracked-files=normal')
+                named = assigned()
+                if named is None:
+                    result['dirty_reason'] = 'git_filter_configuration_unknown'
+                elif named:
+                    result['dirty_reason'] = 'git_filters_not_executed'
+                elif not dirty.returncode:
                     result.update(dirty=bool(dirty.stdout), status='recorded', dirty_reason='git_status_without_filters')
-        else:
-            result['dirty_reason'] = 'git_filter_configuration_unknown'
     except (OSError, ValueError, TypeError, subprocess.SubprocessError):
         pass
     result['reason'] = REASONS[result['dirty_reason']]

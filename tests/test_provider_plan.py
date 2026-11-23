@@ -248,9 +248,14 @@ class ProviderPlanTests(unittest.TestCase):
 
     def test_probe_does_not_probe_a_different_agy_model(self):
         H=load_helix();routing.atomic_json(self.root/'provider-availability.json',inventory(('gemini','big-model')))
-        self.assertTrue(H.probe('gemini',ctx=self.ctx,model='big-model')[0])
-        self.assertFalse(H.probe('claude-via-agy',ctx=self.ctx,model='reason-model')[0])
-        self.assertFalse(H.probe('gemini',ctx=self.ctx,model='fast-model')[0])
+        # A missing record triggers probe's own refresh round: it must reach fake callers, never a real CLI.
+        called=[]
+        def unavailable(ctx,model,*args): called.append(model); raise ValueError('synthetic: model unavailable')
+        with patch.dict(H.CALLERS,{provider:unavailable for provider in H.CALLERS}):
+            self.assertTrue(H.probe('gemini',ctx=self.ctx,model='big-model')[0])
+            self.assertFalse(H.probe('claude-via-agy',ctx=self.ctx,model='reason-model')[0])
+            self.assertFalse(H.probe('gemini',ctx=self.ctx,model='fast-model')[0])
+        self.assertEqual(sorted(called),['big-model','code-model','fast-model','reason-model','verify-model'])
 
     def test_providers_plan_requires_no_calls(self):
         H=load_helix(); routing.atomic_json(self.root/'provider-availability.json',inventory(('codex','code-model')))
