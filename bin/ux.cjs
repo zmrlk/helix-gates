@@ -236,10 +236,10 @@ const ERROR_TEXT = /błąd|blad|error|nie udało|nie mozna|nie można|spróbuj|s
 const EMPTY_TEXT = /brak|pusto|nie ma|no results|empty|nothing|0 wyników|nie znaleziono/i;
 
 async function launch(engine, cache) {
-  // Certyfikat przebiegu (HTTPS runtime): Chromium ufa wyłącznie przypiętym kluczom tego przebiegu, jak runtime-browser.cjs.
+  // Run certificate (HTTPS runtime): Chromium trusts only the keys pinned for this run, as in runtime-browser.cjs.
   const spki = process.env.HELIX_RUNTIME_TLS_SPKI_LIST;
   if (spki && !spki.split(',').every((key) => /^[A-Za-z0-9+/]{43}=$/.test(key))) throw new Error('invalid owned TLS key list');
-  // WebKit i Firefox nie przypinają klucza: przy HTTPS przebiegu nie łączą się (bez obejścia), a cele są niesprawdzone, nie zaliczone.
+  // This runtime pins the run key only for Chromium: with run HTTPS, WebKit and Firefox do not connect (certificate checks are never bypassed) and their targets stay unchecked, not passed.
   if (spki && engine !== 'chromium') throw new Error(engine + ': brak zaufania do certyfikatu przebiegu (HTTPS), cel niesprawdzony');
   const options = { headless: true, ...(spki && engine === 'chromium' ? { args: ['--ignore-certificate-errors-spki-list=' + spki] } : {}) };
   if (!cache[engine]) cache[engine] = playwright()[engine].launch(options);   // cache the promise: no duplicate browsers under concurrency
@@ -270,8 +270,8 @@ function executionProvenance(job, tools) {
       { version: version || null, used, status: version ? 'recorded' : 'unknown' }])) } };
 }
 
-// Syntetyczne odpowiedzi funkcji serwerowych (helix_function_stubs.py, projekt B): plik z HELIX_FUNCTION_STUBS.
-// Funkcje nie startują w kopii (wołają systemy zewnętrzne); przeglądarka odpowiada na /functions/v1/<nazwa> odpowiedzią napisaną z kodu.
+// Synthetic server function responses (helix_function_stubs.py): a file named by HELIX_FUNCTION_STUBS.
+// Server functions do not start in the copy (they call external systems); the browser answers /functions/v1/<name> with a response written from the code.
 let FUNCTION_STUBS;
 function functionStubs() {
   if (FUNCTION_STUBS === undefined) {
@@ -293,7 +293,7 @@ async function routeFunctionStubs(ctx) {
 async function newContext(browser, target, job, extra = {}) {
   const opts = { ...resolveTarget(target), locale: job.locale || 'pl-PL', timezoneId: job.timezone || 'Europe/Warsaw',
     acceptDownloads: true, ...extra };
-  // storage_state: zalogowana sesja (Playwright storageState JSON) zamiast logowania na każdej stronie (limity logowań w API)
+  // storage_state: a signed-in session (Playwright storageState JSON) instead of a login on every page (APIs rate-limit logins)
   if (opts.storageState === undefined && job.storage_state) opts.storageState = job.storage_state;
   if (opts.storageState === null) delete opts.storageState;
   const ctx = await browser.newContext(opts);
@@ -510,7 +510,7 @@ async function scanOne(browser, target, pg, variant, job, outDir) {
       res.full_shot = rel + '.full.png';
     }
     res.shot = rel + '.png';
-    if (!variant) {   // stan zrzutu (projekt B): przekierowanie i widoczny komunikat błędu; resztę liczy helix_ux.screen_state
+    if (!variant) {   // screenshot state: redirect and visible error message; helix_ux.screen_state derives the rest
       const norm = (p) => p.replace(/\/+$/, '') || '/';
       const txt = await page.evaluate(() => (document.body ? document.body.innerText : '')).catch(() => '');
       const finalPath = new URL(page.url()).pathname;
@@ -749,7 +749,7 @@ function domSummary() {
     text: (document.body.innerText || '').trim().replace(/\n{2,}/g, '\n').slice(0, 2500) };
 }
 
-// Ekran startowy albo napis „Ładowanie...”: człowiek czeka, aż zniknie, i dopiero ocenia ekran (ta sama reguła co w ui-audit.mjs).
+// A splash screen or a loading indicator: a person waits until it is gone before judging the screen (same rule as ui-audit.mjs).
 const LOADING_SELECTOR = '[aria-busy="true"],[role="progressbar"],.animate-spin,.animate-pulse,[class*="spinner" i],[class*="skeleton" i],[data-loading="true"]';
 const LOADING_TEXT = '^(trwa\\s+)?(ładowanie|wczytywanie|pobieranie|loading|please wait|proszę czekać)(\\s+\\S+){0,3}\\s*(\\.{2,3}|…)$';
 async function waitReady(page, ms = 8000) {

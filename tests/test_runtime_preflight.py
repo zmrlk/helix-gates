@@ -23,7 +23,7 @@ def spec(identity='BLOCKED'):
 
 class ToolLedger(unittest.TestCase):
     def test_tool_first_seen_through_browser_metadata_can_later_be_run_directly(self):
-        # Przebieg 27 na projekcie A: po udanym e2e start Chrome dla PDF wywracał cały raport błędem 'calls'.
+        # Starting Chrome for the PDF after a successful e2e run must not crash the whole report with a 'calls' error.
         runner = runtime.Runner.__new__(runtime.Runner)
         runner.tools = {'playwright_chromium': '/synthetic/chrome'}; runner.browser_module_dir = '/synthetic/missing'
         runner.browser_metadata({'routes': [{'route': '/'}]})
@@ -44,12 +44,12 @@ class BareCallbackAnswers(unittest.TestCase):
                     errors=['stale'])
 
     def test_bare_callback_4xx_is_not_a_screen_defect_but_a_shared_screen_is_still_judged(self):
-        # Przebieg 28 na projekcie A: e2e i a11y kończyły FAIL przez 400 z /auth/callback wywołanego bez parametrów.
+        # A 400 from /auth/callback called without parameters must not fail e2e and a11y.
         out = runtime.bare_callback_answers(self.data(), self.PLANS, 'frontend')
         status = {row['route']: row['status'] for row in out['routes']}
         self.assertEqual(status, {'/auth/callback': 'NOT_APPLICABLE', '/': 'PASS', '/done': 'FAIL', '/missing': 'FAIL'})
         self.assertEqual(len(out['routes']), 4); self.assertEqual(out['bare_callbacks'], ['/auth/callback'])
-        self.assertEqual(len(out['requests']), 2)  # żądania zostają w dowodach, także 400 z adresu zwrotnego
+        self.assertEqual(len(out['requests']), 2)  # the requests stay in the evidence, including the 400 from the callback
         self.assertEqual(len(out['errors']), 2); self.assertTrue(any(e.startswith('/missing') for e in out['errors']))
 
     def test_callback_that_fails_for_another_reason_stays_a_failure(self):
@@ -289,7 +289,7 @@ class BrowserPort(unittest.TestCase):
             self.assertEqual(runner.active_sink['input']['browser_control_origins'], [])
             self.assertEqual((runner.network_listen_ports, runner.network_connect_ports, runner.env), ({5000}, {5000}, {'KEEP': '1'}))
             with self.assertRaises(runtime.Blocked): runner.project_command(['/synthetic/node', 'y.mjs'], phase='build')
-            # Każda droga startu procesu projektu przechodzi przez admit_process: polecenie, proces w tle i pomiar.
+            # Every way a project process starts goes through admit_process: command, background process and measurement.
             for phase in ('install', 'migration', 'build', 'application', 'measurement', 'database_server'):
                 with self.subTest(phase=phase), self.assertRaises(runtime.Blocked): runner.admit_process(phase, 10)
             with self.assertRaises(runtime.Blocked): runner.project_spawn(['/synthetic/node', 'server.js'], Path(directory), {}, Path(directory) / 'app.log', phase='application')
@@ -441,7 +441,7 @@ class ProfileBoundary(unittest.TestCase):
         self.assertEqual(home_rules, ['(allow file-write-create (require-all (vnode-type DIRECTORY) (require-any '
                                       + ' '.join('(literal "' + str(path) + '")' for path in isolation.browser_profile_directories()) + ')))'])
         for scope in ('project', 'database_server'): self.assertNotIn(str(support), texts[scope])
-        # Żadnej reguły dla systemowego katalogu tymczasowego użytkownika: Chrome dostaje własny przez MAC_CHROMIUM_TMPDIR.
+        # No rule for the user's system temporary directory: Chrome gets its own through MAC_CHROMIUM_TMPDIR.
         self.assertNotIn('/var/folders', measurement); self.assertNotIn('regex #"^/', measurement)
         self.assertIn('(allow network* (local unix-socket (subpath "' + str(work) + '")))', measurement)
         self.assertNotIn('(allow network* (local unix-socket))', measurement)
@@ -540,17 +540,17 @@ class RedirectedRoutes(unittest.TestCase):
             Path(d,'audit.json').write_text(j.dumps(base))
             result=helix_visual.projection(d,known={'/old','/new'})
             self.assertEqual((result['status'],result['redirects_to']),('redirected','/new'))
-            # pomiar przerwany odesłaniem ma flagę stanów zamiast listy: nadal jest rozpoznany jako odesłanie
+            # a measurement cut short by a redirect carries a state flag instead of a list: it is still recognised as a redirect
             Path(d,'audit.json').write_text(j.dumps(dict(base,runs=[dict(run,states=True)])))
             self.assertEqual(helix_visual.projection(d,known={'/old','/new'})['status'],'redirected')
             Path(d,'audit.json').write_text(j.dumps(base))
-            # bez sesji ekranów, na nieznany ekran i na logowanie odesłanie zostaje pomiarem niepełnym
+            # a redirect leaves the measurement incomplete when the screen session is missing, the target is unknown, or it is the login
             self.assertEqual(helix_visual.projection(d)['status'],'incomplete')
             self.assertEqual(helix_visual.projection(d,known={'/old'})['status'],'incomplete')
             for target in ('/login','/403','/404','/access-denied','/errors/500','/brak-dostepu'):
                 Path(d,'audit.json').write_text(j.dumps(dict(base,runs=[dict(run,finalURL='https://localhost:1'+target)])))
                 self.assertEqual(helix_visual.projection(d,known={'/old',target})['status'],'incomplete',target)
-            # inny origin (np. dostawca tożsamości) i błąd HTTP zostają pomiarem niepełnym
+            # another origin (e.g. the identity provider) and an HTTP error stay incomplete measurements
             for change in (dict(finalURL='https://idp.example.invalid/new'),dict(httpStatus=404)):
                 Path(d,'audit.json').write_text(j.dumps(dict(base,runs=[dict(run,**change)])))
                 self.assertEqual(helix_visual.projection(d,known={'/old','/new'})['status'],'incomplete')
@@ -583,10 +583,10 @@ class RouteAuditSelfCheck(unittest.TestCase):
     def test_same_finding_on_most_routes_makes_the_audit_suspect(self):
         import helix_visual, tempfile
         with tempfile.TemporaryDirectory() as d:
-            # niemal wszystkie uwagi są te same na każdej trasie: pomiar ogląda coś wspólnego, nie ekrany
+            # nearly all findings are the same on every route: the measurement sees something common to all routes, not the screens
             check=helix_visual.self_check(self.audits(d,[['okno "Zaczynamy" 95x28','okno: lista','okno: tytuł','okno: stopka']+(['własny'] if i==0 else []) for i in range(12)]))
             self.assertEqual((check['status'],check['shared_total'],check['shared_findings'][0]['routes']),('SUSPECT',4,12))
-            # wspólna powłoka plus dużo własnych uwag na trasach to wynik, nie podejrzenie; trasy są oceniane bez uwag powłoki
+            # a shared shell plus many route-specific findings is a result, not a suspicion; routes are judged without the shell's findings
             mixed=helix_visual.self_check(self.audits(d+'/..',[]) if False else self.audits(tempfile.mkdtemp(dir=d),[['powłoka 36x36']+(['własny '+str(i)+'-'+str(k) for k in range(4)] if i%2 else []) for i in range(12)]))
             self.assertEqual((mixed['status'],mixed['passed_without_shell']),('OK',6))
 
@@ -609,7 +609,7 @@ class RouteAuditSelfCheck(unittest.TestCase):
             Path(results[0]['evidence']).write_text(j.dumps(dict(runs=[dict(tap=['własny'],runtime=['HTTP 500: http://127.0.0.1:5/functions/v1/sales?x=1','console: x'])])))
             Path(results[1]['evidence']).write_text(j.dumps(dict(runs=[dict(runtime=['HTTP 500: http://127.0.0.1:5/functions/v1/sales','HTTP 406: http://127.0.0.1:5/rest/v1/rows'])])))
             results[1]['status']='incomplete'
-            # błąd po kliknięciu i błąd z odrzuconego podejścia liczą się tak samo jak błąd po wejściu
+            # an error after a click or from a rejected attempt counts the same as an error on entry
             Path(results[2]['evidence']).write_text(j.dumps(dict(runs=[dict(states=True),dict(states=[dict(runtime=['HTTP 500: http://127.0.0.1:5/functions/v1/sales'])],attempts=[dict(runtime=['HTTP 404: http://127.0.0.1:5/rpc/x'])])])))
             check=helix_visual.self_check(results)
             self.assertEqual(check['failed_requests'],[dict(status=500,path='/functions/v1/sales',routes=3),dict(status=406,path='/rest/v1/rows',routes=1),dict(status=404,path='/rpc/x',routes=1)])
@@ -832,7 +832,7 @@ class Settings(BaseSettings):
         proxy=helix_runtime.PackageProxy(('localhost',))
         original=socket.create_connection
         try:
-            # tunel do „rejestru” na pętli zwrotnej: test podmienia tylko port docelowy
+            # a tunnel to the "registry" on loopback: the test only swaps the target port
             socket.create_connection=lambda address,timeout=None:original(('127.0.0.1',port),timeout=timeout) if address==('localhost',443) else original(address,timeout=timeout)
             client=original(('127.0.0.1',proxy.port),timeout=5)
             client.sendall(b'CONNECT localhost:443 HTTP/1.1\r\n\r\n')
@@ -923,7 +923,7 @@ class RoleChecks(unittest.TestCase):
         fake.identity_forms['frontend']['identities'][1]['phases']=phases('PASS')
         rows={row['role']:row['result'] for row in helix_runtime.Runner.login_expectations(fake,{'path':'frontend'})}
         self.assertEqual(rows['archived'],'SESSION_GRANTED_TO_DENIED_ROLE')
-        # nieudana próba z innego powodu (dostawca tożsamości, przerwanie) nie dowodzi odmowy aplikacji
+        # an attempt that failed for another reason (identity provider, interruption) does not prove the application refused
         fake.identity_forms['frontend']['identities'][1]['phases']=phases('FAIL','BROWSER_OPERATION_FAILED')
         rows={row['role']:row['result'] for row in helix_runtime.Runner.login_expectations(fake,{'path':'frontend'})}
         self.assertEqual(rows['archived'],'INCONCLUSIVE')
@@ -960,7 +960,7 @@ class ClosingReviewFixes(unittest.TestCase):
             self.assertTrue(probe(None,'http://127.0.0.1:%d/'%api.server_address[1]))
             self.assertFalse(probe(None,'http://127.0.0.1:1/'))
             self.assertFalse(probe(None,'https://example.invalid/'))
-            # odesłanie i błąd HTTP niczego nie rozstrzygają; odesłania nie są śledzone
+            # a redirect or an HTTP error decides nothing; redirects are not followed
             import http.server, threading
             hits=[]
             class Elsewhere(http.server.BaseHTTPRequestHandler):

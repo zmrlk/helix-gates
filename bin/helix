@@ -218,7 +218,7 @@ from helix_usage import measured, Response
 def call_codex(ctx, model, prompt, images, schema, write, out_dir, timeout):
     admit_native_model(ctx, 'codex', model, prompt, images, schema, write, out_dir)
     out = Path(out_dir) / f"codex-last-{int(time.time()*1000)}.txt"
-    # daybreak w konfiguracji użytkownika odrzuca `codex exec` („Daybreak is unavailable for model …”); wyłączamy go tylko dla tego wywołania.
+    # A user-level daybreak setting makes `codex exec` fail ("Daybreak is unavailable for model ..."); it is disabled for this call only.
     cmd = ["codex", "exec", "--ephemeral", "--skip-git-repo-check", "-c", "daybreak=false", "-C", str(ctx.repo),
            "-s", "workspace-write" if write else "read-only", "-o", str(out), "--color", "never"]
     if model: cmd += ["-m", model]
@@ -248,7 +248,7 @@ def call_agy(ctx, model, prompt, images, schema, write, out_dir, timeout, *, pro
            "--add-dir", str(out_dir)]
     if write: cmd += ["--dangerously-skip-permissions"]
     elif images:
-        # Bez okna agy odmawia odczytu pliku i zwraca pusty SUCCESS; dopuszczamy wyłącznie odczyt katalogów ze zrzutami.
+        # Headless agy refuses to read files and returns an empty SUCCESS; only the screenshot folders may be read.
         folders = sorted({str(Path(p).resolve().parent) for p in images})
         cmd += ["--settings", json.dumps({"permissions": {"allow": [f"read_file({folder}/**)" for folder in folders]}})]
     if schema: cmd += ["--json-schema", str(schema)]
@@ -275,15 +275,15 @@ def call_grok_cli(ctx, model, prompt, images, schema, write, out_dir, timeout):
         prompt = ("READ-ONLY TASK. Do NOT run any shell commands and do not edit files. Everything you need is in this prompt"
                   + (" and the listed image files (just view them)" if images else "") + ". Answer directly with the final JSON.\n\n" + prompt)
     pf = Path(out_dir) / f"grok-cli-prompt-{int(time.time()*1000)}.md"; pf.write_text(prompt)
-    # grok-cli: no --add-dir (session works only in cwd). Zadanie tylko do odczytu ma całą treść w poleceniu, więc biegnie
-    # w katalogu wyników: haki sesji (np. memsearch) piszą wtedy tam, a nie w sprawdzanym projekcie.
+    # grok-cli has no --add-dir (a session works only in its cwd). A read-only task carries everything in the prompt,
+    # so it runs in the output directory: session hooks (e.g. memsearch) then write there, not into the checked project.
     cwd = ctx.repo if write or images else Path(out_dir)
     cmd = ["grok", "--prompt-file", str(pf), "--output-format", "json", "--no-subagents", "--disable-web-search",
            "--cwd", str(cwd)]
     if model: cmd += ["-m", model]
     if write: cmd += ["--permission-mode", "acceptEdits"]
-    # 4 tury nie wystarczały: Grok mimo polecenia sięga po narzędzia i kończył „max turns reached” bez odpowiedzi
-    # (projekt B: 9 z ok. 190 i 14 z 80 weryfikacji). 8 tur daje mu miejsce na odpowiedź po nieudanych odczytach.
+    # Grok may still try tools despite the instruction and can exhaust a four-turn budget ("max turns reached", no answer).
+    # Eight turns leave room for an answer after failed reads.
     else: cmd += ["--permission-mode", "dontAsk", "--max-turns", "8"]
     if schema: cmd += ["--json-schema", Path(schema).read_text()]
     try: rc, o, e = sh(cmd, cwd, timeout=timeout, env=model_cli_env())
@@ -302,7 +302,7 @@ def call_claude(ctx, model, prompt, images, schema, write, out_dir, timeout):
     cmd = ["claude", "-p", prompt, "--output-format", "text", "--add-dir", str(out_dir),
            "--permission-mode", "acceptEdits" if write else "plan"]
     if model: cmd += ["--model", model]
-    # Katalog roboczy poza projektem: wtyczki i haki Claude Code zapisują do bieżącego katalogu (np. .memsearch/), a projekt jest tylko do odczytu.
+    # Working directory outside the project: Claude Code plugins and hooks write to the current directory (e.g. .memsearch/), and the project is read-only.
     rc, o, e = sh(cmd, Path(out_dir), timeout=timeout, env=model_cli_env())
     if rc != 0: raise ProviderError(f"claude rc={rc}: {(e or o)[-300:]}")
     return o
@@ -372,7 +372,7 @@ def ask(ctx, provider, prompt, *, images=None, schema=None, write=False, out_dir
             choices = [r for item in planned['roles'].values() for r in (item if isinstance(item, list) else [item])
                        if r.get('provider') == prov and r.get('status') == 'available']
             models = list(dict.fromkeys(r['model'] for r in choices))
-            # Plan ról liczony ze starej sondy nie zamyka drogi: modele z konfiguracji idą do probe(), który sam odświeża sondy.
+            # A role plan from a stale probe does not block: configured models go to probe(), which refreshes the probes itself.
             if not models: models = list(ctx.cfg['models'].get(prov, [None]))
         if not models:
             attempts.append(dict(provider=prov, model=None, error='brak sprawdzonego modelu w planie ról'))
@@ -383,7 +383,7 @@ def ask(ctx, provider, prompt, *, images=None, schema=None, write=False, out_dir
                 continue
             try:
                 started = time.time()
-                # Każdy prompt do modelu przechodzi przez maskowanie sekretów: znika sama wartość (token, klucz, hasło), kod zostaje.
+                # Every prompt to a model goes through secret masking: only the value (token, key, password) is removed, the code stays.
                 from helix_data_egress import mask_secrets
                 text = CALLERS[prov](ctx, model, mask_secrets(prompt)[0], images, schema, write, out_dir, timeout)
                 if (schema if need_json is None else need_json) and extract_json(text) is None:
@@ -568,7 +568,7 @@ def gate_review(ctx, cp_id, round_no=1, previous=None):
             try: authorize_model_provider(ctx, reviewer.get('provider'))
             except ProviderError as error: refused.append(dict(reviewer=reviewer.get('name'), code=error.admission_code))
         if refused:
-            # Jawne ograniczenie właściciela wyklucza recenzenta: bramka nie wybiera po cichu innego dostawcy.
+            # An explicit owner restriction excludes the reviewer: the gate never silently picks another provider.
             result = dict(gate='review', **{'pass': False}, status='ERROR', verdicts=[], model_admission=refused,
                           error='data_egress: właściciel nie dopuścił dostawcy recenzji')
             write_gate_result(ctx, ev / 'review.json', result); log('gate review: ERROR (data_egress)')
@@ -675,8 +675,8 @@ def gate_review(ctx, cp_id, round_no=1, previous=None):
     return res
 
 # ---------------------------------------------------------------- gate 0: truth & context (G0 "Prawda i kontekst")
-# Origin case (24.10.2026): the assistant called example-app's ERP "LegacyERP" because the name was in the code, while production
-# actually uses Example ERP. A name in code is not proof of what runs in production. G0 runs before any fix/PR
+# A name in code is not proof of what runs in production: an integration name found in code can differ from the
+# deployed system. G0 runs before any fix/PR
 # and before reporting findings. Input: helix-evidence/<cp>/truth.json (claim ledger), output: truth.md + truth-gate.json.
 TRUTH_TAGS = ("VERIFIED", "ASSUMPTION")
 PROD_EVIDENCE = ("owner:", "config:", "deploy:", "sha:", "cmd:", "prod:")   # kinds that can prove what runs in prod

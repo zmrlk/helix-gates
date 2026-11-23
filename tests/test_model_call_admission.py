@@ -35,7 +35,7 @@ class ModelCallAdmission(unittest.TestCase):
                                    cfg=config(), explicit_cfg={}, offline=False)
 
     def test_every_real_source_caller_refuses_owner_restriction_before_process_or_export(self):
-        # Decyzja właściciela 15.11.2026: domyślnie wszyscy dostawcy; odmawia tylko jawne ograniczenie właściciela.
+        # All providers are allowed by default; only an explicit owner restriction refuses one.
         with patch.object(self.H, 'sh', side_effect=AssertionError('model process must not start')):
             for provider, caller in self.H.CALLERS.items():
                 other = 'gemini' if provider not in ('gemini',) else 'codex'
@@ -95,11 +95,11 @@ class ModelCallAdmission(unittest.TestCase):
         self.assertIn('xdg-open blocked', done.stderr)
 
     def test_read_only_grok_runs_outside_the_checked_project(self):
-        # Haki sesji (memsearch) piszą w katalogu roboczym: Grok w projekcie B zmienił źródła przeglądu.
+        # Session hooks (memsearch) write into the working directory, so a read-only review must not run inside the reviewed project.
         seen = []
         def answer(argv, cwd, **kwargs):
             seen.append((argv[argv.index('--cwd') + 1], Path(cwd)))
-            self.assertEqual(argv[argv.index('--max-turns') + 1], '8')   # 16.11: 4 tury kończyły się „max turns reached”
+            self.assertEqual(argv[argv.index('--max-turns') + 1], '8')   # four turns can run out before Grok answers ("max turns reached")
             return 0, json.dumps({'structuredOutput': {'ok': True}}), ''
         with patch.object(self.H, 'sh', side_effect=answer):
             self.H.call_grok_cli(self.ctx, 'grok-4.7', 'zadanie', None, None, False, self.out, 1)
@@ -175,11 +175,11 @@ class ModelCallAdmission(unittest.TestCase):
             with self.assertRaises(self.H.ProviderError) as caught:
                 self.H.ask(self.ctx, 'codex', 'PRIVATE_SOURCE_CANARY')
         self.assertEqual(caught.exception.admission_code, 'PROVIDER_NOT_ALLOWED')
-        # Odmowa zapada przed sondą i przed zapasowym dostawcą (gemini jest dopuszczony, ale nie wchodzi po cichu).
+        # The refusal comes before the probe and before any fallback provider (gemini is allowed but never steps in silently).
         self.assertEqual(probe.call_count, 0)
 
     def test_substitute_moves_to_next_available_provider_when_configured_one_is_limited(self):
-        # Właściciel: Gemini na limicie, a sędzia UX i eksplorator stały zamiast przejść na Codexa, Claude albo Groka.
+        # With substitution enabled, the UX judge and explorer continue with the next available provider after a usage limit.
         self.ctx.cfg['models'] = {'gemini-flash': ['flash-high', 'flash-low'], 'codex': ['astra'], 'grok-cli': [None]}
         self.ctx.explicit_cfg = {'providers': {'visual_judge': 'gemini-flash'}}
         probed = []
@@ -187,7 +187,7 @@ class ModelCallAdmission(unittest.TestCase):
             probed.append((provider, model)); return provider == 'codex', 'synthetic availability'
         with patch.object(self.H, 'probe', side_effect=probe), \
              patch.dict(self.H.CALLERS, {'codex': lambda *args: '{"ok": true}'}):
-            with self.assertRaises(self.H.ProviderError):   # bez zastępstwa jawny wybór zostaje i zadanie staje
+            with self.assertRaises(self.H.ProviderError):   # without a substitute the explicit choice stays and the task stops
                 self.H.ask(self.ctx, 'gemini-flash', 'synthetic', need_json=True)
             text, used = self.H.ask(self.ctx, 'gemini-flash', 'synthetic', need_json=True, substitute=True)
         self.assertEqual((used['provider'], used['model'], used['fallback_used']), ('codex', 'astra', True))

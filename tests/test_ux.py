@@ -152,11 +152,11 @@ class JudgeCoverage(unittest.TestCase):
             try: result = U.judge(ctx, u, out, scan, targets)
             finally: U.H.ask = old
             device = result["phone-small@portrait"]
-            self.assertEqual(len(calls), 2)                          # 5 stron = 2 arkusze, żadna strona nie jest pominięta
-            self.assertEqual(device["not_judged_pages"], ["p5"])     # arkusz z błędem modelu nie udaje oceny
+            self.assertEqual(len(calls), 2)                          # 5 pages = 2 sheets, no page is skipped
+            self.assertEqual(device["not_judged_pages"], ["p5"])     # a sheet with a model error does not pretend to be judged
 
     def test_free_slot_takes_the_next_device_without_waiting_for_the_oldest(self):
-        # Projekt B: sędzia czekał na całe najstarsze urządzenie (32 arkusze), więc szedł po jednym urządzeniu.
+        # The judge must not wait for the whole oldest device before starting the next one, or it runs one device at a time.
         import threading
         from types import SimpleNamespace
         from PIL import Image
@@ -167,7 +167,7 @@ class JudgeCoverage(unittest.TestCase):
             targets = [{"id": t, "engine": "chromium", "label": t} for t in ids]
             third_started, order = threading.Event(), []
             def ask(ctx, provider, prompt, **kw):
-                if "slow@portrait" in prompt: self.assertTrue(third_started.wait(5))   # wolne kończy dopiero po starcie trzeciego
+                if "slow@portrait" in prompt: self.assertTrue(third_started.wait(5))   # the slow one finishes only after the third has started
                 if "third@portrait" in prompt: third_started.set()
                 order.append(next(t for t in ids if t in prompt))
                 return json.dumps({"scores": {"layout": 4}, "issues": [], "summary": "ok", "valid": True}), {"provider": "gemini", "model": "m"}
@@ -254,7 +254,7 @@ if __name__ == "__main__": unittest.main()
 
 class NodeTimeout(unittest.TestCase):
     def test_scan_limit_grows_with_pages_and_devices(self):
-        # Projekt B: stała godzina ucięła skan 128 stron × 28 urządzeń po 22 urządzeniach.
+        # A fixed one-hour limit can truncate large scans, so the limit grows with the planned pages and devices.
         import json, tempfile
         from pathlib import Path
         folder = Path(tempfile.mkdtemp())
@@ -265,7 +265,7 @@ class NodeTimeout(unittest.TestCase):
 
 class EmptyReport(unittest.TestCase):
     def test_report_without_any_checked_cell_is_not_pass(self):
-        # Projekt B: `ux judge` odrzucił skan jako nieaktualny i raport z zerem komórek pokazał PASS.
+        # A scan that `ux judge` rejects as stale must not yield a PASS report with zero cells.
         from types import SimpleNamespace
         with tempfile.TemporaryDirectory() as d:
             out = Path(d)
@@ -278,7 +278,7 @@ class EmptyReport(unittest.TestCase):
 
 
 class ScreenState(unittest.TestCase):
-    # Projekt B: 53 ze 128 zrzutów to ekran startowy, błąd funkcji serwerowej albo pusta strona, a sędzia je oceniał.
+    # Splash screens, server function errors and empty pages are classified before judging, so the judge does not rate them as screens.
     def test_classifies_redirect_data_error_empty_and_content(self):
         full = {"text_chars": 900, "interactive_count": 20}
         self.assertEqual(U.screen_state({"screen": {"redirected": True}, "layout": full}), "redirected")
@@ -340,7 +340,7 @@ class JudgeResume(unittest.TestCase):
             self.assertTrue(all(not v.get("error") and not v.get("not_judged_pages") for v in result.values()))
 
     def test_resume_repeats_only_failed_sheets_of_a_device(self):
-        # Projekt B: urządzeniu brakowało 1-3 z 32 arkuszy, a wznowienie oceniało od nowa wszystkie 32.
+        # Resuming a device with a few missing sheets judges only the missing ones, not all sheets again.
         from types import SimpleNamespace
         from PIL import Image
         with tempfile.TemporaryDirectory() as d:
